@@ -37,10 +37,9 @@ import {VerberService} from '../../../services/global/verber';
 })
 export class TenantListComponent extends ResourceListWithStatuses<TenantList, Tenant> {
   @Input() endpoint = EndpointManager.resource(Resource.tenant).list();
-  displayName: any = "";
-  typeMeta: any = "";
-  objectMeta: any;
-
+  displayName:any="";
+  typeMeta:any="";
+  objectMeta:any;
   constructor(
     private readonly verber_: VerberService,
     private readonly tenant_: ResourceService<TenantList>,
@@ -77,5 +76,10 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
 
   getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'phase', 'age'];
+  }
+
+  //added the code
+  onClick(): void {
+    this.verber_.showCreateDialog(this.displayName, this.typeMeta, this.objectMeta);
   }
 }

@@ -39,7 +39,7 @@ type heapsterClient struct {
 
 // Implement Integration interface.
 
-// HealthCheck implements integration app interface. See Integration interface for more information.
+// HealthCheck implements integration app interface. See Integration interface for more clustermanagement.
 func (self heapsterClient) HealthCheck() error {
 	if self.client == nil {
 		return errors.NewInvalid("Heapster not configured")
@@ -48,14 +48,14 @@ func (self heapsterClient) HealthCheck() error {
 	return self.client.HealthCheck()
 }
 
-// ID implements integration app interface. See Integration interface for more information.
+// ID implements integration app interface. See Integration interface for more clustermanagement.
 func (self heapsterClient) ID() integrationapi.IntegrationID {
 	return integrationapi.HeapsterIntegrationID
 }
 
 // Implement MetricClient interface
 
-// DownloadMetrics implements metric client interface. See MetricClient for more information.
+// DownloadMetrics implements metric client interface. See MetricClient for more clustermanagement.
 func (self heapsterClient) DownloadMetrics(selectors []metricapi.ResourceSelector,
 	metricNames []string, cachedResources *metricapi.CachedResources) metricapi.MetricPromises {
 	result := metricapi.MetricPromises{}
@@ -66,7 +66,7 @@ func (self heapsterClient) DownloadMetrics(selectors []metricapi.ResourceSelecto
 	return result
 }
 
-// DownloadMetric implements metric client interface. See MetricClient for more information.
+// DownloadMetric implements metric client interface. See MetricClient for more clustermanagement.
 func (self heapsterClient) DownloadMetric(selectors []metricapi.ResourceSelector,
 	metricName string, cachedResources *metricapi.CachedResources) metricapi.MetricPromises {
 	heapsterSelectors := getHeapsterSelectors(selectors, cachedResources)
@@ -76,7 +76,7 @@ func (self heapsterClient) DownloadMetric(selectors []metricapi.ResourceSelector
 	return self.downloadMetric(heapsterSelectors, compressedSelectors, reverseMapping, metricName)
 }
 
-// AggregateMetrics implements metric client interface. See MetricClient for more information.
+// AggregateMetrics implements metric client interface. See MetricClient for more clustermanagement.
 func (self heapsterClient) AggregateMetrics(metrics metricapi.MetricPromises, metricName string,
 	aggregations metricapi.AggregationModes) metricapi.MetricPromises {
 	return common.AggregateMetricPromises(metrics, metricName, aggregations, nil)

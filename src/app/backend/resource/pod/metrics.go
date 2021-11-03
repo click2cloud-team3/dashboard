@@ -32,7 +32,7 @@ type MetricsByPod struct {
 	MetricsMap map[types.UID]PodMetrics `json:"metricsMap"`
 }
 
-// PodMetrics is a structure representing pods metrics, contains information about CPU and memory
+// PodMetrics is a structure representing pods metrics, contains clustermanagement about CPU and memory
 // usage.
 type PodMetrics struct {
 	// Most recent measure of CPU usage on all cores in nanoseconds.

@@ -18,6 +18,7 @@ import {SharedModule} from '../../shared.module';
 import {ComponentsModule} from '../components/module';
 
 import {AlertDialog} from './alert/dialog';
+import {CreateResourceDialog} from './createresource/dialog';
 import {DeleteResourceDialog} from './deleteresource/dialog';
 import {LogsDownloadDialog} from './download/dialog';
 import {EditResourceDialog} from './editresource/dialog';
@@ -28,15 +29,18 @@ import { CreateResourceDialog } from './createresource/dialog';
   imports: [SharedModule, ComponentsModule],
   declarations: [
     AlertDialog,
+    CreateResourceDialog,
     EditResourceDialog,
     CreateResourceDialog,
     DeleteResourceDialog,
     LogsDownloadDialog,
     ScaleResourceDialog,
     TriggerResourceDialog,
+
   ],
   exports: [
     AlertDialog,
+    CreateResourceDialog,
     EditResourceDialog,
     CreateResourceDialog,
     DeleteResourceDialog,
@@ -46,6 +50,7 @@ import { CreateResourceDialog } from './createresource/dialog';
   ],
   entryComponents: [
     AlertDialog,
+    CreateResourceDialog,
     EditResourceDialog,
     CreateResourceDialog,
     DeleteResourceDialog,

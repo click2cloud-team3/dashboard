@@ -35,6 +35,7 @@ a {
 button {
   &:not(:last-child) {
     margin-right: $baseline-grid;
+    min-width: 5%;
   }
 }
 
@@ -60,7 +61,7 @@ code {
 }
 
 .mat-card {
-  margin: 2.5 * $baseline-grid;
+  margin: 2.4 * $baseline-grid;
 
   .mat-card-title {
     margin-bottom: $baseline-grid;

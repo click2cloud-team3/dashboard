@@ -66,7 +66,7 @@ type kubeConfigAuthenticator struct {
 	authModes   authApi.AuthenticationModes
 }
 
-// GetAuthInfo implements Authenticator interface. See Authenticator for more information.
+// GetAuthInfo implements Authenticator interface. See Authenticator for more clustermanagement.
 func (self *kubeConfigAuthenticator) GetAuthInfo() (api.AuthInfo, error) {
 	kubeConfig, err := self.parseKubeConfig(self.fileContent)
 	if err != nil {

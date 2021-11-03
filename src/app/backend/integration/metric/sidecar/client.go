@@ -38,7 +38,7 @@ type sidecarClient struct {
 
 // Implement Integration interface.
 
-// HealthCheck implements integration app interface. See Integration interface for more information.
+// HealthCheck implements integration app interface. See Integration interface for more clustermanagement.
 func (self sidecarClient) HealthCheck() error {
 	if self.client == nil {
 		return errors.New("Sidecar not configured")
@@ -47,14 +47,14 @@ func (self sidecarClient) HealthCheck() error {
 	return self.client.HealthCheck()
 }
 
-// ID implements integration app interface. See Integration interface for more information.
+// ID implements integration app interface. See Integration interface for more clustermanagement.
 func (self sidecarClient) ID() integrationapi.IntegrationID {
 	return integrationapi.SidecarIntegrationID
 }
 
 // Implement MetricClient interface
 
-// DownloadMetrics implements metric client interface. See MetricClient for more information.
+// DownloadMetrics implements metric client interface. See MetricClient for more clustermanagement.
 func (self sidecarClient) DownloadMetrics(selectors []metricapi.ResourceSelector,
 	metricNames []string, cachedResources *metricapi.CachedResources) metricapi.MetricPromises {
 	result := metricapi.MetricPromises{}
@@ -65,7 +65,7 @@ func (self sidecarClient) DownloadMetrics(selectors []metricapi.ResourceSelector
 	return result
 }
 
-// DownloadMetric implements metric client interface. See MetricClient for more information.
+// DownloadMetric implements metric client interface. See MetricClient for more clustermanagement.
 func (self sidecarClient) DownloadMetric(selectors []metricapi.ResourceSelector,
 	metricName string, cachedResources *metricapi.CachedResources) metricapi.MetricPromises {
 	sidecarSelectors := getSidecarSelectors(selectors, cachedResources)
@@ -75,7 +75,7 @@ func (self sidecarClient) DownloadMetric(selectors []metricapi.ResourceSelector,
 	return self.downloadMetric(sidecarSelectors, compressedSelectors, reverseMapping, metricName)
 }
 
-// AggregateMetrics implements metric client interface. See MetricClient for more information.
+// AggregateMetrics implements metric client interface. See MetricClient for more clustermanagement.
 func (self sidecarClient) AggregateMetrics(metrics metricapi.MetricPromises, metricName string,
 	aggregations metricapi.AggregationModes) metricapi.MetricPromises {
 	return common.AggregateMetricPromises(metrics, metricName, aggregations, nil)

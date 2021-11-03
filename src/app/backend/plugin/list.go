@@ -22,7 +22,7 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// PluginList holds only necessary information and is used to
+// PluginList holds only necessary clustermanagement and is used to
 // map v1alpha1.PluginList to plugin.PluginList
 type PluginList struct {
 	ListMeta api.ListMeta `json:"listMeta"`
@@ -30,7 +30,7 @@ type PluginList struct {
 	Errors   []error      `json:"errors"`
 }
 
-// PluginList holds only necessary information and is used to
+// PluginList holds only necessary clustermanagement and is used to
 // map v1alpha1.Plugin to plugin.Plugin
 type Plugin struct {
 	Name         string   `json:"name"`

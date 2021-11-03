@@ -32,14 +32,14 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// Implements certificate Creator interface. See Creator for more information.
+// Implements certificate Creator interface. See Creator for more clustermanagement.
 type ecdsaCreator struct {
 	keyFile  string
 	certFile string
 	curve    elliptic.Curve
 }
 
-// GenerateKey implements certificate Creator interface. See Creator for more information.
+// GenerateKey implements certificate Creator interface. See Creator for more clustermanagement.
 func (self *ecdsaCreator) GenerateKey() interface{} {
 	key, err := ecdsa.GenerateKey(self.curve, rand.Reader)
 	if err != nil {
@@ -49,7 +49,7 @@ func (self *ecdsaCreator) GenerateKey() interface{} {
 	return key
 }
 
-// GenerateCertificate implements certificate Creator interface. See Creator for more information.
+// GenerateCertificate implements certificate Creator interface. See Creator for more clustermanagement.
 func (self *ecdsaCreator) GenerateCertificate(key interface{}) []byte {
 	ecdsaKey := self.getKey(key)
 	pod := self.getDashboardPod()
@@ -77,7 +77,7 @@ func (self *ecdsaCreator) GenerateCertificate(key interface{}) []byte {
 	return certBytes
 }
 
-// StoreCertificates implements certificate Creator interface. See Creator for more information.
+// StoreCertificates implements certificate Creator interface. See Creator for more clustermanagement.
 func (self *ecdsaCreator) StoreCertificates(path string, key interface{}, certBytes []byte) {
 	keyPEM, certPEM, err := self.KeyCertPEMBytes(key, certBytes)
 	if err != nil {
@@ -101,12 +101,12 @@ func (self *ecdsaCreator) KeyCertPEMBytes(key interface{}, certBytes []byte) ([]
 	return keyPEM, certPEM, nil
 }
 
-// GetKeyFileName implements certificate Creator interface. See Creator for more information.
+// GetKeyFileName implements certificate Creator interface. See Creator for more clustermanagement.
 func (self *ecdsaCreator) GetKeyFileName() string {
 	return self.keyFile
 }
 
-// GetCertFileName implements certificate Creator interface. See Creator for more information.
+// GetCertFileName implements certificate Creator interface. See Creator for more clustermanagement.
 func (self *ecdsaCreator) GetCertFileName() string {
 	return self.certFile
 }

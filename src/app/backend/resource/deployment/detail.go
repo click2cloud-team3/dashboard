@@ -55,7 +55,7 @@ type DeploymentDetail struct {
 	// Label selector of the service.
 	Selector map[string]string `json:"selector"`
 
-	// Status information on the deployment
+	// Status clustermanagement on the deployment
 	StatusInfo `json:"statusInfo"`
 
 	// Conditions describe the state of a deployment at a certain point.

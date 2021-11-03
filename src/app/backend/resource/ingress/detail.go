@@ -39,7 +39,7 @@ type IngressDetail struct {
 	Errors []error `json:"errors"`
 }
 
-// GetIngressDetail returns detailed information about an ingress
+// GetIngressDetail returns detailed clustermanagement about an ingress
 func GetIngressDetail(client client.Interface, namespace, name string) (*IngressDetail, error) {
 	log.Printf("Getting details of %s ingress in %s namespace", name, namespace)
 
@@ -52,7 +52,7 @@ func GetIngressDetail(client client.Interface, namespace, name string) (*Ingress
 	return getIngressDetail(rawIngress), nil
 }
 
-// GetIngressDetailWithMultiTenancy returns detailed information about an ingress
+// GetIngressDetailWithMultiTenancy returns detailed clustermanagement about an ingress
 func GetIngressDetailWithMultiTenancy(client client.Interface, tenant, namespace, name string) (*IngressDetail, error) {
 	log.Printf("Getting details of %s ingress in %s namespace for %s", name, namespace, tenant)
 

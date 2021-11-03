@@ -28,7 +28,7 @@ type PersistentVolumeClaimDetail struct {
 	PersistentVolumeClaim `json:",inline"`
 }
 
-// GetPersistentVolumeClaimDetail returns detailed information about a persistent volume claim
+// GetPersistentVolumeClaimDetail returns detailed clustermanagement about a persistent volume claim
 func GetPersistentVolumeClaimDetail(client kubernetes.Interface, namespace string, name string) (*PersistentVolumeClaimDetail, error) {
 	log.Printf("Getting details of %s persistent volume claim", name)
 

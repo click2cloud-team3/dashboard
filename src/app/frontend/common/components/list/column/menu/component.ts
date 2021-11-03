@@ -124,6 +124,10 @@ export class MenuComponent implements ActionColumn {
     );
   }
 
+  onCreate(): void {
+    this.verber_.showEditDialog(this.typeMeta.kind, this.typeMeta, this.objectMeta);
+  }
+
   onEdit(): void {
     this.verber_.showEditDialog(this.typeMeta.kind, this.typeMeta, this.objectMeta);
   }

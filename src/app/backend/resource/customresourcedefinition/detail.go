@@ -42,7 +42,7 @@ type CustomResourceDefinitionVersion struct {
 	Storage bool   `json:"storage"`
 }
 
-// GetCustomResourceDefinitionDetail returns detailed information about a custom resource definition.
+// GetCustomResourceDefinitionDetail returns detailed clustermanagement about a custom resource definition.
 func GetCustomResourceDefinitionDetail(client apiextensionsclientset.Interface, config *rest.Config, name string) (*CustomResourceDefinitionDetail, error) {
 	customResourceDefinition, err := client.ApiextensionsV1beta1().
 		CustomResourceDefinitionsWithMultiTenancy("").
@@ -61,7 +61,7 @@ func GetCustomResourceDefinitionDetail(client apiextensionsclientset.Interface, 
 	return toCustomResourceDefinitionDetail(customResourceDefinition, *objects, nonCriticalErrors), nil
 }
 
-// GetCustomResourceDefinitionDetailWithMultiTenancy returns detailed information about a custom resource definition.
+// GetCustomResourceDefinitionDetailWithMultiTenancy returns detailed clustermanagement about a custom resource definition.
 func GetCustomResourceDefinitionDetailWithMultiTenancy(client apiextensionsclientset.Interface, config *rest.Config, tenant, name string) (*CustomResourceDefinitionDetail, error) {
 	customResourceDefinition, err := client.ApiextensionsV1beta1().
 		CustomResourceDefinitionsWithMultiTenancy(tenant).

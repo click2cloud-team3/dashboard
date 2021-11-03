@@ -32,7 +32,7 @@ type PersistentVolumeDetail struct {
 	PersistentVolumeSource v1.PersistentVolumeSource `json:"persistentVolumeSource"`
 }
 
-// GetPersistentVolumeDetail returns detailed information about a persistent volume
+// GetPersistentVolumeDetail returns detailed clustermanagement about a persistent volume
 func GetPersistentVolumeDetail(client client.Interface, name string) (*PersistentVolumeDetail, error) {
 	log.Printf("Getting details of %s persistent volume", name)
 
@@ -44,7 +44,7 @@ func GetPersistentVolumeDetail(client client.Interface, name string) (*Persisten
 	return getPersistentVolumeDetail(*rawPersistentVolume), nil
 }
 
-// GetPersistentVolumeDetailWithMultiTenancy returns detailed information about a persistent volume
+// GetPersistentVolumeDetailWithMultiTenancy returns detailed clustermanagement about a persistent volume
 func GetPersistentVolumeDetailWithMultiTenancy(client client.Interface, tenant string, name string) (*PersistentVolumeDetail, error) {
 	log.Printf("Getting details of %s persistent volume", name)
 

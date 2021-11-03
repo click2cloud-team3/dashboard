@@ -57,7 +57,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "kubernetes-dashboard:build",
-            "port": 8080
+            "port": 9445
           },
           "configurations": {
             "production": {

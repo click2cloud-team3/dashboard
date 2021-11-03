@@ -17,7 +17,7 @@ limitations under the License.
 <div class="kd-namespace-select-title kd-muted"
      i18n>Namespace</div>
 <mat-form-field class="kd-namespace-select-input-container">
-  <mat-select (openedChange)="onNamespaceToggle($event)"
+  <mat-select  (openedChange)="onNamespaceToggle($event)"
               [(ngModel)]="selectedNamespace">
     <div [ngClass]="{'kd-namespace-select-input-border': namespaces.length > 0}">
       <input #namespaceInput

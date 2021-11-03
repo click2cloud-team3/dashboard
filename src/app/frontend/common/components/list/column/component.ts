@@ -49,3 +49,4 @@ export class ColumnComponent<T extends ActionColumn> implements OnChanges {
     this.componentRef_.instance.setTypeMeta(this.resource.typeMeta);
   }
 }
+
