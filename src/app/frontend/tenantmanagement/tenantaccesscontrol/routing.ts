@@ -1,11 +1,11 @@
-// Copyright 2020 Authors of Arktos.
-
+// Copyright 2017 The Kubernetes Authors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,32 +14,35 @@
 
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
+import {DEFAULT_ACTIONBAR} from '../../common/components/actionbars/routing';
 
-import {CLUSTER_ROUTE} from '../routing';
+import {TENANTMANAGEMENT_ROUTE} from '../routing';
 
-import {TenantListComponent} from './list/component';
-import {TenantDetailComponent} from './detail/component';
+import {TenantAccessControlDetailComponent} from './detail/component';
+import {TenantAccessControlListComponent} from './list/component';
 
-const TENANT_LIST_ROUTE: Route = {
+const ROLE_LIST_ROUTE: Route = {
   path: '',
-  component: TenantListComponent,
+  component: TenantAccessControlListComponent,
   data: {
-    breadcrumb: 'Tenant',
-    parent: CLUSTER_ROUTE,
+    breadcrumb: 'Access Control',
+    parent: TENANTMANAGEMENT_ROUTE,
   },
 };
 
-const TENANT_DETAIL_ROUTE: Route = {
+const ROLE_DETAIL_ROUTE: Route = {
   path: ':resourceName',
-  component: TenantDetailComponent,
+  component: TenantAccessControlDetailComponent,
   data: {
     breadcrumb: '{{ resourceName }}',
-    parent: TENANT_LIST_ROUTE,
+    parent: ROLE_LIST_ROUTE,
   },
 };
 
 @NgModule({
-  imports: [RouterModule.forChild([TENANT_LIST_ROUTE, TENANT_DETAIL_ROUTE])],
+  imports: [
+    RouterModule.forChild([ROLE_LIST_ROUTE, ROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR]),
+  ],
   exports: [RouterModule],
 })
-export class TenantRoutingModule {}
+export class TenantAccessControlRoutingModule {}

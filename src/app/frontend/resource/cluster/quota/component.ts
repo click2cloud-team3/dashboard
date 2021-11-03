@@ -12,21 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {Route, RouterModule} from '@angular/router';
-import {ClusterComponent} from './component';
+import {Component, Input} from '@angular/core';
+import {MatTableDataSource} from '@angular/material';
+import {ResourceQuotaDetail} from 'typings/backendapi';
 
-export const CLUSTER_ROUTE: Route = {
-  path: '',
-  component: ClusterComponent,
-  data: {
-    breadcrumb: 'Cluster Management',
-    link: ['', 'cluster'],
-  },
-};
-
-@NgModule({
-  imports: [RouterModule.forChild([CLUSTER_ROUTE])],
-  exports: [RouterModule],
+@Component({
+  selector: 'kd-resource-quota-list',
+  template: '',
 })
-export class ClusterRoutingModule {}
+export class QuotaComponent {
+
+}

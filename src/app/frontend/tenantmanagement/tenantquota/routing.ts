@@ -14,35 +14,34 @@
 
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-import {DEFAULT_ACTIONBAR} from '../../../common/components/actionbars/routing';
 
-import {CLUSTER_ROUTE} from '../routing';
+import {TENANTMANAGEMENT_ROUTE} from '../routing';
+import {DEFAULT_ACTIONBAR} from "../../common/components/actionbars/routing";
+import {TenantQuotaDetailComponent} from 'tenantmanagement/tenantquota/detail/component';
+import {TenantQuotaListComponent} from 'tenantmanagement/tenantquota/list/component';
 
-import {ClusterRoleDetailComponent} from './detail/component';
-import {ClusterRoleListComponent} from './list/component';
-
-const CLUSTERROLE_LIST_ROUTE: Route = {
+const QUOTASNAMESPACE_LIST_ROUTE: Route = {
   path: '',
-  component: ClusterRoleListComponent,
+  component: TenantQuotaListComponent,
   data: {
-    breadcrumb: 'Access Control',
-    parent: CLUSTER_ROUTE,
+    breadcrumb: 'Quota',
+    parent: TENANTMANAGEMENT_ROUTE,
   },
 };
 
-const CLUSTERROLE_DETAIL_ROUTE: Route = {
+const QUOTASNAMESPACE_DETAIL_ROUTE: Route = {
   path: ':resourceName',
-  component: ClusterRoleDetailComponent,
+  component: TenantQuotaDetailComponent,
   data: {
-    breadcrumb: '{{ resourceName }}',
-    parent: CLUSTERROLE_LIST_ROUTE,
+    breadcrumb: ' {{ resourceName }} ',
+    parent: QUOTASNAMESPACE_LIST_ROUTE,
   },
 };
+
+
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([CLUSTERROLE_LIST_ROUTE, CLUSTERROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR]),
-  ],
+  imports: [RouterModule.forChild([QUOTASNAMESPACE_LIST_ROUTE, QUOTASNAMESPACE_DETAIL_ROUTE])],
   exports: [RouterModule],
 })
-export class ClusterRoutingModule {}
+export class TenantQuotasRoutingModule {}

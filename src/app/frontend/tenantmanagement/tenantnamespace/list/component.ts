@@ -12,21 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {Route, RouterModule} from '@angular/router';
-import {ClusterComponent} from './component';
+import {Component} from '@angular/core';
 
-export const CLUSTER_ROUTE: Route = {
-  path: '',
-  component: ClusterComponent,
-  data: {
-    breadcrumb: 'Cluster Management',
-    link: ['', 'cluster'],
-  },
-};
-
-@NgModule({
-  imports: [RouterModule.forChild([CLUSTER_ROUTE])],
-  exports: [RouterModule],
+@Component({
+  selector: 'kd-namespace-list-view',
+  template: '<kd-namespace-list></kd-namespace-list>'
 })
-export class ClusterRoutingModule {}
+export class TenantNamespaceListComponent {
+
+}

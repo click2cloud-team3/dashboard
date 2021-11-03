@@ -23,12 +23,5 @@ import {TenantService} from '../../common/services/global/tenant';
   selector: 'kd-cluster',
   templateUrl: './template.html',
 })
-export class ClusterComponent extends GroupedResourceList {
-  constructor(private readonly tenantService_: TenantService) {
-    super();
-  }
-
-  get isCurrentSystem(): boolean {
-    return this.tenantService_.current() === CONFIG.systemTenantName;
-  }
+export class ClusterComponent {
 }

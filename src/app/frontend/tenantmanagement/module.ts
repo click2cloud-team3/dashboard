@@ -12,21 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {Route, RouterModule} from '@angular/router';
-import {ClusterComponent} from './component';
 
-export const CLUSTER_ROUTE: Route = {
-  path: '',
-  component: ClusterComponent,
-  data: {
-    breadcrumb: 'Cluster Management',
-    link: ['', 'cluster'],
-  },
-};
+import {NgModule} from '@angular/core';
+
+import {ComponentsModule} from '../common/components/module';
+import {SharedModule} from '../shared.module';
+import {TenantManagementComponent} from './component';
+import {TenantManagementRoutingModule} from './routing';
 
 @NgModule({
-  imports: [RouterModule.forChild([CLUSTER_ROUTE])],
-  exports: [RouterModule],
+  imports: [SharedModule, ComponentsModule, TenantManagementRoutingModule],
+  declarations: [TenantManagementComponent],
 })
-export class ClusterRoutingModule {}
+export class TenantManagementModule {}

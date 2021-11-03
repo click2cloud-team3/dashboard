@@ -15,31 +15,31 @@
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
 
-import {CLUSTER_ROUTE} from '../routing';
+import {TENANTMANAGEMENT_ROUTE} from '../routing';
 
-import {TenantListComponent} from './list/component';
-import {TenantDetailComponent} from './detail/component';
+import {TenantUsersListComponent} from './list/component';
+import {TenantUsersDetailComponent} from './detail/component';
 
-const TENANT_LIST_ROUTE: Route = {
+const USERS_LIST_ROUTE: Route = {
   path: '',
-  component: TenantListComponent,
+  component: TenantUsersListComponent,
   data: {
-    breadcrumb: 'Tenant',
-    parent: CLUSTER_ROUTE,
+    breadcrumb: 'Users',
+    parent: TENANTMANAGEMENT_ROUTE,
   },
 };
 
-const TENANT_DETAIL_ROUTE: Route = {
+const USERS_DETAIL_ROUTE: Route = {
   path: ':resourceName',
-  component: TenantDetailComponent,
+  component: TenantUsersDetailComponent,
   data: {
     breadcrumb: '{{ resourceName }}',
-    parent: TENANT_LIST_ROUTE,
+    parent: USERS_LIST_ROUTE,
   },
 };
 
 @NgModule({
-  imports: [RouterModule.forChild([TENANT_LIST_ROUTE, TENANT_DETAIL_ROUTE])],
+  imports: [RouterModule.forChild([USERS_LIST_ROUTE, USERS_DETAIL_ROUTE])],
   exports: [RouterModule],
 })
-export class TenantRoutingModule {}
+export class TenantUsersRoutingModule {}

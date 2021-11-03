@@ -13,20 +13,18 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {Route, RouterModule} from '@angular/router';
-import {ClusterComponent} from './component';
 
-export const CLUSTER_ROUTE: Route = {
-  path: '',
-  component: ClusterComponent,
-  data: {
-    breadcrumb: 'Cluster Management',
-    link: ['', 'cluster'],
-  },
-};
+import {ComponentsModule} from '../../common/components/module';
+import {SharedModule} from '../../shared.module';
+
+import {NactionbarComponent} from './detail/nactionbar/component';
+import {TenantNamespaceDetailComponent} from './detail/component';
+import {TenantNamespaceListComponent} from './list/component';
+import {ClusterNamespaceRoutingModule} from './routing';
 
 @NgModule({
-  imports: [RouterModule.forChild([CLUSTER_ROUTE])],
-  exports: [RouterModule],
+  imports: [SharedModule, ComponentsModule, ClusterNamespaceRoutingModule],
+  declarations: [TenantNamespaceListComponent, TenantNamespaceDetailComponent, NactionbarComponent],
 })
-export class ClusterRoutingModule {}
+export class TenantNamespaceModule {}
+

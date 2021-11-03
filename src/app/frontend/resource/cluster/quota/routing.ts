@@ -1,11 +1,11 @@
-// Copyright 2020 Authors of Arktos.
-
+// Copyright 2017 The Kubernetes Authors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,32 +14,19 @@
 
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
+import {QuotaComponent} from './component';
 
-import {CLUSTER_ROUTE} from '../routing';
 
-import {TenantListComponent} from './list/component';
-import {TenantDetailComponent} from './detail/component';
-
-const TENANT_LIST_ROUTE: Route = {
+const CLUSTERMANAGEMENT_ROUTE: Route = {
   path: '',
-  component: TenantListComponent,
+  component: QuotaComponent,
   data: {
-    breadcrumb: 'Tenant',
-    parent: CLUSTER_ROUTE,
-  },
-};
-
-const TENANT_DETAIL_ROUTE: Route = {
-  path: ':resourceName',
-  component: TenantDetailComponent,
-  data: {
-    breadcrumb: '{{ resourceName }}',
-    parent: TENANT_LIST_ROUTE,
+    breadcrumb: 'Quota',
   },
 };
 
 @NgModule({
-  imports: [RouterModule.forChild([TENANT_LIST_ROUTE, TENANT_DETAIL_ROUTE])],
+  imports: [RouterModule.forChild([CLUSTERMANAGEMENT_ROUTE])],
   exports: [RouterModule],
 })
-export class TenantRoutingModule {}
+export class QuotaRoutingModule {}

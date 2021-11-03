@@ -18,17 +18,21 @@ limitations under the License.
 <mat-drawer-container class="kd-nav">
   <mat-drawer class="kd-nav"
               mode="side">
-    
-    <div *ngIf="isSystem"
+    <div
          class="kd-nav-system-control">
       <kd-tenant-selector></kd-tenant-selector>
       <mat-divider></mat-divider>
     </div>
-    
-    <div class="kd-nav-group">
+
+    <div>
+      <kd-namespace-selector></kd-namespace-selector>
+    </div>
+    <div *ngIf="isCurrentSystem"
+         class="kd-nav-group">
+      <mat-divider></mat-divider>
       <kd-nav-item class="kd-nav-group-item"
                    state="/cluster"
-                   i18n>Cluster
+                   i18n>Cluster Management
       </kd-nav-item>
       <kd-nav-item *ngIf="isCurrentSystem"
                    class="kd-nav-item"
@@ -37,7 +41,7 @@ limitations under the License.
       </kd-nav-item>
       <kd-nav-item class="kd-nav-item"
                    state="/clusterrole"
-                   i18n>Cluster Roles
+                   i18n>Access Control
       </kd-nav-item>
       <kd-nav-item class="kd-nav-item"
                    state="/namespace"
@@ -48,19 +52,45 @@ limitations under the License.
                    state="/node"
                    i18n>Nodes
       </kd-nav-item>
-      <kd-nav-item class="kd-nav-item"
-                   state="/persistentvolume"
-                   i18n>Persistent Volumes
+      <kd-nav-item *ngIf="isCurrentSystem"
+                   class="kd-nav-item"
+                   state="/quota"
+                   i18n>Quota
       </kd-nav-item>
-      <kd-nav-item class="kd-nav-item"
-                   state="/storageclass"
-                   i18n>Storage Classes
-      </kd-nav-item>
+
     </div>
 
     <mat-divider></mat-divider>
 
-    <kd-namespace-selector></kd-namespace-selector>
+
+    <kd-nav-item class="kd-nav-group-item"
+                 state="/tenantmanagement"
+                 i18n>Tenant Management
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantmonitoring"
+                 i18n>Tenant Monitoring
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantnamespace"
+                 i18n>Namespaces
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantaccesscontrol"
+                 i18n>Access Control
+    </kd-nav-item>
+
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantquota"
+                 i18n>Quota
+    </kd-nav-item>
+
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantuser"
+                 i18n>Users
+    </kd-nav-item>
+
+    <mat-divider></mat-divider>
 
     <div class="kd-nav-group">
       <kd-nav-item class="kd-nav-group-item"
@@ -149,7 +179,7 @@ limitations under the License.
     </div>
 
     <mat-divider></mat-divider>
-
+     <!---Setting tab --->
     <div class="kd-nav-group">
       <kd-nav-item class="kd-nav-group-item"
                    state="/settings"
@@ -160,6 +190,14 @@ limitations under the License.
                    state="/about"
                    i18n>About
       </kd-nav-item>
+
+
+      <div>
+
+        <mat-divider></mat-divider>
+      </div>
     </div>
+
+
   </mat-drawer>
 </mat-drawer-container>
