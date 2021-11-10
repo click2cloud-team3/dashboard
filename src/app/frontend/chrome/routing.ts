@@ -187,6 +187,21 @@ const routes: Routes = [
       //here
 
       {
+        path: 'usermanagement',
+        loadChildren: 'usermanagement/module#UserManagementModule',
+      },
+      {
+        path: 'usermonitoring',
+        loadChildren: 'usermanagement/usermonitoring/module#UserMonitoringModule',
+
+      },
+      {
+        path: 'usernamespace',
+        loadChildren: 'usermanagement/usernamespace/module#UserNamespaceModule',
+
+      },
+
+      {
         path: 'create',
         loadChildren: 'create/module#CreateModule',
       },

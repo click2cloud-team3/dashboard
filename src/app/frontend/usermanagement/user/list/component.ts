@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import {Component,Input, OnInit} from '@angular/core';
-import { MatTableDataSource} from '@angular/material';
 import {HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {ResourceListWithStatuses} from "../../../common/resources/list";
@@ -26,58 +25,14 @@ import {
   ListIdentifier
 } from "../../../common/components/resourcelist/groupids";
 import {MenuComponent} from "../../../common/components/list/column/menu/component";
-import {TenantUsersDetailComponent} from "../detail/component";
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: string;
-  symbol: string;
-  selected?:boolean
+import {UsersDetailComponent} from "../detail/component";
 
-}
-
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'John', weight: 'Active', symbol: '18 hours'},
-  {position: 2, name: 'Harry', weight: 'Active', symbol: '18 hours'},
-  {position: 3, name: 'Jenkins', weight: 'Active', symbol: '18 hours'},
-
-];
 @Component({
-  selector: 'kd-tenantusers-list',
-  templateUrl: './template.html',
+  selector: 'kd-users-img',
+  template: '<kd-tenant-list></kd-tenant-list>'
 })
-export class TenantUsersListComponent{
+export class UsersListComponent {
 
 
-  displayedColumns: string[] =['select','position', 'name', 'weight', 'symbol'];
 
-  dataSource = ELEMENT_DATA
-  oneSelected=false;
-  allSelected=false;
-
-  change(element:PeriodicElement){
-    let e= this.dataSource.find(item=>item.position===element.position);
-    if(e){
-      e.selected=true;
-    }
-    this.oneSelected=this.dataSource.filter(item=>item.selected).length>0
-  }
-  selectAll(){
-    if(this.allSelected || !this.oneSelected){
-      this.dataSource.forEach(item=>item.selected= false);
-      this.allSelected=true;
-    }else{
-      this.dataSource.forEach(item=>item.selected= true);
-      this.allSelected=false;
-      this.oneSelected=false;
-    }
-
-
-  }
 }
-
-
-
-
-

@@ -27,6 +27,7 @@ limitations under the License.
     <div>
       <kd-namespace-selector></kd-namespace-selector>
     </div>
+
     <div *ngIf="isCurrentSystem"
          class="kd-nav-group">
       <mat-divider></mat-divider>
@@ -60,9 +61,11 @@ limitations under the License.
 
     </div>
 
-    <mat-divider></mat-divider>
 
 
+    <div *ngIf="isCurrentSystem"
+         class="kd-nav-group">
+      <mat-divider></mat-divider>
     <kd-nav-item class="kd-nav-group-item"
                  state="/tenantmanagement"
                  i18n>Tenant Management
@@ -89,6 +92,50 @@ limitations under the License.
                  state="/tenantuser"
                  i18n>Users
     </kd-nav-item>
+    </div>
+
+
+
+    <div
+         class="kd-nav-group">
+    <mat-divider></mat-divider>
+    <kd-nav-item class="kd-nav-group-item"
+                 state="/usermanagement"
+                 i18n>User
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/usermonitoring"
+                 i18n>User Monitoring
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/usernamespace"
+                 i18n>Namespaces
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/deployment"
+                 i18n>Deployments
+    </kd-nav-item>
+
+    <kd-nav-item class="kd-nav-item"
+                 state="/pod"
+                 i18n>Pods
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/replicaset"
+                 i18n>Replica Sets
+    </kd-nav-item>
+
+    <kd-nav-item class="kd-nav-item"
+                 state="/secret"
+                 i18n>Secrets
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/service"
+                 i18n>Services
+    </kd-nav-item>
+    </div>
+
+
 
     <mat-divider></mat-divider>
 
