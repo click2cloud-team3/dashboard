@@ -29,7 +29,6 @@ import { CreatorCardComponent } from 'common/components/creator/component';
 import { CreateFromFileComponent } from 'create/from/file/component';
 import { Form } from '@angular/forms';
 import {MatMenuModule} from '@angular/material/menu';
-
 import {VerberService} from '../../../services/global/verber';
 
 @Component({

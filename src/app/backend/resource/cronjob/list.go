@@ -34,7 +34,7 @@ type CronJobList struct {
 	CumulativeMetrics []metricapi.Metric `json:"cumulativeMetrics"`
 	Items             []CronJob          `json:"items"`
 
-	// Basic information about resources status on the list.
+	// Basic clustermanagement about resources status on the list.
 	Status common.ResourceStatus `json:"status"`
 
 	// List of non-critical errors, that occurred during resource retrieval.

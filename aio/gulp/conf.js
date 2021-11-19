@@ -47,7 +47,7 @@ const containerRegistry = {
 };
 
 /**
- * Package version information.
+ * Package version clustermanagement.
  */
 const version = {
   /**

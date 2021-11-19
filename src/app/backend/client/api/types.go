@@ -29,7 +29,7 @@ import (
 )
 
 const (
-	// Resource information that are used as csrf token storage. Can be accessible by multiple dashboard replicas.
+	// Resource clustermanagement that are used as csrf token storage. Can be accessible by multiple dashboard replicas.
 	CsrfTokenSecretName = "kubernetes-dashboard-csrf"
 
 	// Name of the data var that holds the csrf token inside the secret.

@@ -51,3 +51,9 @@
 :host {
   height: 100vh;
 }
+
+.image-logo{
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}

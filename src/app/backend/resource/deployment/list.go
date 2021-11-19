@@ -34,7 +34,7 @@ type DeploymentList struct {
 	ListMeta          api.ListMeta       `json:"listMeta"`
 	CumulativeMetrics []metricapi.Metric `json:"cumulativeMetrics"`
 
-	// Basic information about resources status on the list.
+	// Basic clustermanagement about resources status on the list.
 	Status common.ResourceStatus `json:"status"`
 
 	// Unordered list of Deployments.
@@ -51,7 +51,7 @@ type Deployment struct {
 	ObjectMeta api.ObjectMeta `json:"objectMeta"`
 	TypeMeta   api.TypeMeta   `json:"typeMeta"`
 
-	// Aggregate information about pods belonging to this Deployment.
+	// Aggregate clustermanagement about pods belonging to this Deployment.
 	Pods common.PodInfo `json:"pods"`
 
 	// Container images of the Deployment.

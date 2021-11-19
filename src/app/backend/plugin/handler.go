@@ -34,7 +34,7 @@ type Handler struct {
 	cManager clientapi.ClientManager
 }
 
-// Install creates new endpoints for plugins. All information that any plugin would want
+// Install creates new endpoints for plugins. All clustermanagement that any plugin would want
 // to expose by creating new endpoints should be kept here, i.e. plugin service might want to
 // create endpoint to list available proxy paths to another backend.
 //

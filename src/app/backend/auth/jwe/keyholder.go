@@ -57,7 +57,7 @@ type rsaKeyHolder struct {
 	mux          sync.Mutex
 }
 
-// Encrypter implements key holder interface. See KeyHolder for more information.
+// Encrypter implements key holder interface. See KeyHolder for more clustermanagement.
 // Used encryption algorithms:
 //    - Content encryption: AES-GCM (256)
 //    - Key management: RSA-OAEP-SHA256
@@ -71,14 +71,14 @@ func (self *rsaKeyHolder) Encrypter() jose.Encrypter {
 	return encrypter
 }
 
-// Key implements key holder interface. See KeyHolder for more information.
+// Key implements key holder interface. See KeyHolder for more clustermanagement.
 func (self *rsaKeyHolder) Key() *rsa.PrivateKey {
 	self.mux.Lock()
 	defer self.mux.Unlock()
 	return self.key
 }
 
-// Refresh implements key holder interface. See KeyHolder for more information.
+// Refresh implements key holder interface. See KeyHolder for more clustermanagement.
 func (self *rsaKeyHolder) Refresh() {
 	self.synchronizer.Refresh()
 	self.update(self.synchronizer.Get())

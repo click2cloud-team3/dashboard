@@ -152,6 +152,40 @@ limitations under the License.
         <img class="menu_icon" src="assets/images/overview_icon.svg" alt="">
         Overview
       </kd-nav-item>
+
+    </div>
+
+
+
+    <div *ngIf="isCurrentSystem"
+         class="kd-nav-group">
+      <mat-divider></mat-divider>
+    <kd-nav-item class="kd-nav-group-item"
+                 state="/tenantmanagement"
+                 i18n>Tenant Management
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantmonitoring"
+                 i18n>Tenant Monitoring
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantnamespace"
+                 i18n>Namespaces
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantaccesscontrol"
+                 i18n>Access Control
+    </kd-nav-item>
+
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantquota"
+                 i18n>Quota
+    </kd-nav-item>
+
+    <kd-nav-item class="kd-nav-item"
+                 state="/tenantuser"
+                 i18n>Users
+    </kd-nav-item>
     </div>
     <mat-divider></mat-divider>    
 
@@ -202,6 +236,41 @@ limitations under the License.
       </mat-expansion-panel>
     </mat-accordion>
     <mat-divider></mat-divider>
+    <kd-nav-item class="kd-nav-group-item"
+                 state="/usermanagement"
+                 i18n>User
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/usermonitoring"
+                 i18n>User Monitoring
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/usernamespace"
+                 i18n>Namespaces
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/deployment"
+                 i18n>Deployments
+    </kd-nav-item>
+
+    <kd-nav-item class="kd-nav-item"
+                 state="/pod"
+                 i18n>Pods
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/replicaset"
+                 i18n>Replica Sets
+    </kd-nav-item>
+
+    <kd-nav-item class="kd-nav-item"
+                 state="/secret"
+                 i18n>Secrets
+    </kd-nav-item>
+    <kd-nav-item class="kd-nav-item"
+                 state="/service"
+                 i18n>Services
+    </kd-nav-item>
+    </div>
 
     <mat-accordion>
       <mat-expansion-panel [expanded]="true">
@@ -276,179 +345,5 @@ limitations under the License.
       </kd-nav-item>
     </div>
     <mat-divider></mat-divider>    
-
-    <!-- <div *ngIf="isCurrentSystem" class="kd-nav-group">
-      <mat-divider></mat-divider>
-      <kd-nav-item class="kd-nav-group-item" state="/cluster" i18n>
-        <img class="menu_icon" src="assets/images/cluster_management_icon.svg" alt="">
-        Cluster Management
-      </kd-nav-item>
-      <kd-nav-item *ngIf="isCurrentSystem" class="kd-nav-item" state="/tenant" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Tenants
-      </kd-nav-item>
-      <kd-nav-item *ngIf="isCurrentSystem" class="kd-nav-item" state="/tenantnew" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Tenants New
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/clusterrole" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Access Control
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/namespace" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Namespaces
-      </kd-nav-item>
-      <kd-nav-item *ngIf="isCurrentSystem" class="kd-nav-item" state="/node" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Nodes
-      </kd-nav-item>
-      <kd-nav-item *ngIf="isCurrentSystem" class="kd-nav-item" state="/quota" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Quota
-      </kd-nav-item>
-    </div> -->
-
-    <!-- <div *ngIf="isCurrentSystem" class="kd-nav-group">
-      <mat-divider></mat-divider>
-      <kd-nav-item class="kd-nav-group-item" state="/tenantmanagement" i18n>
-        <img class="menu_icon" src="assets/images/tenant_management_icon.svg" alt="">
-        Tenant Management
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/tenantmonitoring" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Tenant Monitoring
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/tenantnamespace" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Namespaces
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/tenantaccesscontrol" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Access Control
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/tenantquota" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Quota
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/tenantuser" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Users
-      </kd-nav-item>
-    </div> -->
-
-    <!-- <div class="kd-nav-group">
-      <mat-divider></mat-divider>
-      <kd-nav-item class="kd-nav-group-item" state="/usermanagement" i18n>
-        <img class="menu_icon" src="assets/images/user_icon.svg" alt="">
-        User
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/usermonitoring" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        User Monitoring
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/usernamespace" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Namespaces
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/deployment" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Deployments
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/pod" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Pods
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/replicaset" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Replica Sets
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/secret" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Secrets
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/service" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Services
-      </kd-nav-item>
-    </div> -->
-
-    <!-- <div class="kd-nav-group">
-      <mat-divider></mat-divider>
-      <kd-nav-item class="kd-nav-group-item" state="/workloads" i18n>
-        <img class="menu_icon" src="assets/images/workloads_icon.svg" alt="">
-        Workloads
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/cronjob" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Cron Jobs
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/daemonset" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Daemon Sets
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/deployment" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Deployments
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/job" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Jobs
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/pod" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Pods
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/replicaset" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Replica Sets
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/replicationcontroller" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Replication Controllers
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/statefulset" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Stateful Sets
-      </kd-nav-item>
-    </div> -->
-
-    <!-- <div class="kd-nav-group">
-      <mat-divider></mat-divider>
-      <kd-nav-item class="kd-nav-group-item" state="/discovery" i18n>
-        <img class="menu_icon" src="assets/images/discovery_load_balancing_icon.svg" alt="">
-        Discovery and Load Balancing
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/ingress" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Ingresses
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/service" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Services
-      </kd-nav-item>
-    </div> -->
-    
-    <!-- <div class="kd-nav-group">
-      <mat-divider></mat-divider>
-      <kd-nav-item class="kd-nav-group-item" state="/config" i18n>
-        <img class="menu_icon" src="assets/images/config_storage_icon.svg" alt="">
-        Config and Storage
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/configmap" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Config Maps
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/persistentvolumeclaim" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Persistent Volume Claims
-      </kd-nav-item>
-      <kd-nav-item class="kd-nav-item" state="/secret" i18n>
-        <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-        Secrets
-      </kd-nav-item>
-    </div> -->
-
- 
   </mat-drawer>
 </mat-drawer-container>

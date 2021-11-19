@@ -54,7 +54,7 @@ type metricManager struct {
 	active  metricapi.MetricClient
 }
 
-// AddClient implements metric manager interface. See MetricManager for more information.
+// AddClient implements metric manager interface. See MetricManager for more clustermanagement.
 func (self *metricManager) AddClient(client metricapi.MetricClient) MetricManager {
 	if client != nil {
 		self.clients[client.ID()] = client
@@ -63,12 +63,12 @@ func (self *metricManager) AddClient(client metricapi.MetricClient) MetricManage
 	return self
 }
 
-// Client implements metric manager interface. See MetricManager for more information.
+// Client implements metric manager interface. See MetricManager for more clustermanagement.
 func (self *metricManager) Client() metricapi.MetricClient {
 	return self.active
 }
 
-// Enable implements metric manager interface. See MetricManager for more information.
+// Enable implements metric manager interface. See MetricManager for more clustermanagement.
 func (self *metricManager) Enable(id integrationapi.IntegrationID) error {
 	metricClient, exists := self.clients[id]
 	if !exists {
@@ -84,7 +84,7 @@ func (self *metricManager) Enable(id integrationapi.IntegrationID) error {
 	return nil
 }
 
-// EnableWithRetry implements metric manager interface. See MetricManager for more information.
+// EnableWithRetry implements metric manager interface. See MetricManager for more clustermanagement.
 func (self *metricManager) EnableWithRetry(id integrationapi.IntegrationID, period time.Duration) {
 	go wait.Forever(func() {
 		metricClient, exists := self.clients[id]
@@ -107,7 +107,7 @@ func (self *metricManager) EnableWithRetry(id integrationapi.IntegrationID, peri
 	}, period*time.Second)
 }
 
-// List implements metric manager interface. See MetricManager for more information.
+// List implements metric manager interface. See MetricManager for more clustermanagement.
 func (self *metricManager) List() []integrationapi.Integration {
 	result := make([]integrationapi.Integration, 0)
 	for _, c := range self.clients {
@@ -117,7 +117,7 @@ func (self *metricManager) List() []integrationapi.Integration {
 	return result
 }
 
-// ConfigureSidecar implements metric manager interface. See MetricManager for more information.
+// ConfigureSidecar implements metric manager interface. See MetricManager for more clustermanagement.
 func (self *metricManager) ConfigureSidecar(host string) MetricManager {
 	kubeClient := self.manager.InsecureClient()
 	metricClient, err := sidecar.CreateSidecarClient(host, kubeClient)
@@ -130,7 +130,7 @@ func (self *metricManager) ConfigureSidecar(host string) MetricManager {
 	return self
 }
 
-// ConfigureHeapster implements metric manager interface. See MetricManager for more information.
+// ConfigureHeapster implements metric manager interface. See MetricManager for more clustermanagement.
 func (self *metricManager) ConfigureHeapster(host string) MetricManager {
 	kubeClient := self.manager.InsecureClient()
 	metricClient, err := heapster.CreateHeapsterClient(host, kubeClient)

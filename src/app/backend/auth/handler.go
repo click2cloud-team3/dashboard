@@ -30,7 +30,7 @@ type AuthHandler struct {
 }
 
 // Install creates new endpoints for dashboard auth, such as login. It allows user to log in to dashboard using
-// one of the supported methods. See AuthManager and Authenticator for more information.
+// one of the supported methods. See AuthManager and Authenticator for more clustermanagement.
 func (self AuthHandler) Install(ws *restful.WebService) {
 	ws.Route(
 		ws.POST("/login").

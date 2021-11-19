@@ -25,7 +25,7 @@ type basicAuthenticator struct {
 	password string
 }
 
-// GetAuthInfo implements Authenticator interface. See Authenticator for more information.
+// GetAuthInfo implements Authenticator interface. See Authenticator for more clustermanagement.
 func (self *basicAuthenticator) GetAuthInfo() (api.AuthInfo, error) {
 	return api.AuthInfo{
 		Username: self.username,

@@ -25,7 +25,7 @@ type synchronizerManager struct {
 	client kubernetes.Interface
 }
 
-// Secret implements synchronizer manager. See SynchronizerManager interface for more information.
+// Secret implements synchronizer manager. See SynchronizerManager interface for more clustermanagement.
 func (self *synchronizerManager) Secret(namespace, name string) syncApi.Synchronizer {
 	return &secretSynchronizer{
 		namespace:      namespace,

@@ -25,7 +25,7 @@ import (
 	k8sClient "k8s.io/client-go/kubernetes"
 )
 
-// ReplicationControllerDetail represents detailed information about a Replication Controller.
+// ReplicationControllerDetail represents detailed clustermanagement about a Replication Controller.
 type ReplicationControllerDetail struct {
 	// Extends list item structure.
 	ReplicationController `json:",inline"`
@@ -36,13 +36,13 @@ type ReplicationControllerDetail struct {
 	Errors []error `json:"errors"`
 }
 
-// ReplicationControllerSpec contains information needed to update replication controller.
+// ReplicationControllerSpec contains clustermanagement needed to update replication controller.
 type ReplicationControllerSpec struct {
 	// Replicas (pods) number in replicas set
 	Replicas int32 `json:"replicas"`
 }
 
-// GetReplicationControllerDetail returns detailed information about the given replication controller
+// GetReplicationControllerDetail returns detailed clustermanagement about the given replication controller
 // in the given namespace.
 func GetReplicationControllerDetail(client k8sClient.Interface, namespace, name string) (*ReplicationControllerDetail, error) {
 	log.Printf("Getting details of %s replication controller in %s namespace", name, namespace)
@@ -62,7 +62,7 @@ func GetReplicationControllerDetail(client k8sClient.Interface, namespace, name 
 	return &replicationControllerDetail, nil
 }
 
-// GetReplicationControllerDetailWithMultiTenancy returns detailed information about the given replication controller
+// GetReplicationControllerDetailWithMultiTenancy returns detailed clustermanagement about the given replication controller
 // in the given namespace.
 func GetReplicationControllerDetailWithMultiTenancy(client k8sClient.Interface, tenant, namespace, name string) (*ReplicationControllerDetail, error) {
 	log.Printf("Getting details of %s replication controller in %s namespace for %s", name, namespace, tenant)

@@ -123,7 +123,7 @@ type MetricPoint struct {
 	Value     uint64    `json:"value"`
 }
 
-// Label stores information about identity of resources (UIDs) described by metric.
+// Label stores clustermanagement about identity of resources (UIDs) described by metric.
 type Label map[api.ResourceKind][]types.UID
 
 // AddMetricLabel returns a unique combined Label of self and other resource.
@@ -158,7 +158,7 @@ type Metric struct {
 	MetricPoints []MetricPoint `json:"metricPoints"`
 	// MetricName is the name of metric stored in this struct.
 	MetricName string `json:"metricName"`
-	// Label stores information about identity of resources (UIDS) described by this metric.
+	// Label stores clustermanagement about identity of resources (UIDS) described by this metric.
 	Label `json:"-"`
 	// Names of aggregating function used.
 	Aggregate AggregationMode `json:"aggregation,omitempty"`
@@ -172,7 +172,7 @@ type SidecarMetric struct {
 	MetricPoints []MetricPoint `json:"metricPoints"`
 	// MetricName is the name of metric stored in this struct.
 	MetricName string `json:"metricName"`
-	// Label stores information about identity of resources (UIDS) described by this metric.
+	// Label stores clustermanagement about identity of resources (UIDS) described by this metric.
 	UIDs []string `json:"uids"`
 }
 

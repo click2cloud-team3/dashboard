@@ -31,7 +31,7 @@ type authManager struct {
 	authenticationSkippable bool
 }
 
-// Login implements auth manager. See AuthManager interface for more information.
+// Login implements auth manager. See AuthManager interface for more clustermanagement.
 func (self authManager) Login(spec *authApi.LoginSpec) (*authApi.AuthResponse, error) {
 	authenticator, err := self.getAuthenticator(spec)
 	if err != nil {
@@ -63,7 +63,7 @@ func (self authManager) Login(spec *authApi.LoginSpec) (*authApi.AuthResponse, e
 	return &authApi.AuthResponse{JWEToken: token, Errors: nonCriticalErrors, Tenant: tenant}, nil
 }
 
-// Refresh implements auth manager. See AuthManager interface for more information.
+// Refresh implements auth manager. See AuthManager interface for more clustermanagement.
 func (self authManager) Refresh(jweToken string) (string, error) {
 	return self.tokenManager.Refresh(jweToken)
 }
@@ -79,7 +79,7 @@ func (self authManager) AuthenticationSkippable() bool {
 // Returns authenticator based on provided LoginSpec.
 func (self authManager) getAuthenticator(spec *authApi.LoginSpec) (authApi.Authenticator, error) {
 	if len(self.authenticationModes) == 0 {
-		return nil, errors.NewInvalid("All authentication options disabled. Check --authentication-modes argument for more information.")
+		return nil, errors.NewInvalid("All authentication options disabled. Check --authentication-modes argument for more clustermanagement.")
 	}
 
 	switch {

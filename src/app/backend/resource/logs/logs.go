@@ -70,7 +70,7 @@ var AllSelection = &Selection{
 // Representation of log lines
 type LogDetails struct {
 
-	// Additional information of the logs e.g. container name, dates,...
+	// Additional clustermanagement of the logs e.g. container name, dates,...
 	Info LogInfo `json:"info"`
 
 	// Reference point to keep track of the position of all the logs
@@ -80,7 +80,7 @@ type LogDetails struct {
 	LogLines `json:"logs"`
 }
 
-// Meta information about the selected log lines
+// Meta clustermanagement about the selected log lines
 type LogInfo struct {
 
 	// Pod name.
@@ -150,7 +150,7 @@ type LogLine struct {
 type LogTimestamp string
 
 // SelectLogs returns selected part of LogLines as required by logSelector, moreover it returns IDs of first and last
-// of returned lines and the information of the resulting logView.
+// of returned lines and the clustermanagement of the resulting logView.
 func (self LogLines) SelectLogs(logSelection *Selection) (LogLines, LogTimestamp, LogTimestamp, Selection, bool) {
 	requestedNumItems := logSelection.OffsetTo - logSelection.OffsetFrom
 	referenceLineIndex := self.getLineIndex(&logSelection.ReferencePoint)
