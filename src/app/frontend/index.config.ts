@@ -34,8 +34,8 @@ export const CONFIG: Config = {
   authTenantCookieName: 'tenant',
   csrfHeaderName: 'X-CSRF-TOKEN',
   skipLoginPageCookieName: 'skipLoginPage',
-  defaultNamespace: 'default',
-  systemTenantName: 'system',
+  defaultNamespace: 'default',  //default
+  systemTenantName: 'system',  //system
 };
 
 // Override default material tooltip values.

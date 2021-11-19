@@ -48,7 +48,7 @@
   // Global style overrides.
 
   a {
-    color: $primary;
+    color: #326de6;//colorchange
   }
 
   code {
@@ -77,7 +77,7 @@
   }
 
   .kd-bg-primary {
-    background-color: $primary;
+    background-color: #326de6;//change the colors
   }
 
   .kd-accent {
@@ -225,6 +225,8 @@
       color: $muted-light;
     }
   }
+
+
 
   .mat-chip.mat-standard-chip {
     background: $card-background-dark;

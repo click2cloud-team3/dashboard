@@ -17,8 +17,8 @@ limitations under the License.
 <div class="kd-namespace-select-title kd-muted"
      i18n>Tenant</div>
 <mat-form-field class="kd-namespace-select-input-container">
-  <mat-select (openedChange)="onTenantToggle($event)"
-              [(ngModel)]="selectedTenant">
+  <mat-select  (openedChange)="onTenantToggle($event)"
+              [(ngModel)]="selectedTenant" >
     <div [ngClass]="{'kd-namespace-select-input-border': tenants.length > 0}">
       <input #tenantInput
              i18n-placeholder
@@ -30,7 +30,7 @@ limitations under the License.
     </div>
     <mat-optgroup label="SYSTEM"
                   i18n-label>
-      <mat-option [value]="systemTenantName">{{systemTenantName}}</mat-option>
+      <mat-option [value]="systemTenantName" >{{systemTenantName}}</mat-option>
     </mat-optgroup>
     <mat-optgroup label="TENANTS"
                   i18n-label

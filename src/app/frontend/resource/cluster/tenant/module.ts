@@ -21,6 +21,7 @@ import {TenantRoutingModule} from './routing';
 import {TenantListComponent} from './list/component';
 import {TenantDetailComponent} from './detail/component';
 
+
 @NgModule({
   imports: [SharedModule, ComponentsModule, TenantRoutingModule],
   declarations: [TenantListComponent, TenantDetailComponent],

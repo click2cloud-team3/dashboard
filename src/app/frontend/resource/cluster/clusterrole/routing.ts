@@ -25,7 +25,7 @@ const CLUSTERROLE_LIST_ROUTE: Route = {
   path: '',
   component: ClusterRoleListComponent,
   data: {
-    breadcrumb: 'Cluster Roles',
+    breadcrumb: 'Access Control',
     parent: CLUSTER_ROUTE,
   },
 };

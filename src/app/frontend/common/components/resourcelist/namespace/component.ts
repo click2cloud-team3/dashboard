@@ -24,6 +24,8 @@ import {EndpointManager, Resource} from '../../../services/resource/endpoint';
 import {ResourceService} from '../../../services/resource/resource';
 import {MenuComponent} from '../../list/column/menu/component';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
+import {VerberService} from '../../../services/global/verber';
+
 
 @Component({
   selector: 'kd-namespace-list',
@@ -31,8 +33,11 @@ import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 })
 export class NamespaceListComponent extends ResourceListWithStatuses<NamespaceList, Namespace> {
   @Input() endpoint = EndpointManager.resource(Resource.namespace, false, true).list();
-
+  displayName:any="";
+  typeMeta:any="";
+  objectMeta:any;
   constructor(
+    private readonly verber_: VerberService,
     private readonly namespace_: ResourceService<NamespaceList>,
     notifications: NotificationsService,
   ) {
@@ -66,5 +71,9 @@ export class NamespaceListComponent extends ResourceListWithStatuses<NamespaceLi
 
   getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'labels', 'phase', 'age'];
+  }
+  //added the code
+  onClick(): void {
+    this.verber_.showCreateDialog(this.displayName, this.typeMeta, this.objectMeta);
   }
 }

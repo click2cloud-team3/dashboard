@@ -19,6 +19,7 @@ import {AuthGuard} from '../common/services/guard/auth';
 import {SystemGuard} from '../common/services/guard/system';
 import {ChromeComponent} from './component';
 
+
 const routes: Routes = [
   {path: '', redirectTo: '/overview', pathMatch: 'full'},
   {
@@ -31,19 +32,26 @@ const routes: Routes = [
         loadChildren: 'error/module#ErrorModule',
       },
 
-      // Cluster group
+      // Cluster Management
       {
         path: 'cluster',
         loadChildren: 'resource/cluster/module#ClusterModule',
       },
       {
-        path: 'tenant',
-        loadChildren: 'resource/cluster/tenant/module#TenantModule',
-        canActivate: [SystemGuard],
-      },
-      {
         path: 'clusterrole',
         loadChildren: 'resource/cluster/clusterrole/module#ClusterRoleModule',
+      },
+      {
+        path: 'tenant',
+        loadChildren: 'resource/cluster/tenant/module#TenantModule',
+      },
+      {
+        path: 'tenantnew',
+        loadChildren: 'resource/cluster/tenantnew/module#TenantNewModule',
+      },
+      {
+        path: 'quota',
+        loadChildren: 'resource/cluster/quota/module#QuotaModule',
       },
       {
         path: 'namespace',
@@ -54,14 +62,14 @@ const routes: Routes = [
         loadChildren: 'resource/cluster/node/module#NodeModule',
         canActivate: [SystemGuard],
       },
-      {
-        path: 'persistentvolume',
-        loadChildren: 'resource/cluster/persistentvolume/module#PersistentVolumeModule',
-      },
-      {
-        path: 'storageclass',
-        loadChildren: 'resource/cluster/storageclass/module#StorageClassModule',
-      },
+      // {
+      //   path: 'persistentvolume',
+      //   loadChildren: 'resource/cluster/persistentvolume/module#PersistentVolumeModule',
+      // },
+      // {
+      //   path: 'storageclass',
+      //   loadChildren: 'resource/cluster/storageclass/module#StorageClassModule',
+      // },
 
       // Overview
       {
@@ -151,6 +159,51 @@ const routes: Routes = [
         path: 'about',
         loadChildren: 'about/module#AboutModule',
       },
+      {
+        path: 'tenantmanagement',
+        loadChildren: 'tenantmanagement/module#TenantManagementModule',
+      },
+      {
+        path: 'tenantmonitoring',
+        loadChildren: 'tenantmanagement/tenantmonitoring/module#TenantMonitoringModule',
+
+      },
+      {
+        path: 'tenantnamespace',
+        loadChildren: 'tenantmanagement/tenantnamespace/module#TenantNamespaceModule',
+
+      },
+      {
+        path: 'tenantaccesscontrol',
+        loadChildren: 'tenantmanagement/tenantaccesscontrol/module#TenantAccessControlModule',
+
+      },
+      {
+        path: 'tenantquota',
+        loadChildren: 'tenantmanagement/tenantquota/module#TenantQuotasModule',
+
+      },
+      {
+        path: 'tenantuser',
+        loadChildren: 'tenantmanagement/tenantuser/module#TenantUsersModule',
+
+      },
+      //here
+
+      {
+        path: 'usermanagement',
+        loadChildren: 'usermanagement/module#UserManagementModule',
+      },
+      {
+        path: 'usermonitoring',
+        loadChildren: 'usermanagement/usermonitoring/module#UserMonitoringModule',
+
+      },
+      {
+        path: 'usernamespace',
+        loadChildren: 'usermanagement/usernamespace/module#UserNamespaceModule',
+
+      },
 
       {
         path: 'create',
@@ -164,6 +217,8 @@ const routes: Routes = [
         path: 'shell',
         loadChildren: 'shell/module#ShellModule',
       },
+
+
       {
         path: 'search',
         loadChildren: 'search/module#SearchModule',

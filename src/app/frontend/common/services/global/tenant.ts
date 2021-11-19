@@ -26,14 +26,26 @@ export class TenantService {
 
   constructor(private readonly cookies_: CookieService) {
     const tenantCookie = this.cookies_.get(CONFIG.authTenantCookieName) || '';
+    const autht1 = this.cookies_.get(CONFIG.authTokenHeaderName) || '';
+    const autht2 = this.cookies_.get(CONFIG.authTokenCookieName) || '';
+    const autht3 = this.cookies_.get(CONFIG.defaultNamespace) || '';
+    const autht4 = this.cookies_.get(CONFIG.systemTenantName) || '';
     this.setAuthTenant(tenantCookie);
+    console.log (tenantCookie);
+    console.log(autht1);
+    console.log(autht2);
+    console.log(autht3);
+    console.log(autht4);
+
   }
 
   setCurrent(tenant: string) {
     if (this.isSystemTenant_) {
       this.currentTenant_ = tenant;
     }
+
   }
+
 
   current(): string {
     if (this.isSystemTenant_) {
