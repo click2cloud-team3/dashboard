@@ -58,7 +58,6 @@ export class LoginComponent implements OnInit {
     private readonly route_: ActivatedRoute,
   ) {}
 
-
   ngOnInit(): void {
     this.http_
       .get<EnabledAuthenticationModes>('api/v1/login/modes')

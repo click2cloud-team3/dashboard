@@ -7,246 +7,101 @@ You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
+Unless required by applicable law or agreed to in writing , software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<style>
-  /* create button css */
-  .btn_sec {
-    margin-right: 20px;
-  }
 
-  .btn_sec button {
-    float: right;
-    padding: 0px 25px;
-  }
-  /* end of create button css */
-</style>
 <!---Buttons Add--->
-<div class="main_container">
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="btn_sec">
-        <button mat-raised-button i18n-matTooltip matTooltip="Create new tenant" color="primary"
-          (click)="onClick()">Create</button>
-      </div>
-      <div class="clearfix"></div>
-    </div>
+<button mat-raised-button i18n-matTooltip
+matTooltip="Create new tenant" color="primary" (click)="onClick()" style="">Create</button>
+
+
+
+<kd-card role="table"
+         [hidden]="isHidden()">
+  <div title
+       fxLayout="row"
+       i18n>Tenants</div>
+  <div description><span class="kd-muted-light"
+          i18n>Items:&nbsp;</span>{{totalItems}}</div>
+  <div actions>
+    <kd-card-list-filter></kd-card-list-filter>
   </div>
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-      <kd-card role="table" [hidden]="isHidden()">
-        <div title fxLayout="row" i18n>Daemon Sets</div>
-        <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{totalItems}}
-        </div>
-        <div actions>
-          <!-- <kd-card-list-filter></kd-card-list-filter> -->
-        </div>
 
-        <div content [hidden]="showZeroState()">
-          <div kdLoadingSpinner [isLoading]="isLoading"></div>
+  <div content
+       [hidden]="showZeroState()">
+    <div kdLoadingSpinner
+         [isLoading]="isLoading"></div>
 
-          <div class="card_container">
-            <div class="row">
-              <div class="col-4 col-sm-4 col-md-4 col-lg-4">
-                <div class="card_item">
-                  <div class="card_header">
-                    <div class="left_head">
-                      <img src="assets/images/greentick.svg" alt="">
-                      <a href="#">mizar-operator</a>
-                    </div>
-                    <div class="right_head">
-                      <button mat-button [matMenuTriggerFor]="menu">
-                        <mat-icon>more_vert</mat-icon>
-                      </button>
-                      <mat-menu #menu="matMenu">
-                        <button mat-menu-item>Edit</button>
-                        <button mat-menu-item>Delete</button>
-                      </mat-menu>
-                    </div>
-                  </div>
-                  <div class="card_body">
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Namespace</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>default</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Labels</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>-</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Pods</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>1/1</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Age</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>4 Days</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Images</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>fwnetworking/endpointer:latest</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-4 col-sm-4 col-md-4 col-lg-4">
-                <div class="card_item">
-                  <div class="card_header">
-                    <div class="left_head">
-                      <img src="assets/images/greentick.svg" alt="">
-                      <a href="#">mizar-operator</a>
-                    </div>
-                    <div class="right_head">
-                      <button mat-button [matMenuTriggerFor]="menu">
-                        <mat-icon>more_vert</mat-icon>
-                      </button>
-                      <mat-menu #menu="matMenu">
-                        <button mat-menu-item>Edit</button>
-                        <button mat-menu-item>Delete</button>
-                      </mat-menu>
-                    </div>
-                  </div>
-                  <div class="card_body">
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Namespace</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>default</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Labels</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>-</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Pods</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>1/1</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Age</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>4 Days</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Images</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>fwnetworking/endpointer:latest</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-4 col-sm-4 col-md-4 col-lg-4">
-                <div class="card_item">
-                  <div class="card_header">
-                    <div class="left_head">
-                      <img src="assets/images/redtick.svg" alt="">
-                      <a class="red_text" href="#">mizar-operator</a>
-                    </div>
-                    <div class="right_head">
-                      <button mat-button [matMenuTriggerFor]="menu">
-                        <mat-icon>more_vert</mat-icon>
-                      </button>
-                      <mat-menu #menu="matMenu">
-                        <button mat-menu-item>Edit</button>
-                        <button mat-menu-item>Delete</button>
-                      </mat-menu>
-                    </div>
-                  </div>
-                  <div class="card_body">
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Namespace</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>default</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Labels</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>-</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Pods</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>1/1</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Age</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>4 Days</h5>
-                      </div>
-                    </div>
-                    <div class="card_content">
-                      <div class="left_content">
-                        <h5>Images</h5>
-                      </div>
-                      <div class="right_content">
-                        <h5><span>:</span>fwnetworking/endpointer:latest</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <mat-table [dataSource]="getData()"
+               matSort
+               [matSortActive]="getColumns()[3]"
+               matSortDisableClear
+               matSortDirection="asc">
+      <ng-container [matColumnDef]="getColumns()[0]">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let tenant">
+          <mat-icon [ngClass]="getStatus(tenant).iconClass">
+            {{getStatus(tenant).iconName}}
+          </mat-icon>
+        </mat-cell>
+      </ng-container>
 
-          <mat-paginator [length]="totalItems" [pageSize]="itemsPerPage" [hidePageSize]="true"
-            [showFirstLastButtons]="true">
-          </mat-paginator>
-        </div>
+      <ng-container [matColumnDef]="getColumns()[1]">
+        <mat-header-cell *matHeaderCellDef
+                         mat-sort-header
+                         disableClear="true"
+                         i18n>Name</mat-header-cell>
+        <mat-cell *matCellDef="let tenant">
+          <a [routerLink]="getDetailsHref(tenant.objectMeta.name)"
+             queryParamsHandling="preserve">
+            {{tenant.objectMeta.name}}
+          </a>
+        </mat-cell>
+      </ng-container>
 
-        <div content [hidden]="!showZeroState()">
-          <kd-list-zero-state></kd-list-zero-state>
-        </div>
-      </kd-card>
-    </div>
+      <ng-container [matColumnDef]="getColumns()[2]">
+        <mat-header-cell *matHeaderCellDef
+                         i18n>Phase</mat-header-cell>
+        <mat-cell *matCellDef="let tenant">{{tenant.phase}}</mat-cell>
+      </ng-container>
+
+      <ng-container [matColumnDef]="getColumns()[3]">
+        <mat-header-cell *matHeaderCellDef
+                         mat-sort-header
+                         disableClear="true"
+                         i18n>Age</mat-header-cell>
+        <mat-cell *matCellDef="let tenant">
+          <kd-date [date]="tenant.objectMeta.creationTimestamp"
+                   relative></kd-date>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container *ngFor="let col of getActionColumns()"
+                    [matColumnDef]="col.name">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let tenant">
+          <kd-dynamic-cell [component]="col.component"
+                           [resource]="tenant"></kd-dynamic-cell>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="getColumns()"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: getColumns();"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="totalItems"
+                   [pageSize]="itemsPerPage"
+                   [hidePageSize]="true"
+                   [showFirstLastButtons]="true"></mat-paginator>
   </div>
-</div>
+
+  <div content
+       [hidden]="!showZeroState()">
+    <kd-list-zero-state></kd-list-zero-state>
+  </div>
+</kd-card>
