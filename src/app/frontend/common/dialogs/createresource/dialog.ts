@@ -14,12 +14,13 @@
 
 
 
-import {Component} from '@angular/core';
+import {Component,Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HttpClient} from '@angular/common/http';
 import  {TenantService} from "../../services/global/tenant";
 import {NamespaceService} from "../../services/global/namespace";
 import {AppDeploymentContentSpec} from "@api/backendapi";
+import {MAT_DIALOG_DATA} from '@angular/material'
 
 @Component({
   selector: 'kd-delete-resource-dialog',
@@ -29,25 +30,27 @@ import {AppDeploymentContentSpec} from "@api/backendapi";
 
 
 export class CreateResourceDialog {
+  place_holder: string;
   tenant_name: string;
   // namespace_name: string;
 
   constructor(public dialog: MatDialog,
               private http:HttpClient,
               private readonly namespace_: NamespaceService,
-              private readonly tenant_: TenantService,) {}
+              private readonly tenant_: TenantService,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+                this.place_holder = this.data.displayName;
+              }
 
   openDialog() {
     const dialogRef = this.dialog.open(CreateResourceDialog);
     var data = {
-      tenant_name: "this.tenant_name",
+      tenant_name: this.tenant_name,
       // namespace_name: "this.namespace_name"
     }
 
      this.http.post<any>('https://192.168.1.244:9445/api/v1/tenant', data);
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-      console.log(data);
     });
   }
 }

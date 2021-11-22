@@ -359,6 +359,7 @@ router-outlet::after {
 }
 .mat-sort-header-button{
   font-size:11px !important;
+  color: #6c6b6b !important;
 }
 .kd-light-theme .kd-search {
   background-color: #fff;
@@ -570,7 +571,7 @@ router-outlet::after {
 }
 
 .mat-paginator .mat-paginator-container {
-  padding-right: 5px !important;
+  padding-right: 15px !important;
 }
 
 .mat-paginator .mat-paginator-container .mat-paginator-icon {
@@ -638,7 +639,7 @@ router-outlet::after {
   margin-right: 14px !important;
 }
 .mat-card {
-  margin: 19.2px !important;
+  margin: 12px 20px !important;
 }
 .mat-card-title button{
   font-size: 11px;
@@ -652,6 +653,11 @@ router-outlet::after {
   margin-top: -3px;
   margin-right: 5px;
 }
+// add button show hide //
+.kd-minimized-card-header button{
+  display: none;
+}
+// end of add button show hide //
 .mat-cell a,
 .mat-cell span{
   font-size: 12px !important;
@@ -663,6 +669,163 @@ router-outlet::after {
 .mat-header-row,
 .mat-row {
   min-height: 30px !important;
+  height: 30px !important;
 }
+// .table-row {
+//   height: 30px !important;
+// }
+.kd-light-theme .mat-row, 
+.kd-light-theme .mat-header-row, 
+.kd-light-theme .mat-footer-row, 
+.kd-light-theme th.mat-header-cell, 
+.kd-light-theme td.mat-cell, 
+.kd-light-theme td.mat-footer-cell{
+  border-bottom-color: #e7e5e5 !important;
+}
+.kd-light-theme .mat-flat-button.mat-primary,
+.kd-light-theme .mat-raised-button.mat-primary,
+.kd-light-theme .mat-fab.mat-primary,
+.kd-light-theme .mat-mini-fab.mat-primary{
+  background-color: #4175ff !important;
+}
+.mat-tab-header {
+  margin-left: 20px;
+  margin-right: 20px;
+  .mat-tab-label-container {
+      margin-bottom: 0px;
+      .mat-tab-labels {
+      .mat-tab-label {
+          padding: 0px 2px !important;
+          min-width: 10px;
+          margin-left: 0px;
+          height: 25px !important;
+          margin-right: 25px !important;
+      }
+      }
+  }
+  }
+  .mat-tab-label-active .mat-tab-label-content{
+    color: #4175ff !important;
+    opacity: 1;
+  }
+  .kd-scroll-container {
+    overflow-x: hidden !important;
+  }
 
+  // new card css //
+  .card_container {
+    margin: 12px 0px 0px 0px;
+  }
+
+  .card_item {
+    height: auto;
+    background-color: #fff;
+    border: 1px solid #d1d1d1;
+    padding: 12px 20px;
+    min-height: 160px;
+    max-height: 186px;
+  }
+
+  .card_item:hover {
+    box-shadow: 0px 1px 15px 2px #ccc;
+    // box-shadow: 0px 1px 15px 2px rgb(0 0 0 / 15%);
+  }
+
+  .mt_15 {
+    margin-top: 15px;
+  }
+
+  .card_header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+  }
+  .card_header .left_head{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 90%;
+  }
+
+  .card_header a {
+    text-decoration: none;
+    color: #4b7dff;
+    font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  .card_header a.red_text {
+    color: #ff0c0c;
+  }
+
+  .right_head .mat-button {
+    line-height: 20px !important;
+    margin-right: -8px !important;
+    padding: 0 !important;
+  }
+
+  .right_head .mat-icon {
+    color: #939191 !important;
+  }
+
+  .left_head .mat-icon {
+    color: #008000 !important;
+    font-size: 16px !important;
+  }
+
+  .left_head img {
+    width: 13px;
+    margin-right: 7px;
+    vertical-align: middle;
+    margin-top: -2px;
+  }
+
+  .card_body {
+    padding: 20px 0px 0px 0px;
+  }
+
+  .card_content {
+    display: flex;
+    margin-bottom: 8px;
+  }
+
+  .card_content h5 {
+    font-size: 11px;
+    color: #606060;
+    font-weight: normal;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  .card_content span {
+    font-size: 12px;
+    color: #b5b2b2;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  .left_content {
+    width: 105px;
+  }
+
+  .left_content h5 {
+    color: #8b8888;
+  }
+
+  .right_content h5 {
+    color: #6c6b6b;
+    font-weight: 600;
+  }
+  .namespace_container .card_item{
+    min-height: 143px;
+    max-height: 143px;
+  }
+  // end of new card css //
+
+  [class^='mat-column-action'], [class*='mat-column-action'] {
+    flex: 0 0 30px !important;
+  }
 

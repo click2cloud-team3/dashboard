@@ -14,77 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<style>
-  /* .mat-tab-body {
-    animation: fade-out 0.5s;
-    opacity: 0;
-  }
-
-  .mat-tab-body.mat-tab-body-active {
-    animation: fade-in 0.5s;
-    opacity: 1;
-  }
-
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
-
-    50% {
-      opacity: 0;
-    }
-
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes fade-out {
-    0% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0;
-    }
-
-    100% {
-      opacity: 0;
-    }
-  } */
-
-    /* create button css */
-    .btn_sec {
-    margin-right: 20px;
-  }
-
-  .btn_sec button {
-    float: right;
-    padding: 0px 25px;
-  }
-  /* end of create button css */
-  :host ::ng-deep.mat-card {
-    margin: 19.2px !important;
-  }
-  .btn_sec{
-    margin-top: 1rem;
-  }
-</style>
-
 <div class="row">
   <div class="col-12">
-    <mat-tab-group>
+    <mat-tab-group animationDuration="0ms">
       <div class="row">
         <div class="col-12">
           <mat-tab label="Role">
             <kd-card role="table" [hidden]="isHidden()">
               <div title fxLayout="row" i18n style="justify-content: space-between;">
-                <span>Role</span> 
+                <span>Role</span>
                 <button mat-raised-button matTooltip="Add Role" color="primary">
-                  <img class="add_icon" src="assets/images/plus_icon_white.svg" alt="">                  
+                  <img class="add_icon" src="assets/images/plus_icon_white.svg" alt="">
                   Add Role</button>
               </div>
-              
+
 
               <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{totalItems}}</div>
               <!-- <div actions>
@@ -132,8 +75,170 @@ limitations under the License.
                 <kd-list-zero-state></kd-list-zero-state>
               </div>
             </kd-card>
+
+            <kd-card role="table" [hidden]="isHidden()">
+              <div title fxLayout="row" i18n>Namespaces</div>
+              <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{totalItems}}
+              </div>
+              <!-- <div actions>
+                <kd-card-list-filter></kd-card-list-filter>
+              </div> -->
+      
+              <div content [hidden]="showZeroState()">
+                <div kdLoadingSpinner [isLoading]="isLoading"></div>
+      
+                <div class="card_container namespace_container">
+                  <div class="row">
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                      <div class="card_item">
+                        <div class="card_header">
+                          <div class="left_head">
+                            <img src="assets/images/greentick.svg" alt="">
+                            <a href="#">default</a>
+                          </div>
+                          <div class="right_head">
+                            <button mat-button [matMenuTriggerFor]="menu">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                              <button mat-menu-item>Edit</button>
+                              <button mat-menu-item>Delete</button>
+                            </mat-menu>
+                          </div>
+                        </div>
+                        <div class="card_body">
+                          <div class="card_content">
+                            <div class="left_content">
+                              <h5>Labels</h5>
+                            </div>
+                            <div class="right_content">
+                              <h5><span>:</span>-</h5>
+                            </div>
+                          </div>
+                          <div class="card_content">
+                            <div class="left_content">
+                              <h5>Phase</h5>
+                            </div>
+                            <div class="right_content">
+                              <h5><span>:</span>Active</h5>
+                            </div>
+                          </div>
+                          <div class="card_content">
+                            <div class="left_content">
+                              <h5>Age</h5>
+                            </div>
+                            <div class="right_content">
+                              <h5><span>:</span>1/1</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                      <div class="card_item">
+                        <div class="card_header">
+                          <div class="left_head">
+                            <img src="assets/images/greentick.svg" alt="">
+                            <a href="#">kube-node-lease</a>
+                          </div>
+                          <div class="right_head">
+                            <button mat-button [matMenuTriggerFor]="menu">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                              <button mat-menu-item>Edit</button>
+                              <button mat-menu-item>Delete</button>
+                            </mat-menu>
+                          </div>
+                        </div>
+                        <div class="card_body">
+                          <div class="card_content">
+                            <div class="left_content">
+                              <h5>Labels</h5>
+                            </div>
+                            <div class="right_content">
+                              <h5><span>:</span>-</h5>
+                            </div>
+                          </div>
+                          <div class="card_content">
+                            <div class="left_content">
+                              <h5>Phase</h5>
+                            </div>
+                            <div class="right_content">
+                              <h5><span>:</span>Active</h5>
+                            </div>
+                          </div>
+                          <div class="card_content">
+                            <div class="left_content">
+                              <h5>Age</h5>
+                            </div>
+                            <div class="right_content">
+                              <h5><span>:</span>1/1</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4">
+                      <div class="card_item">
+                        <div class="card_header">
+                          <div class="left_head">
+                            <img src="assets/images/greentick.svg" alt="">
+                            <a href="#">kube-public</a>
+                          </div>
+                          <div class="right_head">
+                            <button mat-button [matMenuTriggerFor]="menu">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                              <button mat-menu-item>Edit</button>
+                              <button mat-menu-item>Delete</button>
+                            </mat-menu>
+                          </div>
+                        </div>
+                        <div class="card_body">
+                          <div class="card_content">
+                            <div class="left_content">
+                              <h5>Labels</h5>
+                            </div>
+                            <div class="right_content">
+                              <h5><span>:</span>-</h5>
+                            </div>
+                          </div>
+                          <div class="card_content">
+                            <div class="left_content">
+                              <h5>Phase</h5>
+                            </div>
+                            <div class="right_content">
+                              <h5><span>:</span>Active</h5>
+                            </div>
+                          </div>
+                          <div class="card_content">
+                            <div class="left_content">
+                              <h5>Age</h5>
+                            </div>
+                            <div class="right_content">
+                              <h5><span>:</span>1/1</h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+      
+                <mat-paginator [length]="totalItems" [pageSize]="itemsPerPage" [hidePageSize]="true"
+                  [showFirstLastButtons]="true">
+                </mat-paginator>
+              </div>
+      
+              <div content [hidden]="!showZeroState()">
+                <kd-list-zero-state></kd-list-zero-state>
+              </div>
+            </kd-card>
+
           </mat-tab>
-          <mat-tab label="Rolebindings">Rolebindings Content</mat-tab>
+          <mat-tab label="Rolebinding">Rolebinding Content</mat-tab>
           <mat-tab label="Clusterroles">Clusterroles Content</mat-tab>
           <mat-tab label="ClusterBinding">ClusterBinding Content</mat-tab>
         </div>

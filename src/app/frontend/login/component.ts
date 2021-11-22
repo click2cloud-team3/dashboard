@@ -40,7 +40,7 @@ enum LoginModes {
 })
 export class LoginComponent implements OnInit {
   loginModes = LoginModes;
-  selectedAuthenticationMode = LoginModes.Basic;
+  selectedAuthenticationMode = LoginModes.Kubeconfig;
   errors: KdError[] = [];
 
   private enabledAuthenticationModes_: AuthenticationMode[] = [];
