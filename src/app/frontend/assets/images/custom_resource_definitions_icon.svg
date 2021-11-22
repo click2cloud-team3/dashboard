@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="13px" height="13px" viewBox="0 0 13 13" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <g id="Custom-Resource-Definitions" transform="translate(0.5 0.5)">
+    <g id="people">
+      <g id="Group" transform="translate(7.9960938 0)">
+        <path d="M1.48782 3.09562C0.659918 3.06562 0 2.38771 0 1.54781C0 0.689916 0.689914 0 1.54781 0C2.4057 0 3.09562 0.695915 3.09562 1.54781C3.08962 2.38771 2.4297 3.06562 1.6018 3.09562C1.56581 3.08962 1.52381 3.08962 1.48782 3.09562Z" id="Vector" fill="none" fill-rule="evenodd" stroke="#1F263E" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M0.98382 7.46312C1.80572 7.6011 2.71161 7.45712 3.34753 7.03117C4.19343 6.46724 4.19343 5.54336 3.34753 4.97943C2.70561 4.55348 1.78772 4.40949 0.96582 4.55348" id="Vector" fill="none" fill-rule="evenodd" stroke="#1F263E" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+      <g id="Group">
+        <path d="M2.49452 3.09562C3.32242 3.06562 3.98234 2.38771 3.98234 1.54781C3.98234 0.689916 3.29242 0 2.43453 0C1.57663 0 0.886719 0.695915 0.886719 1.54781C0.892718 2.38771 1.55264 3.06562 2.38054 3.09562C2.41653 3.08962 2.45852 3.08962 2.49452 3.09562Z" id="Vector" fill="none" fill-rule="evenodd" stroke="#1F263E" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M2.99813 7.46312C2.17623 7.6011 1.27034 7.45712 0.634422 7.03117C-0.211474 6.46724 -0.211474 5.54336 0.634422 4.97943C1.27634 4.55348 2.19423 4.40949 3.01613 4.55348" id="Vector" fill="none" fill-rule="evenodd" stroke="#1F263E" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+      <g id="Group" transform="translate(3.618164 4.4814453)">
+        <path d="M2.26614 3.09562C1.43824 3.06562 0.77832 2.38771 0.77832 1.54781C0.77832 0.689916 1.46823 0 2.32613 0C3.18402 0 3.87394 0.695915 3.87394 1.54781C3.86794 2.38771 3.20802 3.07162 2.38012 3.09562C2.34413 3.08962 2.30213 3.08962 2.26614 3.09562Z" id="Vector" fill="none" fill-rule="evenodd" stroke="#1F263E" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M0.634422 7.03711C1.5943 7.67903 3.16611 7.67903 4.12599 7.03711C4.97189 6.47318 4.97189 5.54929 4.12599 4.98536C3.17211 4.34944 1.5943 4.34944 0.634422 4.98536C-0.211474 5.54929 -0.211474 6.47318 0.634422 7.03711Z" id="Vector" fill="none" fill-rule="evenodd" stroke="#1F263E" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+    </g>
+  </g>
+</svg>
