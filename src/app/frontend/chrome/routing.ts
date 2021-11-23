@@ -46,10 +46,6 @@ const routes: Routes = [
         loadChildren: 'resource/cluster/tenant/module#TenantModule',
       },
       {
-        path: 'tenantnew',
-        loadChildren: 'resource/cluster/tenantnew/module#TenantNewModule',
-      },
-      {
         path: 'quota',
         loadChildren: 'resource/cluster/quota/module#QuotaModule',
       },
@@ -62,15 +58,6 @@ const routes: Routes = [
         loadChildren: 'resource/cluster/node/module#NodeModule',
         canActivate: [SystemGuard],
       },
-      // {
-      //   path: 'persistentvolume',
-      //   loadChildren: 'resource/cluster/persistentvolume/module#PersistentVolumeModule',
-      // },
-      // {
-      //   path: 'storageclass',
-      //   loadChildren: 'resource/cluster/storageclass/module#StorageClassModule',
-      // },
-
       // Overview
       {
         path: 'overview',
@@ -137,6 +124,14 @@ const routes: Routes = [
       {
         path: 'configmap',
         loadChildren: 'resource/config/configmap/module#ConfigMapModule',
+      },
+      {
+        path: 'persistentvolume',
+        loadChildren: 'resource/cluster/persistentvolume/module#PersistentVolumeModule',
+      },
+      {
+        path: 'storageclass',
+        loadChildren: 'resource/cluster/storageclass/module#StorageClassModule',
       },
       {
         path: 'persistentvolumeclaim',

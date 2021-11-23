@@ -42,10 +42,6 @@ limitations under the License.
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Tenants
           </kd-nav-item>
-          <kd-nav-item *ngIf="isCurrentSystem" class="kd-nav-item" state="/tenantnew" i18n>
-            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            Tenants New
-          </kd-nav-item>
           <kd-nav-item class="kd-nav-item" state="/clusterrole" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Access Control
@@ -242,13 +238,21 @@ limitations under the License.
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Config Maps
           </kd-nav-item>
-          <kd-nav-item class="kd-nav-item" state="/persistentvolumeclaim" i18n>
-            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            Persistent Volume Claims
-          </kd-nav-item>
           <kd-nav-item class="kd-nav-item" state="/secret" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Secrets
+          </kd-nav-item>
+          <kd-nav-item class="kd-nav-item" state="/storageclass" i18n>
+            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+            Storage Classes
+          </kd-nav-item>
+          <kd-nav-item class="kd-nav-item" state="/persistentvolume" i18n>
+            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+            Persistent Volumes
+          </kd-nav-item>
+          <kd-nav-item class="kd-nav-item" state="/persistentvolumeclaim" i18n>
+            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+            Persistent Volume Claims
           </kd-nav-item>
         </div>
       </mat-expansion-panel>
