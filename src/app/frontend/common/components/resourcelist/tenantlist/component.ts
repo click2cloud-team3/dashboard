@@ -35,7 +35,6 @@ import {VerberService} from '../../../services/global/verber';
 @Component({
   selector: 'kd-tenant-list',
   templateUrl: './template.html',
-  // styleUrls: ['./tenantlist.css']
 })
 export class TenantListComponent extends ResourceListWithStatuses<TenantList, Tenant> {
   @Input() endpoint = EndpointManager.resource(Resource.tenant).list();
@@ -82,6 +81,7 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
 
   //added the code
   onClick(): void {
-    this.verber_.showCreateDialog(this.displayName, this.typeMeta, this.objectMeta);
+    // this.verber_.showCreateDialog(this.displayName, this.typeMeta, this.objectMeta);
+    this.verber_.showTenantCreateDialog('tenant name',this.typeMeta,this.objectMeta);
   }
 }

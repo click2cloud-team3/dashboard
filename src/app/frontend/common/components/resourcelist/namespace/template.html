@@ -18,6 +18,7 @@ limitations under the License.
   :host ::ng-deep.mat-card {
     margin: 19.2px !important;
   }
+
   /* create button css */
   .btn_sec {
     margin-right: 20px;
@@ -30,26 +31,19 @@ limitations under the License.
 
   /* end of create button css */
 </style>
-<!---Buttons Add--->
-<!-- <button mat-raised-button i18n-matTooltip
-        matTooltip="Create new namespace" color="primary" (click)="onClick()">Create</button> -->
-
-<div class="row">
-  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-    <div class="btn_sec">
-      <button mat-raised-button i18n-matTooltip matTooltip="Create new tenant" color="primary"
-        (click)="onClick()">Create</button>
-    </div>
-    <div class="clearfix"></div>
-  </div>
-</div>
 
 <kd-card role="table" [hidden]="isHidden()">
-  <div title fxLayout="row" i18n>Namespaces</div>
-  <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{totalItems}}</div>
-  <div actions>
-    <kd-card-list-filter></kd-card-list-filter>
+  <div title fxLayout="row" i18n style="justify-content: space-between;"><span>Namespaces</span>
+    <button mat-raised-button matTooltip="Add Namespace" color="primary" (click)="onClick()">
+      <img class="add_icon" src="assets/images/plus_icon_white.svg" alt="">
+      Add Namespace</button>
   </div>
+
+
+  <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{totalItems}}</div>
+  <!-- <div actions>
+    <kd-card-list-filter></kd-card-list-filter>
+  </div> -->
 
   <div content [hidden]="showZeroState()">
     <div kdLoadingSpinner [isLoading]="isLoading"></div>

@@ -23,13 +23,13 @@ import {AppDeploymentContentSpec} from "@api/backendapi";
 import {MAT_DIALOG_DATA} from '@angular/material'
 
 @Component({
-  selector: 'kd-delete-resource-dialog',
+  selector: 'kd-create-tenant-dialog',
   templateUrl: 'template.html',
 })
 
 
 
-export class CreateResourceDialog {
+export class CreateTenantDialog {
   place_holder: string;
   tenant_name: string;
   // namespace_name: string;
@@ -44,9 +44,8 @@ export class CreateResourceDialog {
               }
 
   openDialog() {
-    console.log(" htsi is ",this.tenant_name);
     
-    const dialogRef = this.dialog.open(CreateResourceDialog);
+    const dialogRef = this.dialog.open(CreateTenantDialog);
     var data = {
       tenant_name: this.tenant_name,
       // namespace_name: "this.namespace_name"

@@ -14,33 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<style>
-  /* create button css */
-  .btn_sec {
-    margin-right: 20px;
-  }
-
-  .btn_sec button {
-    float: right;
-    padding: 0px 25px;
-  }
-  /* end of create button css */
-</style>
-<!---Buttons Add--->
 <div class="main_container">
   <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="btn_sec">
-        <button mat-raised-button i18n-matTooltip matTooltip="Create new tenant" color="primary"
-          (click)="onClick()">Create</button>
-      </div>
-      <div class="clearfix"></div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
       <kd-card role="table" [hidden]="isHidden()">
-        <div title fxLayout="row" i18n>Daemon Sets</div>
+        <div title fxLayout="row" i18n></div>
+        <div title fxLayout="row" i18n style="justify-content: space-between;"><span>Tenants</span>
+          <button mat-raised-button matTooltip="Add Tenant" color="primary" (click)="onClick()">
+            <img class="add_icon" src="assets/images/plus_icon_white.svg" alt="">
+            Add Tenant</button>
+        </div>
         <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{totalItems}}
         </div>
         <div actions>

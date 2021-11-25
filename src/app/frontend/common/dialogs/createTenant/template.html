@@ -1,0 +1,119 @@
+<style>
+  :host ::ng-deep.mat-form-field {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+  }
+
+  :host ::ng-deep.mat-form-field-appearance-fill .mat-form-field-flex {
+    padding: .25em .75em 0px .75em;
+  }
+
+  :host ::ng-deep.help_sec,
+  :host ::ng-deep.input_sec {
+    margin-bottom: 1.5rem;
+  }
+
+  :host ::ng-deep.help_sec {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  :host ::ng-deep.help_sec .material-icons {
+    font-size: 12px;
+    vertical-align: middle;
+  }
+
+  :host ::ng-deep.help_sec a {
+    color: #326de6;
+  }
+
+  :host ::ng-deep.mat-dialog-actions button:last-child {
+    color: #326de6;
+  }
+  .dialog_title{
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+    color: rgba(0, 0, 0, 0.87);
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Media Query */
+  @media screen and (min-width:320px) and (max-width:575px) {
+    :host ::ng-deep.input_sec {
+      margin-bottom: .5rem;
+    }
+  }
+</style>
+
+<div class="row">
+  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+    <h2 mat-dialog-title>Create a Tenant</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+    <div class="input_sec">
+      <mat-form-field appearance="fill">
+        <mat-label>Tenant Name *</mat-label>
+        <input matInput [(ngModel)]="tenant_name">
+        <mat-hint align="end">0/24</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+    <div class="help_sec">
+      <span>An 'app' label with this value will be added to the Deployment and Service that get deployed.</span>
+      <a href="" target="_blank">
+        Learn more
+        <i class="material-icons">open_in_new</i>
+      </a>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+    <div class="input_sec">
+      <mat-form-field appearance="fill">
+        <mat-label>Namespace *</mat-label>
+        <input matInput>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+    <div class="help_sec">
+      <span>An 'app' label with this value will be added to the Deployment and Service that get deployed.</span>
+      <a href="" target="_blank">
+        Learn more
+        <i class="material-icons">open_in_new</i></a>
+    </div>
+  </div>
+  <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+    <div class="input_sec">
+      <mat-form-field appearance="fill">
+        <mat-label>StorageClusterid: 0</mat-label>
+        <input matInput disabled>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+    <div class="help_sec">
+      <span>An 'app' label with this value will be added to the Deployment and Service that get deployed.</span>
+      <a href="" target="_blank">
+        Learn more
+        <i class="material-icons">open_in_new</i></a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button [mat-dialog-close]="true">Create</button>
+    </mat-dialog-actions>
+  </div>
+</div>

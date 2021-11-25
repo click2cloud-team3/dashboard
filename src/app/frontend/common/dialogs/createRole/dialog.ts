@@ -20,7 +20,8 @@ import {HttpClient} from '@angular/common/http';
 import  {TenantService} from "../../services/global/tenant";
 import {NamespaceService} from "../../services/global/namespace";
 import {AppDeploymentContentSpec} from "@api/backendapi";
-import {MAT_DIALOG_DATA} from '@angular/material'
+import {MAT_DIALOG_DATA} from '@angular/material';
+import { contact } from './model';
 
 @Component({
   selector: 'kd-delete-resource-dialog',
@@ -29,7 +30,7 @@ import {MAT_DIALOG_DATA} from '@angular/material'
 
 
 
-export class CreateResourceDialog {
+export class CreateRoleDialog {
   place_holder: string;
   tenant_name: string;
   // namespace_name: string;
@@ -41,12 +42,13 @@ export class CreateResourceDialog {
               @Inject(MAT_DIALOG_DATA) public data: any) {
                 console.log(" data",this.data);
                 this.place_holder = this.data.displayName;
+                this.dataarray.push(this.obj1);
               }
 
   openDialog() {
     console.log(" htsi is ",this.tenant_name);
     
-    const dialogRef = this.dialog.open(CreateResourceDialog);
+    const dialogRef = this.dialog.open(CreateRoleDialog);
     var data = {
       tenant_name: this.tenant_name,
       // namespace_name: "this.namespace_name"
@@ -57,6 +59,38 @@ export class CreateResourceDialog {
       console.log(`Dialog result: ${result}`);
       console.log(data);
     });
+  }
+  showContent1(){
+    document.getElementById("first_tab_content").style.display = "block"; 
+    document.getElementById("second_tab_content").style.display = "none"; 
+  }
+  showContent2(){
+    document.getElementById("first_tab_content").style.display = "none"; 
+    document.getElementById("second_tab_content").style.display = "block"; 
+  }
+
+
+  obj1 =  new contact();
+  dataarray : any [] = [];
+     
+  // constructor() { 
+  //   this.dataarray.push(this.obj1);
+  // }
+  
+  ngOnInit(): void{
+  }
+
+  addForm(){
+    this.obj1 =  new contact();
+    this.dataarray.push(this.obj1);
+  }   
+
+  removeForm(index:number) {
+    this.dataarray.splice(index,1);
+  }
+  
+  onsubmit() {  
+    console.log(this.dataarray);  
   }
 }
 

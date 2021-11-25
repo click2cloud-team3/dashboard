@@ -25,6 +25,15 @@ import {ScaleResourceDialog} from '../../dialogs/scaleresource/dialog';
 import {TriggerResourceDialog} from '../../dialogs/triggerresource/dialog';
 import {RawResource} from '../../resources/rawresource';
 
+// tenat dialog
+import { CreateTenantDialog } from "./../../dialogs/createTenant/dialog";
+
+// namespace dialog
+import {CreateNamespaceDialog} from '../../dialogs/createNamespace/dialog';
+
+// role dialog
+import {CreateRoleDialog} from '../../dialogs/createRole/dialog';
+
 import {ResourceMeta} from './actionbar';
 import {TenantService} from './tenant';
 
@@ -42,10 +51,58 @@ export class VerberService {
     private tenant_: TenantService,
   ) {}
 
-  showCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
+  showCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {    
     const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
+    
     this.dialog_
       .open(CreateResourceDialog, dialogConfig)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
+          this.http_
+            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
+            .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
+        }
+      });
+  }
+
+  // create tenant
+  showTenantCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {    
+    const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);     
+    this.dialog_
+      .open(CreateTenantDialog, dialogConfig)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
+          this.http_
+            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
+            .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
+        }
+      });
+  }
+
+  // create Namespace
+  showNamespaceCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {    
+    const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);    
+    this.dialog_
+      .open(CreateNamespaceDialog, dialogConfig)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
+          this.http_
+            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
+            .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
+        }
+      });
+  }
+  // create Role
+  showRoleCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {    
+    const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);    
+    this.dialog_
+      .open(CreateRoleDialog, dialogConfig)
       .afterClosed()
       .subscribe(result => {
         if (result) {

@@ -74,6 +74,9 @@ export class NamespaceListComponent extends ResourceListWithStatuses<NamespaceLi
   }
   //added the code
   onClick(): void {
-    this.verber_.showCreateDialog(this.displayName, this.typeMeta, this.objectMeta);
+    
+    // this.verber_.showCreateDialog('Create Name Space', this.typeMeta, this.objectMeta);
+    this.verber_.showNamespaceCreateDialog('Namespace name',this.typeMeta,this.objectMeta);
+
   }
 }
