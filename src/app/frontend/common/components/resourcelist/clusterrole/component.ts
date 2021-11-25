@@ -24,6 +24,7 @@ import {EndpointManager, Resource} from '../../../services/resource/endpoint';
 import {ResourceService} from '../../../services/resource/resource';
 import {MenuComponent} from '../../list/column/menu/component';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
+import {VerberService} from '../../../services/global/verber';
 
 @Component({
   selector: 'kd-cluster-role-list',
@@ -31,8 +32,10 @@ import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 })
 export class ClusterRoleListComponent extends ResourceListBase<ClusterRoleList, ClusterRole> {
   @Input() endpoint = EndpointManager.resource(Resource.clusterRole, false, true).list();
-
+  typeMeta:any="";
+  objectMeta:any;
   constructor(
+    private readonly verber_: VerberService,
     private readonly clusterRole_: ResourceService<ClusterRoleList>,
     notifications: NotificationsService,
   ) {
@@ -54,5 +57,9 @@ export class ClusterRoleListComponent extends ResourceListBase<ClusterRoleList, 
 
   getDisplayColumns(): string[] {
     return ['name', 'age'];
+  }
+  onClick(): void {
+    this.verber_.showRoleCreateDialog('Role name',this.typeMeta,this.objectMeta);
+
   }
 }

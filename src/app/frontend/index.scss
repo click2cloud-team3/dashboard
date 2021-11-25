@@ -393,7 +393,7 @@ router-outlet::after {
 }
 .menu_icon{
   // width: 13px;
-  margin-top: -2px;
+  margin-top: -3px;
   margin-right: 5px;
 }
 .submenu_icon{
@@ -829,3 +829,194 @@ router-outlet::after {
     flex: 0 0 30px !important;
   }
 
+/* custom radio button */
+/* The container */
+.radio_container {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radio_container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.radio_container .checkmark {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  border: 1px solid #a3a1a1;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio_container:hover input ~ .checkmark {
+  border: 1px solid #a3a1a1;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio_container input:checked ~ .checkmark {
+  background-color: #fff;
+  border: 1px solid #4174ff;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.radio_container .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio_container input:checked ~ .checkmark:after {
+  display: block;
+  background-color: #4174ff;
+  border: 1px solid #4174ff;
+  height: 7px;
+  width: 7px;
+}
+
+/* Style the indicator (dot/circle) */
+.radio_container .checkmark:after {
+     top: 3px;
+    left: 3px;
+    border-radius: 50%;
+    background: white;
+}
+
+.radio_container .radio_text {
+  color: #565656 !important;
+  font-size: 14px !important;
+  font-weight: 500;
+}
+.radio_container input[type=radio]:checked ~ .radio_text {
+  color: black !important;
+  font-weight: 500;
+}
+.form-check-inline {
+  padding-left: 0 !important;
+  margin-top: -0.8rem !important;
+  margin-bottom: .525rem !important;
+}
+/* end of custom radio button */
+.form_input_head{
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  color: #565656 !important;
+  margin-bottom: 0.6rem !important;
+}
+.tab_content{
+  min-height: 410px;
+}
+.second_tab_content{
+  display: none;
+}
+.cdk-overlay-pane{
+  width: 430px !important;
+}
+.second_tab_content .cdk-text-field-autofill-monitored{
+  resize: none;
+  min-height: 320px;
+  max-height: 320px;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-left: 18px solid #dedede !important;
+}
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+  line-height: 24px !important;
+  padding: 3px 12px !important;
+  font-size: 12px !important;
+}
+.kd-light-theme .mat-button-toggle-group {
+  border-radius: 0px !important;
+}
+.mat-select-panel-wrap {
+  flex-basis: 40% !important;
+}
+.second_tab_content .mat-form-field-underline{
+  display: none;
+}
+.second_tab_content .mat-form-field-subscript-wrapper{
+  display: none;
+}
+.second_tab_content .mat-form-field-ripple{
+  display: none;
+}
+.second_tab_content .mat-form-field-flex{
+  padding: 0 !important;
+}
+.second_tab_content .mat-form-field-infix{
+  padding: 0 !important;
+  border-top: .15em solid transparent !important;
+}
+.second_tab_content .mat-form-field-wrapper{
+  padding-bottom: 0 !important;
+}
+.tab_content .input_sec{
+  margin-bottom: 0.5rem !important;
+}
+.mat-form-field-flex{
+  background-color: #fff !important;
+}
+.mat-form-field-appearance-fill .mat-form-field-infix{
+  padding: 0em 0 .5em 0 !important;
+}
+.add_btn_sec{
+  margin-top: -20px !important;
+  margin-bottom: 10px !important;
+  margin-right: 56px !important;
+}
+.add_btn_sec .mat-raised-button{
+  font-size: 10px !important;
+  padding: 3px 10px !important;
+  line-height: 15px !important;
+  box-shadow: none !important;
+  border-radius: unset !important;
+  min-width: 55px !important;
+}
+.add_btn_sec .mat-raised-button .add_icon{
+  width: 11px;
+  margin-top: -3px;
+  margin-right: 3px;
+}
+// .add_form_container{
+//   position: relative;
+// }
+// .add_form_container .close_btn_sec{
+//   position: absolute;
+//   top: 10px;
+//   right: 0px;
+//   z-index: 2;
+// }
+.add_form_container .close_btn_sec img{
+  width: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+.col_pad1{
+  padding: 0px 10px 0px 12px !important;
+}
+.col_pad2{
+  padding: 0px 0px 0px 10px !important;
+}
+.content_body{
+  min-height: 375px;
+  max-height: 375px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-right: -10px;
+  padding-right: 10px;
+}
