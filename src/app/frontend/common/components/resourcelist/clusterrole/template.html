@@ -28,12 +28,7 @@ limitations under the License.
                   Add Role</button>
               </div>
 
-
               <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{totalItems}}</div>
-              <!-- <div actions>
-                <kd-card-list-filter></kd-card-list-filter>
-              </div> -->
-
               <div content [hidden]="showZeroState()">
                 <div kdLoadingSpinner [isLoading]="isLoading"></div>
 
@@ -77,6 +72,7 @@ limitations under the License.
             </kd-card>
 
           </mat-tab>
+
           <mat-tab label="Clusterroles">
             <kd-card role="table" [hidden]="isHidden()">
               <div title fxLayout="row" i18n style="justify-content: space-between;">

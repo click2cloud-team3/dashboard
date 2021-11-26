@@ -44,7 +44,7 @@ export class CreateTenantDialog {
               }
 
   openDialog() {
-    
+
     const dialogRef = this.dialog.open(CreateTenantDialog);
     var data = {
       tenant_name: this.tenant_name,

@@ -29,7 +29,7 @@ import {ResourceService} from '../../../common/services/resource/resource';
 })
 export class TenantQuotaDetailComponent  {
 
-imageofquota:string ="../assets/images/kubernetes-logo.png"
+imageofquota:string ="../assets/images/centaurus-logo.png"
 
 
 }
