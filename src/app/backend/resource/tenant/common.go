@@ -34,7 +34,9 @@ type TenantSpec struct {
 // CreateTenant creates tenant based on given specification.
 func CreateTenant(spec *TenantSpec, client kubernetes.Interface) error {
 	log.Printf("Creating tenant %s", spec.Name)
-
+  
+  // setting default values if no values passed 
+  
 	if spec.StorageClusterId == "" {
 		spec.StorageClusterId = "0"
 	}
