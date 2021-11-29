@@ -559,6 +559,14 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Reads(ns.NamespaceSpec{}).
 			Writes(ns.NamespaceSpec{}))
 	apiV1Ws.Route(
+		apiV1Ws.POST("/tenant").
+			To(apiHandler.handleCreateTenant).
+			Reads(tenant.TenantSpec{}).
+			Writes(tenant.TenantSpec{}))
+	apiV1Ws.Route(
+		apiV1Ws.DELETE("/tenants/{tenant}").
+			To(apiHandler.handleDeleteTenant))
+	apiV1Ws.Route(
 		apiV1Ws.GET("/namespace").
 			To(apiHandler.handleGetNamespaces).
 			Writes(ns.NamespaceList{}))
@@ -2659,6 +2667,46 @@ func (apiHandler *APIHandler) handleCreateNamespace(request *restful.Request, re
 		return
 	}
 	response.WriteHeaderAndEntity(http.StatusCreated, namespaceSpec)
+}
+
+func (apiHandler *APIHandler) handleCreateTenant(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	tenantSpec := new(tenant.TenantSpec)
+	if err := request.ReadEntity(tenantSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	if err := tenant.CreateTenant(tenantSpec, k8sClient); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusCreated, tenantSpec)
+}
+
+func (apiHandler *APIHandler) handleDeleteTenant(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	tenant_name := request.PathParameter("tenant")
+
+	tenantSpec := new(tenant.TenantSpec)
+	tenantSpec.Name = tenant_name
+
+	if err := tenant.DeleteTenant(tenantSpec, k8sClient); err != nil {
+		log.Printf("Deleting Tenant %s", tenant_name)
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
 }
 
 func (apiHandler *APIHandler) handleGetNamespaces(request *restful.Request, response *restful.Response) {
