@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <g id="danger" transform="translate(1 1)">
+    <path d="M0 0L0 5" transform="translate(12 9)" id="Vector" fill="none" fill-rule="evenodd" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M3.93944 18.8175C0.469444 18.8175 -0.980555 16.3375 0.699445 13.3075L3.81944 7.6875L6.75944 2.4075C8.53944 -0.8025 11.4594 -0.8025 13.2394 2.4075L16.1794 7.6975L19.2994 13.3175C20.9794 16.3475 19.5194 18.8275 16.0594 18.8275L9.99944 18.8275L9.99944 18.8175L3.93944 18.8175Z" transform="translate(2.0004883 2.5925293)" id="Vector" fill="none" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0 0L0.00898194 0" transform="translate(11.994629 17)" id="Vector" fill="none" fill-rule="evenodd" stroke="#FF0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M24 0L24 24L0 24L0 0L24 0Z" id="Vector" fill="none" fill-rule="evenodd" stroke="none" />
+  </g>
+</svg>

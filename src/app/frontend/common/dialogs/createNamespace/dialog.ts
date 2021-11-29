@@ -23,26 +23,32 @@ import {AppDeploymentContentSpec} from "@api/backendapi";
 import {MAT_DIALOG_DATA} from '@angular/material'
 
 @Component({
-  selector: 'kd-delete-resource-dialog',
+  selector: 'kd-create-namespace-dialog',
   templateUrl: 'template.html',
 })
 
-export class CreateResourceDialog {
+
+
+export class CreateNamespaceDialog {
   place_holder: string;
   tenant_name: string;
+  // namespace_name: string;
 
   constructor(public dialog: MatDialog,
               private http:HttpClient,
               private readonly namespace_: NamespaceService,
               private readonly tenant_: TenantService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
+                console.log(" data",this.data);
                 this.place_holder = this.data.displayName;
               }
 
   openDialog() {
-    const dialogRef = this.dialog.open(CreateResourceDialog);
+    
+    const dialogRef = this.dialog.open(CreateNamespaceDialog);
     var data = {
       tenant_name: this.tenant_name,
+      // namespace_name: "this.namespace_name"
     }
 
      this.http.post<any>('https://192.168.1.244:9445/api/v1/tenant', data);
