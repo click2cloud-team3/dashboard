@@ -2695,17 +2695,11 @@ func (apiHandler *APIHandler) handleDeleteTenant(request *restful.Request, respo
 		return
 	}
 
-	tenant_name := request.PathParameter("tenant")
-
-	tenantSpec := new(tenant.TenantSpec)
-	tenantSpec.Name = tenant_name
-
-	if err := tenant.DeleteTenant(tenantSpec, k8sClient); err != nil {
-		log.Printf("Deleting Tenant %s", tenant_name)
+	tenantName := request.PathParameter("tenant")
+	if err := tenant.DeleteTenant(tenantName, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
-
 	response.WriteHeader(http.StatusOK)
 }
 

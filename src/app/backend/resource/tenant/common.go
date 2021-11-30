@@ -28,15 +28,14 @@ import (
 type TenantSpec struct {
 	// Name of the tenant.
 	Name             string `json:"name"`
-	StorageClusterId string `json:"storageclusterid"`
+	StorageClusterId string `json:"storageclusterid"` // Storage Cluster Id of the Tenant
 }
 
 // CreateTenant creates tenant based on given specification.
 func CreateTenant(spec *TenantSpec, client kubernetes.Interface) error {
 	log.Printf("Creating tenant %s", spec.Name)
-  
-  // setting default values if no values passed 
-  
+
+	// setting default values if no values passed
 	if spec.StorageClusterId == "" {
 		spec.StorageClusterId = "0"
 	}
@@ -51,17 +50,13 @@ func CreateTenant(spec *TenantSpec, client kubernetes.Interface) error {
 	}
 
 	_, err := client.CoreV1().Tenants().Create(tenant)
-
 	return err
 }
 
 // DeleteTenant deletes tenant based on given specification.
-func DeleteTenant(spec *TenantSpec, client kubernetes.Interface) error {
-	log.Printf("Deleting Tenant %s", spec.Name)
-	err := client.CoreV1().Tenants().Delete(spec.Name, &metaV1.DeleteOptions{})
-	if err != nil {
-		log.Printf("error is %s", err.Error())
-	}
+func DeleteTenant(tenantName string, client kubernetes.Interface) error {
+	log.Printf("Deleting Tenant %s", tenantName)
+	err := client.CoreV1().Tenants().Delete(tenantName, &metaV1.DeleteOptions{})
 	return err
 }
 
