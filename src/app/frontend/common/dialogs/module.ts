@@ -19,7 +19,7 @@ import {ComponentsModule} from '../components/module';
 
 import {AlertDialog} from './alert/dialog';
 import {CreateResourceDialog} from './createresource/dialog';
-import { CreateTenantDialog } from './createTenant/dialog';
+import {CreateTenantDialog } from './createTenant/dialog';
 import { CreateNamespaceDialog } from './createNamespace/dialog';
 import { CreateRoleDialog } from './createRole/dialog';
 import {DeleteResourceDialog} from './deleteresource/dialog';
@@ -27,7 +27,7 @@ import {LogsDownloadDialog} from './download/dialog';
 import {EditResourceDialog} from './editresource/dialog';
 import {ScaleResourceDialog} from './scaleresource/dialog';
 import {TriggerResourceDialog} from './triggerresource/dialog';
-
+import {CreateNodeDialog} from "./createNode/dialog";
 
 @NgModule({
   imports: [SharedModule, ComponentsModule],
@@ -42,6 +42,7 @@ import {TriggerResourceDialog} from './triggerresource/dialog';
     LogsDownloadDialog,
     ScaleResourceDialog,
     TriggerResourceDialog,
+    CreateNodeDialog,
 
 
   ],
@@ -56,6 +57,7 @@ import {TriggerResourceDialog} from './triggerresource/dialog';
     LogsDownloadDialog,
     ScaleResourceDialog,
     TriggerResourceDialog,
+    CreateNodeDialog,
 
   ],
   entryComponents: [
@@ -69,6 +71,7 @@ import {TriggerResourceDialog} from './triggerresource/dialog';
     LogsDownloadDialog,
     ScaleResourceDialog,
     TriggerResourceDialog,
+    CreateNodeDialog,
 
   ],
 })

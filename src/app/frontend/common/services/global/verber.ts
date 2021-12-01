@@ -26,21 +26,20 @@ import {TriggerResourceDialog} from '../../dialogs/triggerresource/dialog';
 import {RawResource} from '../../resources/rawresource';
 
 // tenat dialog
-import { CreateTenantDialog } from "./../../dialogs/createTenant/dialog";
+import { CreateTenantDialog } from './../../dialogs/createTenant/dialog';
 
-// namespace dialog
-import {CreateNamespaceDialog} from '../../dialogs/createNamespace/dialog';
-
-// role dialog
-import {CreateRoleDialog} from '../../dialogs/createRole/dialog';
+import {CreateNamespaceDialog} from '../../dialogs/createNamespace/dialog'; // namespace dialog
+import {CreateRoleDialog} from '../../dialogs/createRole/dialog'; // role dialog
 
 import {ResourceMeta} from './actionbar';
 import {TenantService} from './tenant';
+import {CreateNodeDialog} from "../../dialogs/createNode/dialog";
 
 @Injectable()
 export class VerberService {
   onCreate = new EventEmitter<boolean>();
   onCreateTenant = new EventEmitter<boolean>(); //added
+  onCreateNode = new EventEmitter<boolean>(); //added
   onDelete = new EventEmitter<boolean>();
   onEdit = new EventEmitter<boolean>();
   onScale = new EventEmitter<boolean>();
@@ -113,6 +112,21 @@ export class VerberService {
         }
       });
   }
+  // create node
+  showNodeCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
+    const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
+    this.dialog_
+      .open(CreateNodeDialog, dialogConfig)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
+          this.http_
+            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
+            .subscribe(() => this.onCreateNode.emit(true), this.handleErrorResponse_.bind(this));
+        }
+      });
+  }
 
   showDeleteDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
     const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
@@ -181,6 +195,7 @@ export class VerberService {
         }
       });
   }
+
 
   getDialogConfig_(
     displayName: string,
