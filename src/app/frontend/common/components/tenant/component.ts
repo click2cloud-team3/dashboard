@@ -42,7 +42,6 @@ export class TenantSelectorComponent implements OnInit {
   selectTenantInput = '';
   systemTenantName = CONFIG.systemTenantName;
 
-
   @ViewChild(MatSelect, {static: true}) private readonly select_: MatSelect;
   @ViewChild('tenantInput', {static: true}) private readonly tenantInputEl_: ElementRef;
 
@@ -57,6 +56,34 @@ export class TenantSelectorComponent implements OnInit {
   ngOnInit(): void {
     this._activeRoute.queryParams.pipe(takeUntil(this.unsubscribe_)).subscribe(params => {
       const tenant = params.tenant;
+      //tenantlist loaded at ngoninit and get tenant[1] added
+      this.tenantUpdate_
+        .pipe(takeUntil(this.unsubscribe_))
+        .pipe(startWith({}))
+        .pipe(switchMap(() => this.tenant_.get(this.endpoint_.list())))
+        .subscribe(
+          tenantList => {
+            this.tenants = tenantList.tenants
+              .map(t => t.objectMeta.name)
+              .filter(t => t !== this.systemTenantName);
+
+            var tenantslist= tenantList.tenants;//added
+            var selectedtenantname=tenantslist[1].objectMeta.name;//added
+            const tenantselected =selectedtenantname;
+
+            //on pageload get name of tenant from tenantlist using index[1] on tenant dropdown
+            this.selectedTenant = selectedtenantname;
+            if (tenantList.errors.length > 0) {
+              for (const err of tenantList.errors) {
+                this.notifications_.push(err.ErrStatus.message, NotificationSeverity.error);
+              }
+            }
+          },
+          () => {},
+          () => {
+            this.onTenantLoaded_();
+          },
+        );
 
       if (!tenant) {
         this.setDefaultQueryParams_();
@@ -68,41 +95,20 @@ export class TenantSelectorComponent implements OnInit {
       }
 
       this.tenantService_.setCurrent(tenant);
-      this.selectedTenant = tenant;
+      this.router_.navigate([this._activeRoute.snapshot.url], {
+        queryParams: {
+          [TENANT_STATE_PARAM]:  this.selectedTenant,
+        },
+        queryParamsHandling: 'merge',
+      });
     });
 
-    this.selectedTenant = this.tenantService_.current();
     this.select_.value = this.selectTenant;
-    this.loadTenants_();
   }
 
   ngOnDestroy(): void {
     this.unsubscribe_.next();
     this.unsubscribe_.complete();
-  }
-
-  loadTenants_(): void {
-    this.tenantUpdate_
-      .pipe(takeUntil(this.unsubscribe_))
-      .pipe(startWith({}))
-      .pipe(switchMap(() => this.tenant_.get(this.endpoint_.list())))
-      .subscribe(
-        tenantList => {
-          this.tenants = tenantList.tenants
-            .map(t => t.objectMeta.name)
-            .filter(t => t !== this.systemTenantName);
-
-          if (tenantList.errors.length > 0) {
-            for (const err of tenantList.errors) {
-              this.notifications_.push(err.ErrStatus.message, NotificationSeverity.error);
-            }
-          }
-        },
-        () => {},
-        () => {
-          this.onTenantLoaded_();
-        },
-      );
   }
 
   selectTenant(): void {
@@ -124,6 +130,7 @@ export class TenantSelectorComponent implements OnInit {
   private onTenantLoaded_(): void {
     let newTenant = this.tenantService_.getAuthTenant();
     const targetTenant = this.selectedTenant;
+    console.log(newTenant)
 
     if (
       targetTenant &&
@@ -163,9 +170,11 @@ export class TenantSelectorComponent implements OnInit {
     });
   }
 
-  setDefaultQueryParams_(): void {
+  setDefaultQueryParams_( ): void {
     this.router_.navigate([this._activeRoute.snapshot.url], {
-      queryParams: {[TENANT_STATE_PARAM]: 'system'},
+      queryParams: {
+        [TENANT_STATE_PARAM]: 'tenant-1',
+      },
       queryParamsHandling: 'merge',
     });
   }

@@ -18,7 +18,7 @@ limitations under the License.
      i18n>Tenant</div>
 <mat-form-field class="kd-namespace-select-input-container">
   <mat-select  (openedChange)="onTenantToggle($event)"
-              [(ngModel)]="selectedTenant" >
+               [(ngModel)]="selectedTenant" >
     <div [ngClass]="{'kd-namespace-select-input-border': tenants.length > 0}">
       <input #tenantInput
              i18n-placeholder

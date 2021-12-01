@@ -1,43 +1,31 @@
-<div style="display: block;font-size: 22px;padding: 3px 0 0 141px;" title
-     i18n>Users</div>
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 80%;align-items: center;margin-left: 140px;margin-top:4%">
 
-  <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
+<kd-card role="table">
+  <div title
+       fxLayout="row"
+       i18n>Users</div>
+  <div description><span class="kd-muted-light"
+                         i18n>Items:&nbsp;</span></div>
+  <div actions>
+    <kd-card-list-filter></kd-card-list-filter>
+  </div>
 
-  <ng-container matColumnDef="select">
-    <mat-header-cell *matHeaderCellDef>
+  <div content>
+    <table style="width: 100%;" mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+      <ng-container [matColumnDef]="username"   *ngFor="let username of displayedColumns">
+        <th mat-header-cell style="font-size: 18px;padding: 21px 0;" *matHeaderCellDef> Name </th>
+        <td mat-cell style="padding-left: 16px;font-size: 16px;"  *matCellDef="let element"> {{element[username]}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-    </mat-header-cell>
-    <mat-cell *matCellDef="let element">
+    </table>
+    <mat-paginator [length]="totalItems"
+                   [pageSize]="itemsPerPage"
+                   [hidePageSize]="true"
+                   [showFirstLastButtons]="true"></mat-paginator>
 
-    </mat-cell>
-  </ng-container>
-  <!-- Position Column -->
-  <ng-container matColumnDef="position">
-    <th mat-header-cell *matHeaderCellDef>  </th>
-    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-  </ng-container>
-
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-  </ng-container>
-
-  <!-- Weight Column -->
-  <ng-container matColumnDef="weight">
-    <th mat-header-cell *matHeaderCellDef> Phase </th>
-    <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-  </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Age </th>
-    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-  </ng-container>
+  </div>
+</kd-card>
 
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+

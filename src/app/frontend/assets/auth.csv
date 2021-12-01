@@ -1,0 +1,5 @@
+password,User,id,group,Tenant,Phase,Age
+smartvm,varsha,user,system:masters,tenant-1,Active,2 hours
+sonali123,sonali,user,system:masters,tenant-2,Active,1 hours
+user123,user,user,system:masters,tenant-1,Active,2 hours
+
