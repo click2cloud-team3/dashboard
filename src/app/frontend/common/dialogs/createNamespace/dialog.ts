@@ -1,4 +1,4 @@
-// Copyright 2020 Authors of Arktos - file modified.
+// Copyright 2017 The Kubernetes Authors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,50 +12,113 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Component, Inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
+import {AlertDialog, AlertDialogConfig} from '../../../common/dialogs/alert/dialog';
+import {CsrfTokenService} from '../../../common/services/global/csrftoken';
+import {CONFIG} from '../../../index.config';
 
 
-import {Component,Inject} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {HttpClient} from '@angular/common/http';
-import  {TenantService} from "../../services/global/tenant";
-import {NamespaceService} from "../../services/global/namespace";
-import {AppDeploymentContentSpec} from "@api/backendapi";
-import {MAT_DIALOG_DATA} from '@angular/material'
+export interface CreateNamespaceDialogMeta {
+  namespaces: string[];
+}
 
+/**
+ * Displays new namespace creation dialog.
+ */
 @Component({
   selector: 'kd-create-namespace-dialog',
   templateUrl: 'template.html',
 })
+export class CreateNamespaceDialog implements OnInit {
+  form1: FormGroup;
 
+  private readonly config_ = CONFIG;
 
+  /**
+   * Max-length validation rule for namespace
+   */
+  namespaceMaxLength = 63;
+  /**
+   * Pattern validation rule for namespace
+   */
+  namespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-export class CreateNamespaceDialog {
-  place_holder: string;
-  tenant_name: string;
-  // namespace_name: string;
+  constructor(
+    public dialogRef: MatDialogRef<CreateNamespaceDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: CreateNamespaceDialogMeta,
+    private readonly http_: HttpClient,
+    private readonly csrfToken_: CsrfTokenService,
+    private readonly matDialog_: MatDialog,
+    private readonly fb_: FormBuilder,
+  ) {}
 
-  constructor(public dialog: MatDialog,
-              private http:HttpClient,
-              private readonly namespace_: NamespaceService,
-              private readonly tenant_: TenantService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
-                console.log(" data",this.data);
-                this.place_holder = this.data.displayName;
-              }
-
-  openDialog() {
-    
-    const dialogRef = this.dialog.open(CreateNamespaceDialog);
-    var data = {
-      tenant_name: this.tenant_name,
-      // namespace_name: "this.namespace_name"
-    }
-
-     this.http.post<any>('https://192.168.1.244:9445/api/v1/tenant', data);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-      console.log(data);
+  ngOnInit(): void {
+    this.form1 = this.fb_.group({
+      namespace: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.namespaceMaxLength),
+          Validators.pattern(this.namespacePattern),
+        ]),
+      ],
     });
   }
+
+  get namespace(): AbstractControl {
+    return this.form1.get('namespace');
+  }
+  /**
+   * Creates new namespace based on the state of the controller.
+   */
+  createNamespace(): void {
+    if (!this.form1.valid) return;
+    const namespaceSpec = {name: this.namespace.value};
+    const tokenPromise = this.csrfToken_.getTokenForAction('namespace');
+    tokenPromise.subscribe(csrfToken => {
+      return this.http_
+        .post<{valid: boolean}>(
+          'api/v1/namespace',
+          {...namespaceSpec},
+          {
+            headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),
+          },
+        )
+        .subscribe(
+          () => {
+            // this.log_.info('Successfully created namespace:', savedConfig);
+            this.dialogRef.close(this.namespace.value);
+          },
+          error => {
+            // this.log_.info('Error creating namespace:', err);
+            this.dialogRef.close();
+            const configData: AlertDialogConfig = {
+              title: 'Error creating namespace',
+              message: error.data,
+              confirmLabel: 'OK',
+            };
+            this.matDialog_.open(AlertDialog, {data: configData});
+          },
+        );
+    });
+  }
+
+  /**
+   * Returns true if new namespace name hasn't been filled by the user, i.e, is empty.
+   */
+  isDisabled(): boolean {
+    return this.data.namespaces.indexOf(this.namespace.value) >= 0;
+  }
+
+  /**
+   * Cancels the new namespace form.
+   */
+  cancel(): void {
+    this.dialogRef.close();
+  }
 }
+
+
 

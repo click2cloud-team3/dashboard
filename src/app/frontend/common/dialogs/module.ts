@@ -27,7 +27,7 @@ import {LogsDownloadDialog} from './download/dialog';
 import {EditResourceDialog} from './editresource/dialog';
 import {ScaleResourceDialog} from './scaleresource/dialog';
 import {TriggerResourceDialog} from './triggerresource/dialog';
-import {CreateNsDialog} from "./createns/dialog";
+
 
 @NgModule({
   imports: [SharedModule, ComponentsModule],
@@ -42,7 +42,7 @@ import {CreateNsDialog} from "./createns/dialog";
     LogsDownloadDialog,
     ScaleResourceDialog,
     TriggerResourceDialog,
-    CreateNsDialog,
+
 
   ],
   exports: [
@@ -56,7 +56,7 @@ import {CreateNsDialog} from "./createns/dialog";
     LogsDownloadDialog,
     ScaleResourceDialog,
     TriggerResourceDialog,
-    CreateNsDialog,
+
   ],
   entryComponents: [
     AlertDialog,
@@ -69,7 +69,7 @@ import {CreateNsDialog} from "./createns/dialog";
     LogsDownloadDialog,
     ScaleResourceDialog,
     TriggerResourceDialog,
-    CreateNsDialog,
+
   ],
 })
 export class DialogsModule {}
