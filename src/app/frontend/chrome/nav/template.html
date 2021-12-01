@@ -45,8 +45,8 @@ limitations under the License.
             </kd-nav-item>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <div *ngIf="isCurrentSystem" class="kd-nav-group">
-          <kd-nav-item *ngIf="isCurrentSystem" class="kd-nav-item" state="/tenant" i18n>
+        <div  class="kd-nav-group">
+          <kd-nav-item  class="kd-nav-item" state="/tenant" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Tenants
           </kd-nav-item>
@@ -58,11 +58,11 @@ limitations under the License.
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Namespaces
           </kd-nav-item>
-          <kd-nav-item *ngIf="isCurrentSystem" class="kd-nav-item" state="/node" i18n>
+          <kd-nav-item  class="kd-nav-item" state="/node" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Nodes
           </kd-nav-item>
-          <kd-nav-item *ngIf="isCurrentSystem" class="kd-nav-item" state="/quota" i18n>
+          <kd-nav-item  class="kd-nav-item" state="/quota" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Quota
           </kd-nav-item>
@@ -81,7 +81,7 @@ limitations under the License.
             </kd-nav-item>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <div *ngIf="isCurrentSystem" class="kd-nav-group">
+        <div  class="kd-nav-group">
           <kd-nav-item class="kd-nav-item" state="/tenantmonitoring" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Tenant Monitoring
