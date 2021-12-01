@@ -40,6 +40,7 @@ import {TenantService} from './tenant';
 @Injectable()
 export class VerberService {
   onCreate = new EventEmitter<boolean>();
+  onCreateTenant = new EventEmitter<boolean>(); //added
   onDelete = new EventEmitter<boolean>();
   onEdit = new EventEmitter<boolean>();
   onScale = new EventEmitter<boolean>();
@@ -77,7 +78,7 @@ export class VerberService {
           const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
           this.http_
             .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
-            .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
+            .subscribe(() => this.onCreateTenant.emit(true), this.handleErrorResponse_.bind(this));
         }
       });
   }

@@ -81,6 +81,6 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
 
   //added the code
   onClick(): void {
-    this.verber_.showCreateDialog(this.displayName, this.typeMeta, this.objectMeta);
+    this.verber_.showTenantCreateDialog(this.displayName, this.typeMeta, this.objectMeta);  //changes needed
   }
 }
