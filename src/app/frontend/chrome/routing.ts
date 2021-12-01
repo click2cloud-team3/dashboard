@@ -56,7 +56,7 @@ const routes: Routes = [
       {
         path: 'node',
         loadChildren: 'resource/cluster/node/module#NodeModule',
-        canActivate: [SystemGuard],
+
       },
       // Overview
       {

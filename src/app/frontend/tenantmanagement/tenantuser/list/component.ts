@@ -16,7 +16,10 @@ import {Component,Input, OnInit,Inject} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 export interface Elements {
 
-  username: string;
+  User: string;
+  Tenant: string;
+  Phase: string;
+  Age: string;
 }
 const ELEMENT_DATA: Elements[]=[];
 @Component({
@@ -25,12 +28,11 @@ const ELEMENT_DATA: Elements[]=[];
 })
 export class TenantUsersListComponent implements OnInit{
   tempData:any[]=[];
-  displayedColumns = ['id','username'];
+  displayedColumns = ['User','Tenant','Phase','Age'];
+
   public userArray:any[] = [];
   dataSource:any;
-
   constructor(private http: HttpClient){
-
   }
   ngOnInit(): void {
     this.http.get('../assets/auth.csv', {responseType: 'text'})
@@ -43,7 +45,7 @@ export class TenantUsersListComponent implements OnInit{
           }
           for(var i=0;i<this.userArray.length;i++)
           {
-            ELEMENT_DATA.push({username:this.userArray[i][1],id:this.userArray[i][2]});
+            ELEMENT_DATA.push({User:this.userArray[i][1],Tenant:this.userArray[i][4],Phase:this.userArray[i][5],Age:this.userArray[i][6]});
           }
           this.dataSource=ELEMENT_DATA
           console.log(ELEMENT_DATA)
@@ -53,11 +55,5 @@ export class TenantUsersListComponent implements OnInit{
         }
       );
   }
+
 }
-
-
-
-
-
-
-
