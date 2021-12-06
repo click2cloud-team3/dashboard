@@ -27,9 +27,12 @@ import {RawResource} from '../../resources/rawresource';
 
 // tenat dialog
 import { CreateTenantDialog } from './../../dialogs/createTenant/dialog';
-
+// namespace dialog
 import {CreateNamespaceDialog} from '../../dialogs/createNamespace/dialog'; // namespace dialog
+// role dialog
 import {CreateRoleDialog} from '../../dialogs/createRole/dialog'; // role dialog
+// clusterrole dialog
+import {CreateClusterroleDialog} from '../../dialogs/createClusterrole/dialog';
 
 import {ResourceMeta} from './actionbar';
 import {TenantService} from './tenant';
@@ -112,6 +115,23 @@ export class VerberService {
         }
       });
   }
+
+  // create Clusterrole
+  showClusterroleCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
+    const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
+    this.dialog_
+      .open(CreateClusterroleDialog, dialogConfig)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
+          this.http_
+            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
+            .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
+        }
+      });
+  }
+
   // create node
   showNodeCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
     const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
@@ -195,7 +215,6 @@ export class VerberService {
         }
       });
   }
-
 
   getDialogConfig_(
     displayName: string,

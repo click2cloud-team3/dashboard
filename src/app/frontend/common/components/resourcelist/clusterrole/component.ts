@@ -58,8 +58,12 @@ export class ClusterRoleListComponent extends ResourceListBase<ClusterRoleList, 
   getDisplayColumns(): string[] {
     return ['name', 'age'];
   }
+
   onClick(): void {
     this.verber_.showRoleCreateDialog('Role name',this.typeMeta,this.objectMeta);
+  }
 
+  onClick2(): void {
+    this.verber_.showClusterroleCreateDialog('Role name',this.typeMeta,this.objectMeta);
   }
 }

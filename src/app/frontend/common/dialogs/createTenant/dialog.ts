@@ -36,7 +36,7 @@ export interface CreateTenantDialogMeta {
   data : string[]
 }
 @Component({
-  selector: 'kd-delete-resource-dialog',
+  selector: 'kd-create-tenant-dialog',
   templateUrl: 'template.html',
 })
 
@@ -146,7 +146,3 @@ export class CreateTenantDialog implements OnInit {
     document.getElementById("second_tab_content").style.display = "block";
   }
 }
-
-
-
-

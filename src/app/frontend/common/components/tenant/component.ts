@@ -130,7 +130,6 @@ export class TenantSelectorComponent implements OnInit {
   private onTenantLoaded_(): void {
     let newTenant = this.tenantService_.getAuthTenant();
     const targetTenant = this.selectedTenant;
-    console.log(newTenant)
 
     if (
       targetTenant &&
@@ -170,11 +169,9 @@ export class TenantSelectorComponent implements OnInit {
     });
   }
 
-  setDefaultQueryParams_( ): void {
+  setDefaultQueryParams_(): void {
     this.router_.navigate([this._activeRoute.snapshot.url], {
-      queryParams: {
-        [TENANT_STATE_PARAM]: 'tenant-1',
-      },
+      queryParams: {[TENANT_STATE_PARAM]: 'system'},
       queryParamsHandling: 'merge',
     });
   }

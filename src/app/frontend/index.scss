@@ -1068,35 +1068,48 @@ router-outlet::after {
   height: 100%;
   width: 100%;
 }
-.login_container .mat-card{
-  border: 2px solid #ccc;
-  border-radius: 6px;
+.login_container .mat-card {
+  height: 410px;
+  min-width: 445px !important;
+  margin-left: 135px !important;
+  margin-top: 40px !important;
+  box-shadow: 0px 7px 16px 2px #bdbfc1 !important;
+  -webkit-box-shadow: 0px 7px 16px 2px #bdbfc1 !important;
+  border: 2px solid #c9c4c4;
+  border-radius: 8px;
   box-shadow: 0px 10px 15px 2px #ccc;
   width: 50%;
   padding: 0;
 }
 .login_container .mat-card-title{
-  border-radius: 6px 6px 0px 0px;
+  border-radius: 8px 8px 0px 0px;
 }
 .login_container .kd-login-input {
-  padding: 0 10px !important;
+  padding: 0 15px !important;
 }
 .login_container .kd-login-input,
 .login_container .kd-login-input::placeholder {
   font-size: 12px !important;
 }
 .login_container .kd-card-content {
-  padding: 0px 16px 20px 16px !important;
+  padding: 0px 16px 24px 16px !important;
 }
 .login_container .kd-login-button {
-  margin: 18px 25px 8px 10px !important;
+  margin: 35px 22px 15px 15px !important;
+  border-radius: 3px !important;
 }
 .login_container .mat-raised-button {
-  padding: 2px 90px !important;
+  padding: 4px 95px !important;
+  font-size: 15px !important;
 }
-.login_container .mat-card {
-  min-width: 445px !important;
-  margin-left: 60px !important;
+.login_container .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 1.55em !important;
+}
+.login_container .mat-form-field:first-child{
+  margin-bottom: 15px;  
+}
+.login_container .mat-button-wrapper{
+  font-size: 15px !important;
 }
 .alert_section_outer{
   height: 31px;
@@ -1108,9 +1121,9 @@ router-outlet::after {
   font-weight: 500;
   border-radius: 4px;
   padding: 7px 10px;
-  margin: 7px 10px 0px 10px;
+  margin: 6px 15px 0px 15px;
   min-height: 31px;
-  line-height: 20px;
+  line-height: 16px;
 }
 .alert_section img{
   width: 16px;
@@ -1119,7 +1132,42 @@ router-outlet::after {
   margin-right: 5px;
 }
 
-
 // end of login page css
+
+.kd-auth-status {
+  padding: 8px 16px 10px !important;
+  font-size: 14px !important;
+}
+.kd-graph-legend .kd-graph-legend-entry .material-icons{
+  line-height: 16px !important;
+  font-size: 22px !important;
+}
+.mat-tab-body .mat-button{
+  color: inherit !important;
+}
+
+
+// media query
+
+@media screen and (min-width:1023px) and (max-width:1024px){
+  .login_container .mat-card{
+    margin-left: 40px !important;
+  }
+}
+@media screen and (min-width:1150px) and (max-width:1280px){
+  .login_container .mat-card{
+    margin-left: 50px !important;
+  }
+}
+@media screen and (min-width:1360px) and (max-width:1366px){
+  .login_container .mat-card{
+    margin-left: 65px !important;
+  }
+}
+@media screen and (min-width:1400px) and (max-width:1440px){
+  .login_container .mat-card{
+    margin-left: 85px !important;
+  }
+}
 
 
