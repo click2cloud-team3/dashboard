@@ -25,7 +25,7 @@ import (
 
 // ClusterRoleSpec is a specification of cluster role to create.
 type ClusterRoleSpec struct {
-	// Name of the tenant.
+	// Name of the cluster-role.
 	Name string `json:"name"`
 
 	// Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds.
