@@ -121,6 +121,7 @@ export interface JobList extends ResourceList {
 
 export interface NamespaceList extends ResourceList {
   namespaces: Namespace[];
+
 }
 
 export interface NodeList extends ResourceList {

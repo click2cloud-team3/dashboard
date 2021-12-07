@@ -3,20 +3,20 @@ import {ActivatedRoute} from '@angular/router';
 import {NodeDetail} from '@api/backendapi';
 import {Subscription} from 'rxjs/Subscription';
 
-import {ActionbarService, ResourceMeta} from '../../../common/services/global/actionbar';
-import {NotificationsService} from '../../../common/services/global/notifications';
-import {EndpointManager, Resource} from '../../../common/services/resource/endpoint';
-import {ResourceService} from '../../../common/services/resource/resource';
-import {VerberService} from "../../../common/services/global/verber";
+import {ActionbarService, ResourceMeta} from '../../../../common/services/global/actionbar';
+import {NotificationsService} from '../../../../common/services/global/notifications';
+import {EndpointManager, Resource} from '../../../../common/services/resource/endpoint';
+import {ResourceService} from '../../../../common/services/resource/resource';
+import {VerberService} from "../../../../common/services/global/verber";
 
 @Component({
   selector: 'kd-quota-list-state',
   templateUrl: './template.html',
-
+  styleUrls: ['./style.scss'],
 })
 
 
-export class TenantQuotaListComponent{
+export class QuotaListComponent{
   private nodeSubscription_: Subscription;
   private readonly endpoint_ = EndpointManager.resource(Resource.node);
   node: NodeDetail;
@@ -33,7 +33,8 @@ export class TenantQuotaListComponent{
     private readonly verber_: VerberService,
   ) {}
   ngOnInit(): void {
-    const resourceName = "centaurus";
+    const resourceName = "centaurus-master";
+    console.log(this.node)
     this.nodeSubscription_ = this.node_
       .get(this.endpoint_.detail(), resourceName)
       .subscribe((d: NodeDetail) => {

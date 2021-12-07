@@ -46,7 +46,6 @@ func CreateTenant(spec *TenantSpec, client kubernetes.Interface) error {
 			StorageClusterId: "0",
 		},
 	}
-
 	_, err := client.CoreV1().Tenants().Create(tenant)
 	//log.Printf("Response of tenant creation 112 : %v", d)
 	//log.Printf("Error of tenant creation 112 : %s", err.Error())

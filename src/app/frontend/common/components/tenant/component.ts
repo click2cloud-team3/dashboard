@@ -144,7 +144,7 @@ export class TenantSelectorComponent implements OnInit {
   }
 
   /**
-   * Focuses tenant input field after clicking on tenant selector menu.
+   * Focuses clustertenant input field after clicking on clustertenant selector menu.
    */
   private focusTenantInput_(): void {
     // Wrap in a timeout to make sure that element is rendered before looking for it.

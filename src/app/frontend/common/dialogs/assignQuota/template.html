@@ -1,0 +1,28 @@
+<form [formGroup]="form1">
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+      <h2 mat-dialog-title>Create Quota</h2>
+    </div>
+    <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter Tenant </mat-label>
+        <input matInput type="text"   formControlName="tenant" required />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Enter Namespace </mat-label>
+        <input matInput type="text"   formControlName="tenant" required />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Enter pod </mat-label>
+        <input matInput type="text"   formControlName="tenant" required />
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button [mat-dialog-close]="true" type="submit" (click)="createTenant()">Update</button>
+      </mat-dialog-actions>
+    </div>
+  </div>
+</form>

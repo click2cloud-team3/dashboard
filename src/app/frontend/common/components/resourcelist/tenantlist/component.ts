@@ -14,8 +14,9 @@
 
 import {HttpParams} from '@angular/common/http';
 import {Component, Input} from '@angular/core';
-import {Tenant, TenantList} from '@api/backendapi';
+import { Tenant, TenantList} from '@api/backendapi';
 import {Observable} from 'rxjs/Observable';
+
 
 import {ResourceListWithStatuses} from '../../../resources/list';
 import {EndpointManager, Resource} from '../../../services/resource/endpoint';
@@ -23,6 +24,7 @@ import {ResourceService} from '../../../services/resource/resource';
 import {NotificationsService} from '../../../services/global/notifications';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 import {MenuComponent} from '../../list/column/menu/component';
+import {Namespace, NamespaceList} from '@api/backendapi';
 import {MatDialog, MatDialogConfig,MatExpansionModule} from '@angular/material/';
 import { CreateFromFormComponent } from 'create/from/form/component';
 import { CreatorCardComponent } from 'common/components/creator/component';
@@ -36,14 +38,17 @@ import {VerberService} from '../../../services/global/verber';
   selector: 'kd-tenant-list',
   templateUrl: './template.html',
 })
-export class TenantListComponent extends ResourceListWithStatuses<TenantList, Tenant> {
+export class TenantListComponent extends ResourceListWithStatuses<TenantList, Tenant > {
   @Input() endpoint = EndpointManager.resource(Resource.tenant).list();
+  // @Input() endpoint = EndpointManager.resource(Resource.tenant, true, true).list();
+
   displayName:any="";
   typeMeta:any="";
   objectMeta:any;
   constructor(
     private readonly verber_: VerberService,
     private readonly tenant_: ResourceService<TenantList>,
+
     notifications: NotificationsService,
     private dialog: MatDialog //add the code
   ) {
@@ -64,7 +69,8 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
   }
 
   map(tenantList: TenantList): Tenant[] {
-    return tenantList.tenants;
+    console.log(tenantList.tenants)//added
+    return tenantList.tenants ;
   }
 
   isInErrorState(resource: Tenant): boolean {
@@ -76,7 +82,7 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
   }
 
   getDisplayColumns(): string[] {
-    return ['statusicon', 'name', 'phase', 'age'];
+    return ['statusicon', 'name','namespace', 'phase', 'age'];
   }
 
   //added the code

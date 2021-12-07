@@ -37,7 +37,7 @@ limitations under the License.
 
     <mat-table [dataSource]="getData()"
                matSort
-               [matSortActive]="getColumns()[3]"
+               [matSortActive]="getColumns()[4]"
                matSortDisableClear
                matSortDirection="asc">
       <ng-container [matColumnDef]="getColumns()[0]">
@@ -64,11 +64,19 @@ limitations under the License.
 
       <ng-container [matColumnDef]="getColumns()[2]">
         <mat-header-cell *matHeaderCellDef
+                         i18n>Namespace</mat-header-cell>
+        <mat-cell *matCellDef="let tenant">{{tenant.namespace}}</mat-cell>
+      </ng-container>
+
+      <ng-container [matColumnDef]="getColumns()[3]">
+        <mat-header-cell *matHeaderCellDef
                          i18n>Phase</mat-header-cell>
         <mat-cell *matCellDef="let tenant">{{tenant.phase}}</mat-cell>
       </ng-container>
 
-      <ng-container [matColumnDef]="getColumns()[3]">
+
+
+      <ng-container [matColumnDef]="getColumns()[4]">
         <mat-header-cell *matHeaderCellDef
                          mat-sort-header
                          disableClear="true"
@@ -78,6 +86,7 @@ limitations under the License.
                    relative></kd-date>
         </mat-cell>
       </ng-container>
+
 
       <ng-container *ngFor="let col of getActionColumns()"
                     [matColumnDef]="col.name">

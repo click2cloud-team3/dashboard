@@ -20,6 +20,5 @@ import {Component, OnInit} from '@angular/core';
 })
 export class TenantListComponent implements OnInit {
   constructor() {}
-
   ngOnInit() {}
 }

@@ -24,7 +24,7 @@ import {EditResourceDialog} from '../../dialogs/editresource/dialog';
 import {ScaleResourceDialog} from '../../dialogs/scaleresource/dialog';
 import {TriggerResourceDialog} from '../../dialogs/triggerresource/dialog';
 import {RawResource} from '../../resources/rawresource';
-
+import { assignQuotaDialog } from './../../dialogs/assignQuota/dialog';
 // tenat dialog
 import { CreateTenantDialog } from './../../dialogs/createTenant/dialog';
 // namespace dialog
@@ -65,6 +65,21 @@ export class VerberService {
           this.http_
             .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
             .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
+        }
+      });
+  }
+  //added quota dialog
+  showQuotaCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
+    const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
+    this.dialog_
+      .open(assignQuotaDialog, dialogConfig)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
+          this.http_
+            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
+            .subscribe(() => this.onCreateTenant.emit(true), this.handleErrorResponse_.bind(this));
         }
       });
   }

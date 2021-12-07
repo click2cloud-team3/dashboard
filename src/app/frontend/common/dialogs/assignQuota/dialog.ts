@@ -29,44 +29,36 @@ import {CsrfTokenService} from "../../services/global/csrftoken";
 import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
 
 
-export interface CreateTenantDialogMeta {
+export interface assignQuotaDialogMeta {
   tenants: string[];
   StorageClusterId: string []
-  //storageclusterid: string[];
   data : string[]
 }
 @Component({
-  selector: 'kd-create-tenant-dialog',
+  selector: 'kd-assign-quota-dialog',
   templateUrl: 'template.html',
 })
 
-export class CreateTenantDialog implements OnInit {
+export class assignQuotaDialog implements OnInit {
   form1: FormGroup;
 
   private readonly config_ = CONFIG;
 
   /**
-   * Max-length validation rule for tenant
-   */
-  tenantMaxLength = 24;
-  storageidMaxLength =10;
-  /**
-   * Pattern validation rule for tenant
-   */
-  tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
-  storageidPattern: RegExp = new RegExp('^[0-9]$');
-  /**
    * Max-length validation rule for namespace
    */
-  namespaceMaxLength = 63;
+  tenantMaxLength = 63;
+  storageidMaxLength =10;
   /**
    * Pattern validation rule for namespace
    */
-  namespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+  tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+  storageidPattern: RegExp = new RegExp('^[0-9]$');
+
 
   constructor(
-    public dialogRef: MatDialogRef<CreateTenantDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: CreateTenantDialogMeta,
+    public dialogRef: MatDialogRef<assignQuotaDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: assignQuotaDialogMeta,
     private readonly http_: HttpClient,
     private readonly csrfToken_: CsrfTokenService,
     private readonly matDialog_: MatDialog,
@@ -89,7 +81,6 @@ export class CreateTenantDialog implements OnInit {
             Validators.pattern(this.storageidPattern),
           ]),
         ],
-
       }
     );
 
@@ -98,19 +89,13 @@ export class CreateTenantDialog implements OnInit {
   get tenant(): AbstractControl {
     return this.form1.get('tenant');
   }
-  // get namespace(): AbstractControl {
-  //   return this.form1.get('namespace');
-  // }
   /**
    * Creates new tenant based on the state of the controller.
    */
   createTenant(): void {
     if (!this.form1.valid) return;
     const tenantSpec= {name: this.tenant.value,StorageClusterId: this.tenant.value};
-    // const namespaceSpec = {namespace: this.namespace.value};
-    // console.log("ns",namespaceSpec)
     const tokenPromise = this.csrfToken_.getTokenForAction('tenant');
-    // const tokenPromisenamespace = this.csrfToken_.getTokenForAction('namespace');
     tokenPromise.subscribe(csrfToken => {
       return this.http_
         .post<{valid: boolean}>(
@@ -122,14 +107,14 @@ export class CreateTenantDialog implements OnInit {
         )
         .subscribe(
           () => {
-            // this.log_.info('Successfully created tenant:', savedConfig);
+            // this.log_.info('Successfully created namespace:', savedConfig);
             this.dialogRef.close(this.tenant.value);
           },
           error => {
-            // this.log_.info('Error creating tenant:', err);
+            // this.log_.info('Error creating namespace:', err);
             this.dialogRef.close();
             const configData: AlertDialogConfig = {
-              title: 'Tenant Already Exists',
+              title: 'Error creating tenant',
               message: error.data,
               confirmLabel: 'OK',
             };
@@ -137,17 +122,16 @@ export class CreateTenantDialog implements OnInit {
           },
         );
     });
-
   }
   /**
-   * Returns true if new tenant name hasn't been filled by the user, i.e, is empty.
+   * Returns true if new namespace name hasn't been filled by the user, i.e, is empty.
    */
   isDisabled(): boolean {
     return this.data.tenants.indexOf(this.tenant.value) >= 0;
   }
 
   /**
-   * Cancels the new tenant form.
+   * Cancels the new namespace form.
    */
   cancel(): void {
     this.dialogRef.close();
@@ -161,3 +145,7 @@ export class CreateTenantDialog implements OnInit {
     document.getElementById("second_tab_content").style.display = "block";
   }
 }
+
+
+
+

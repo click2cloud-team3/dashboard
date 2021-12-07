@@ -136,6 +136,11 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 		apiV1Ws.GET("/tenant/{name}").
 			To(apiHandler.handleGetTenantDetail).
 			Writes(tenant.TenantDetail{}))
+	//added post method for namespace under tenant
+  //apiV1Ws.Route(
+  //  apiV1Ws.POST("/tenant/{name}/namespace/{namespace}").
+  //    To(apiHandler.handleGetTenantDetail).
+  //    Writes(tenant.TenantDetail{}))
 
 	apiV1Ws.Route(
 		apiV1Ws.GET("csrftoken/{action}").
@@ -579,9 +584,10 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 
 	apiV1Ws.Route(
 		apiV1Ws.POST("/tenants/{tenant}/namespace"). // TODO
-								To(apiHandler.handleCreateNamespace).
+								To(apiHandler.handleGetNamespacesWithMultiTenancy).
 								Reads(ns.NamespaceSpec{}).
 								Writes(ns.NamespaceSpec{}))
+
 	apiV1Ws.Route(
 		apiV1Ws.GET("/tenants/{tenant}/namespace").
 			To(apiHandler.handleGetNamespacesWithMultiTenancy).
