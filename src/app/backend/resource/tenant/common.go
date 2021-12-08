@@ -16,41 +16,51 @@
 package tenant
 
 import (
+	"log"
+
 	"github.com/kubernetes/dashboard/src/app/backend/resource/dataselect"
 	v1 "k8s.io/api/core/v1"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"log"
 )
-
-// The code below allows to perform complex data section on []api.Tenant
 
 // TenantSpec is a specification of tenant to create.
 type TenantSpec struct {
 	// Name of the tenant.
 	Name             string `json:"name"`
-	StorageClusterId string `json:"storageclusterid"`
+	StorageClusterId string `json:"storageclusterid"` // Storage Cluster Id of the Tenant
 }
 
 // CreateTenant creates tenant based on given specification.
 func CreateTenant(spec *TenantSpec, client kubernetes.Interface) error {
 	log.Printf("Creating tenant %s", spec.Name)
 
+	// setting default values if no values passed
+	if spec.StorageClusterId == "" {
+		spec.StorageClusterId = "0"
+	}
+
 	tenant := &v1.Tenant{
 		ObjectMeta: metaV1.ObjectMeta{
 			Name: spec.Name,
-			// Name: "",
 		},
 		Spec: v1.TenantSpec{
-			//StorageClusterId: spec.StorageClusterId,
-			StorageClusterId: "0",
+			StorageClusterId: spec.StorageClusterId,
 		},
 	}
+
 	_, err := client.CoreV1().Tenants().Create(tenant)
-	//log.Printf("Response of tenant creation 112 : %v", d)
-	//log.Printf("Error of tenant creation 112 : %s", err.Error())
 	return err
 }
+
+// DeleteTenant deletes tenant based on given specification.
+func DeleteTenant(tenantName string, client kubernetes.Interface) error {
+	log.Printf("Deleting Tenant %s", tenantName)
+	err := client.CoreV1().Tenants().Delete(tenantName, &metaV1.DeleteOptions{})
+	return err
+}
+
+// The code below allows to perform complex data section on []api.Tenant
 
 type TenantCell v1.Tenant
 

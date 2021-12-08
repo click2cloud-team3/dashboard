@@ -129,8 +129,10 @@ const (
 	ResourceKindReplicaSet               = "replicaset"
 	ResourceKindReplicationController    = "replicationcontroller"
 	ResourceKindResourceQuota            = "resourcequota"
+	ResourceKindRole                     = "role"
 	ResourceKindSecret                   = "secret"
 	ResourceKindService                  = "service"
+	ResourceKindServiceAccount           = "serviceaccount"
 	ResourceKindStatefulSet              = "statefulset"
 	ResourceKindStorageClass             = "storageclass"
 	ResourceKindClusterRole              = "clusterrole"
@@ -189,11 +191,12 @@ var KindToAPIMapping = map[string]APIMapping{
 	ResourceKindResourceQuota:            {"resourcequotas", ClientTypeDefault, true},
 	ResourceKindSecret:                   {"secrets", ClientTypeDefault, true},
 	ResourceKindService:                  {"services", ClientTypeDefault, true},
+	ResourceKindServiceAccount:           {"servicesaccounts", ClientTypeDefault, true},
+	ResourceKindRole:                     {"roles", ClientTypeDefault, false},
 	ResourceKindStatefulSet:              {"statefulsets", ClientTypeAppsClient, true},
 	ResourceKindStorageClass:             {"storageclasses", ClientTypeStorageClient, false},
 	ResourceKindEndpoint:                 {"endpoints", ClientTypeDefault, true},
 	ResourceKindClusterRole:              {"clusterroles", ClientTypeRbacClient, false},
-	ResourceKindTenant:                   {"tenants", ClientTypeDefault, false},
 }
 
 // IsSelectorMatching returns true when an object with the given selector targets the same
