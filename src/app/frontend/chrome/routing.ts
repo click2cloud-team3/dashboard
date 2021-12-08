@@ -21,7 +21,7 @@ import {ChromeComponent} from './component';
 
 
 const routes: Routes = [
-  {path: '', redirectTo: '/overview', pathMatch: 'full'},
+  {path: '', redirectTo: '/tenantmonitoring', pathMatch: 'full'},
   {
     path: '',
     component: ChromeComponent,
@@ -53,11 +53,6 @@ const routes: Routes = [
       {
         path: 'node',
         loadChildren: 'resource/cluster/node/module#NodeModule',
-
-      },
-      {
-        path: 'resourcemonitoring',
-        loadChildren: 'resource/cluster/resourcemonitoring/module#NewNodeModule',
 
       },
       // Overview
@@ -161,7 +156,7 @@ const routes: Routes = [
         loadChildren: 'tenantmanagement/module#TenantManagementModule',
       },
       {
-        path: 'tenantmonitoring',
+        path: 'overview',
         loadChildren: 'tenantmanagement/tenantmonitoring/module#TenantMonitoringModule',
 
       },
@@ -186,22 +181,6 @@ const routes: Routes = [
 
       },
       //here
-
-      {
-        path: 'usermanagement',
-        loadChildren: 'usermanagement/module#UserManagementModule',
-      },
-      {
-        path: 'usermonitoring',
-        loadChildren: 'usermanagement/usermonitoring/module#UserMonitoringModule',
-
-      },
-      {
-        path: 'usernamespace',
-        loadChildren: 'usermanagement/usernamespace/module#UserNamespaceModule',
-
-      },
-
       {
         path: 'create',
         loadChildren: 'create/module#CreateModule',

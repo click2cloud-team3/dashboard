@@ -100,7 +100,6 @@ import {QuotasListComponent} from "./resourcelist/quota/component";
 import {NewNodeListComponent} from "./resourcelist/resourcemonitoring/component";
 
 
-
 const components = [
   ActionbarDetailActionsComponent,
   ActionbarDetailDeleteComponent,

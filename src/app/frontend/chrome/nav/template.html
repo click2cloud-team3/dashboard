@@ -24,17 +24,13 @@ limitations under the License.
     <div>
       <kd-namespace-selector></kd-namespace-selector>
       <mat-divider></mat-divider>
-
     </div>
 
 
-    <div class="kd-nav-group">
-      <kd-nav-item class="kd-nav-group-item" state="/overview" i18n>
-        <img class="menu_icon" src="assets/images/overview_icon.svg" alt="">
-        Overview
-      </kd-nav-item>
-      <mat-divider></mat-divider>
-    </div>
+<!--    <div class="kd-nav-group">-->
+<!--      <kd-nav-item class="kd-nav-group-item" state="/overview" i18n>-->
+<!--      </kd-nav-item>-->
+<!--    </div>-->
 
 
     <mat-accordion>
@@ -52,19 +48,17 @@ limitations under the License.
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Tenants
           </kd-nav-item>
-          <kd-nav-item  class="kd-nav-item" state="/resourcemonitoring" i18n>
+          <kd-nav-item  class="kd-nav-item" state="/node" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            Resource Monitoring
+            Cluster Monitoring
           </kd-nav-item>
           <mat-divider></mat-divider>
         </div>
       </mat-expansion-panel>
-
     </mat-accordion>
 
 
     <mat-accordion>
-
       <mat-expansion-panel [expanded]="true" *ngIf="isSystem">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -75,7 +69,7 @@ limitations under the License.
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="kd-nav-group">
-          <kd-nav-item class="kd-nav-item" state="/tenantmonitoring" i18n>
+          <kd-nav-item class="kd-nav-item" state="/overview" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Tenant Monitoring
           </kd-nav-item>
@@ -94,50 +88,6 @@ limitations under the License.
           <kd-nav-item class="kd-nav-item" state="/tenantuser" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Users
-          </kd-nav-item>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-divider></mat-divider>
-
-    <mat-accordion>
-      <mat-expansion-panel [expanded]="true" *ngIf="isSystem">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <kd-nav-item class="kd-nav-group-item" state="/cluster" i18n>
-              <img class="menu_icon" src="assets/images/user_icon.svg" alt="">
-              User
-            </kd-nav-item>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div class="kd-nav-group">
-          <kd-nav-item class="kd-nav-item" state="/usermonitoring" i18n>
-            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            User Monitoring
-          </kd-nav-item>
-          <kd-nav-item class="kd-nav-item" state="/usernamespace" i18n>
-            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            Namespaces
-          </kd-nav-item>
-          <kd-nav-item class="kd-nav-item" state="/deployment" i18n>
-            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            Deployments
-          </kd-nav-item>
-          <kd-nav-item class="kd-nav-item" state="/pod" i18n>
-            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            Pods
-          </kd-nav-item>
-          <kd-nav-item class="kd-nav-item" state="/replicaset" i18n>
-            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            Replica Sets
-          </kd-nav-item>
-          <kd-nav-item class="kd-nav-item" state="/secret" i18n>
-            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            Secrets
-          </kd-nav-item>
-          <kd-nav-item class="kd-nav-item" state="/service" i18n>
-            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-            Services
           </kd-nav-item>
         </div>
       </mat-expansion-panel>
