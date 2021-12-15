@@ -130,6 +130,10 @@ export interface NodeList extends ResourceList {
   nodes: Node[];
 }
 
+export interface QuotaList extends ResourceList {
+  quotas: Node[];
+}
+
 export interface PartitionList extends ResourceList {
   partitions: Partition[];
 }
@@ -297,6 +301,11 @@ export interface Namespace extends Resource {
 export interface Node extends Resource {
   ready: string;
 }
+
+export interface Quota extends Resource {
+  ready: string;
+}
+
 
 export interface Partition extends Resource {
   ready: string;

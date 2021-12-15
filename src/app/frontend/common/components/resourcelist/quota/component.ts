@@ -1,30 +1,73 @@
-// Copyright 2017 The Kubernetes Authors.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
 import {Component, Input} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {ResourceQuotaDetail} from 'typings/backendapi';
+import {HttpParams} from '@angular/common/http';
+import {Quota, QuotaList} from '@api/backendapi';
+import {Observable} from 'rxjs/Observable';
+import {ResourceListWithStatuses} from '../../../resources/list';
+import {EndpointManager, Resource} from '../../../services/resource/endpoint';
+import {ResourceService} from '../../../services/resource/resource';
+import {NotificationsService} from '../../../services/global/notifications';
+import {ListGroupIdentifier, ListIdentifier} from '../groupids';
+import {MenuComponent} from '../../list/column/menu/component';
+import {MatDialog, MatDialogConfig,MatExpansionModule} from '@angular/material/';
+import { CreateFromFormComponent } from 'create/from/form/component';
+import { CreatorCardComponent } from 'common/components/creator/component';
+import { CreateFromFileComponent } from 'create/from/file/component';
+import { Form } from '@angular/forms';
+import {MatMenuModule} from '@angular/material/menu';
+
+import {VerberService} from '../../../services/global/verber';
+
 
 @Component({
   selector: 'kd-quota-list',
   templateUrl: './template.html',
 })
-export class QuotasListComponent {
+export class QuotaListComponent extends ResourceListWithStatuses<QuotaList, Quota>{
   @Input() initialized: boolean;
   @Input() quotas: ResourceQuotaDetail[];
+  @Input() endpoint = EndpointManager.resource(Resource.quota).list();
+  displayName:any="";
+  typeMeta:any="";
+  objectMeta:any;
 
-  getQuotaColumns(): string[] {
+  constructor(
+    private readonly verber_: VerberService,
+    private readonly quota_: ResourceService<QuotaList>,
+    notifications: NotificationsService,
+    private dialog: MatDialog //add the code
+  ) {
+    super('quota', notifications);
+    this.id = ListIdentifier.quota;
+    this.groupId = ListGroupIdentifier.cluster;
+
+    // Register status icon handlers
+    this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
+    this.registerBinding(this.icon.error, 'kd-error', this.isInErrorState);
+
+    // Register action columns.
+    this.registerActionColumn<MenuComponent>('menu', MenuComponent);
+  }
+  getResourceObservable(params?: HttpParams): Observable<QuotaList> {
+    return this.quota_.get(this.endpoint, undefined, params);
+  }
+
+  map(tenantList: QuotaList): Quota[] {
+    return tenantList.quotas;
+  }
+
+  isInErrorState(resource: Quota): boolean {
+    return resource.ready === 'Terminating';
+  }
+
+  isInSuccessState(resource: Quota): boolean {
+    return resource.ready === 'Active';
+  }
+
+
+  getDisplayColumns(): string[] {
     return ['name', 'age', 'status'];
   }
 
@@ -33,4 +76,12 @@ export class QuotasListComponent {
     tableData.data = this.quotas;
     return tableData;
   }
+
+  onClick(): void {
+    this.verber_.showTenantCreateDialog(this.displayName, this.typeMeta, this.objectMeta);  //changes needed
+  }
+
 }
+
+
+

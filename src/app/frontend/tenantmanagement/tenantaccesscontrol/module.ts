@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
-import {ResourceQuotaDetail} from 'typings/backendapi';
+import {NgModule} from '@angular/core';
 
-@Component({
-  selector: 'kd-resource-quota-list',
-  template: '',
+import {ComponentsModule} from '../../common/components/module';
+import {SharedModule} from '../../shared.module';
+
+import {TenantAccessControlDetailComponent} from './detail/component';
+import {TenantAccessControlListComponent} from './list/component';
+import {TenantAccessControlRoutingModule} from './routing';
+
+@NgModule({
+  imports: [SharedModule, ComponentsModule, TenantAccessControlRoutingModule],
+  declarations: [TenantAccessControlListComponent, TenantAccessControlDetailComponent],
 })
-export class QuotaComponent {
-
-}
+export class TenantAccessControlModule {}

@@ -95,7 +95,7 @@ import {ZeroStateComponent} from './zerostate/component';
 import {TenantSelectorComponent} from './tenant/component';
 import {TenantListComponent} from './resourcelist/tenantlist/component';
 import {UserListComponent} from "./resourcelist/user/component";
-import {QuotasListComponent} from "./resourcelist/quota/component";
+import {QuotaListComponent} from "./resourcelist/quota/component";
 import {PartitionListComponent} from "./resourcelist/partitionlist/component";
 import {TenantPartitionListComponent} from "./resourcelist/tenantpartitionlist/component";
 
@@ -199,7 +199,7 @@ const components = [
   TenantListComponent,
 
   UserListComponent,
-  QuotasListComponent,
+  QuotaListComponent,
 ];
 
 @NgModule({

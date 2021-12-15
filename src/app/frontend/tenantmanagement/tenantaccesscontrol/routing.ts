@@ -14,34 +14,35 @@
 
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-
+import {DEFAULT_ACTIONBAR} from '../../common/components/actionbars/routing';
 import {TENANTMANAGEMENT_ROUTE} from '../routing';
-import {DEFAULT_ACTIONBAR} from "../../common/components/actionbars/routing";
-import {TenantQuotaDetailComponent} from 'tenantmanagement/tenantquota/detail/component';
-import {TenantQuotaListComponent} from 'tenantmanagement/tenantquota/list/component';
+import {TenantAccessControlDetailComponent} from './detail/component';
+import {TenantAccessControlListComponent} from './list/component';
 
-const QUOTASNAMESPACE_LIST_ROUTE: Route = {
+const ROLE_LIST_ROUTE: Route = {
   path: '',
-  component: TenantQuotaListComponent,
+  component: TenantAccessControlListComponent,
   data: {
-    breadcrumb: 'Quota',
+    breadcrumb: 'Access Control',
     parent: TENANTMANAGEMENT_ROUTE,
   },
 };
 
-const QUOTASNAMESPACE_DETAIL_ROUTE: Route = {
+const ROLE_DETAIL_ROUTE: Route = {
   path: ':resourceName',
-  component: TenantQuotaDetailComponent,
+  component: TenantAccessControlDetailComponent,
   data: {
-    breadcrumb: ' {{ resourceName }} ',
-    parent: QUOTASNAMESPACE_LIST_ROUTE,
+    breadcrumb: '{{ resourceName }}',
+    parent: ROLE_LIST_ROUTE,
   },
 };
 
-
-
 @NgModule({
-  imports: [RouterModule.forChild([QUOTASNAMESPACE_LIST_ROUTE, QUOTASNAMESPACE_DETAIL_ROUTE])],
+  imports: [
+    RouterModule.forChild([ROLE_LIST_ROUTE, ROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR]),
+  ],
   exports: [RouterModule],
 })
-export class TenantQuotasRoutingModule {}
+export class TenantAccessControlRoutingModule {
+
+}

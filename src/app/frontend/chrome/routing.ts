@@ -41,6 +41,10 @@ const routes: Routes = [
         loadChildren: 'resource/cluster/clusterrole/module#ClusterRoleModule',
       },
       {
+        path: 'quota',
+        loadChildren: 'resource/cluster/quota/module#QuotaModule',
+      },
+      {
         path: 'tenant',
         loadChildren: 'resource/cluster/tenant/module#TenantModule',
       },
@@ -157,7 +161,6 @@ const routes: Routes = [
 
       // Custom resource definitions
       {path: 'customresourcedefinition', loadChildren: 'crd/module#CrdModule'},
-
       // Others
       {
         path: 'settings',
@@ -172,6 +175,10 @@ const routes: Routes = [
         loadChildren: 'tenantmanagement/module#TenantManagementModule',
       },
       {
+        path: 'tenantaccesscontrol',
+        loadChildren: 'tenantmanagement/tenantaccesscontrol/module#TenantAccessControlModule',
+      },
+      {
         path: 'tenantmonitoring',
 
         loadChildren: 'tenantmanagement/tenantmonitoring/module#TenantMonitoringModule',
@@ -183,11 +190,6 @@ const routes: Routes = [
 
       },
 
-      {
-        path: 'tenantquota',
-        loadChildren: 'tenantmanagement/tenantquota/module#TenantQuotaModule',
-
-      },
       {
         path: 'tenantuser',
         loadChildren: 'tenantmanagement/tenantuser/module#TenantUsersModule',
