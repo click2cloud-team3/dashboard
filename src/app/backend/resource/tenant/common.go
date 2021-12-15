@@ -53,6 +53,13 @@ func CreateTenant(spec *TenantSpec, client kubernetes.Interface) error {
 	return err
 }
 
+// DeleteTenant deletes tenant based on given specification.
+func DeleteTenant(tenantName string, client kubernetes.Interface) error {
+	log.Printf("Deleting Tenant %s", tenantName)
+	err := client.CoreV1().Tenants().Delete(tenantName, &metaV1.DeleteOptions{})
+	return err
+}
+
 type TenantCell v1.Tenant
 
 func (self TenantCell) GetProperty(name dataselect.PropertyName) dataselect.ComparableValue {

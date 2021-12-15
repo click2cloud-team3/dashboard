@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import {ObjectMeta, TypeMeta} from '@api/backendapi';
-
 export class RawResource {
   static getUrl(tenant: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): string {
     let resourceUrl = 'api/v1' + (tenant ? `/tenants/${tenant}` : '') + `/_raw/${typeMeta.kind}`;
@@ -21,6 +20,9 @@ export class RawResource {
       resourceUrl += `/namespace/${objectMeta.namespace}`;
     }
     resourceUrl += `/name/${objectMeta.name}`;
+    if (resourceUrl.includes('/tenant/name')) {
+      resourceUrl = 'api/v1/tenants' + `/${objectMeta.name}`
+    }
     return resourceUrl;
   }
 }

@@ -22,7 +22,6 @@ import {NamespaceService} from "../../services/global/namespace";
 import {AppDeploymentContentSpec} from "@api/backendapi";
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
-
 import { FormGroup, FormControl } from '@angular/forms';
 import {CONFIG} from "../../../index.config";
 import {CsrfTokenService} from "../../services/global/csrftoken";
