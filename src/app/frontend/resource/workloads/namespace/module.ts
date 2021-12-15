@@ -1,11 +1,11 @@
-// Copyright 2020 Authors of Arktos.
-
+// Copyright 2017 The Kubernetes Authors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,14 +16,14 @@ import {NgModule} from '@angular/core';
 
 import {ComponentsModule} from '../../../common/components/module';
 import {SharedModule} from '../../../shared.module';
-import {TenantNewRoutingModule} from './routing';
 
-import {TenantNewListComponent} from './list/component';
-import {TenantNewDetailComponent} from './detail/component';
-
+import {ActionbarComponent} from './detail/actionbar/component';
+import {NamespaceDetailComponent} from './detail/component';
+import {NamespaceListComponent} from './list/component';
+import {NamespaceRoutingModule} from './routing';
 
 @NgModule({
-  imports: [SharedModule, ComponentsModule, TenantNewRoutingModule],
-  declarations: [TenantNewListComponent, TenantNewDetailComponent],
+  imports: [SharedModule, ComponentsModule, NamespaceRoutingModule],
+  declarations: [NamespaceListComponent, NamespaceDetailComponent, ActionbarComponent],
 })
-export class TenantNewModule {}
+export class NamespaceModule {}

@@ -1,11 +1,11 @@
-// Copyright 2020 Authors of Arktos.
-
+// Copyright 2017 The Kubernetes Authors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,32 +15,38 @@
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
 
-import {CLUSTER_ROUTE} from '../routing';
+import {WORKLOADS_ROUTE} from '../routing';
 
-import {TenantNewListComponent} from './list/component';
-import {TenantNewDetailComponent} from './detail/component';
+import {ActionbarComponent} from './detail/actionbar/component';
+import {NamespaceDetailComponent} from './detail/component';
+import {NamespaceListComponent} from './list/component';
 
-const TENANTNEW_LIST_ROUTE: Route = {
+const NAMESPACE_LIST_ROUTE: Route = {
   path: '',
-  component: TenantNewListComponent,
+  component: NamespaceListComponent,
   data: {
-    breadcrumb: 'TenantNew',
-    parent: CLUSTER_ROUTE,
+    breadcrumb: 'Namespaces',
+    parent: WORKLOADS_ROUTE,
   },
 };
 
-const TENANTNEW_DETAIL_ROUTE: Route = {
+const NAMESPACE_DETAIL_ROUTE: Route = {
   path: ':resourceName',
-  component: TenantNewDetailComponent,
+  component: NamespaceDetailComponent,
   data: {
     breadcrumb: '{{ resourceName }}',
-    parent: TENANTNEW_LIST_ROUTE,
+    parent: NAMESPACE_LIST_ROUTE,
   },
+};
+
+export const ACTIONBAR = {
+  path: '',
+  component: ActionbarComponent,
+  outlet: 'actionbar',
 };
 
 @NgModule({
-  imports: [RouterModule.forChild([TENANTNEW_LIST_ROUTE, TENANTNEW_DETAIL_ROUTE])],
+  imports: [RouterModule.forChild([NAMESPACE_LIST_ROUTE, NAMESPACE_DETAIL_ROUTE, ACTIONBAR])],
   exports: [RouterModule],
 })
-export class TenantNewRoutingModule {}
- 
+export class NamespaceRoutingModule {}

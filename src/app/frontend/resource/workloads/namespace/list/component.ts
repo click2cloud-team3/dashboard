@@ -15,10 +15,7 @@
 import {Component} from '@angular/core';
 
 @Component({
-  selector: 'kd-role-list-state',
-  template: '<kd-cluster-role-list></kd-cluster-role-list>'
+  selector: 'kd-namespace-list-view',
+  template: '<kd-namespace-list></kd-namespace-list>',
 })
-export class TenantAccessControlListComponent {
-
-
-}
+export class NamespaceListComponent {}

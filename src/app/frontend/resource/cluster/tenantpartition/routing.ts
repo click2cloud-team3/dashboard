@@ -1,11 +1,11 @@
-// Copyright 2017 The Kubernetes Authors.
-//
+// Copyright 2020 Authors of Arktos.
+
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+
 //     http://www.apache.org/licenses/LICENSE-2.0
-//
+
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,35 +14,32 @@
 
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-import {DEFAULT_ACTIONBAR} from '../../common/components/actionbars/routing';
 
-import {TENANTMANAGEMENT_ROUTE} from '../routing';
+import {CLUSTER_ROUTE} from '../routing';
 
-import {TenantAccessControlDetailComponent} from './detail/component';
-import {TenantAccessControlListComponent} from './list/component';
+import {TenantPartitionListComponent} from './list/component';
+import {TenantPartitionDetailComponent} from './detail/component';
 
-const ROLE_LIST_ROUTE: Route = {
+const TENANT_LIST_ROUTE: Route = {
   path: '',
-  component: TenantAccessControlListComponent,
+  component: TenantPartitionListComponent,
   data: {
-    breadcrumb: 'Access Control',
-    parent: TENANTMANAGEMENT_ROUTE,
+    breadcrumb: 'Tenant',
+    parent: CLUSTER_ROUTE,
   },
 };
 
-const ROLE_DETAIL_ROUTE: Route = {
+const TENANT_DETAIL_ROUTE: Route = {
   path: ':resourceName',
-  component: TenantAccessControlDetailComponent,
+  component: TenantPartitionDetailComponent,
   data: {
     breadcrumb: '{{ resourceName }}',
-    parent: ROLE_LIST_ROUTE,
+    parent: TENANT_LIST_ROUTE,
   },
 };
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([ROLE_LIST_ROUTE, ROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR]),
-  ],
+  imports: [RouterModule.forChild([TENANT_LIST_ROUTE, TENANT_DETAIL_ROUTE])],
   exports: [RouterModule],
 })
-export class TenantAccessControlRoutingModule {}
+export class TenantPartitionRoutingModule {}

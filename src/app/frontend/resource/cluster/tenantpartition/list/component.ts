@@ -15,11 +15,10 @@
 import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'kd-tenant-list-view',
-  template: '<kd-tenant-list></kd-tenant-list>',
+  selector: 'kd-tenant-partition-list-view',
+  template: '<kd-tenant-partition-list></kd-tenant-partition-list>',
 })
-export class TenantNewListComponent implements OnInit {
+export class TenantPartitionListComponent implements OnInit {
   constructor() {}
-
   ngOnInit() {}
 }

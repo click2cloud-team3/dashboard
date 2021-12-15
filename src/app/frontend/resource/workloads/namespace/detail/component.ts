@@ -1,5 +1,6 @@
-// Copyright 2020 Authors of Arktos.
-
+// Copyright 2017 The Kubernetes Authors.
+// Copyright 2020 Authors of Arktos - file modified.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -14,26 +15,27 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TenantDetail} from '@api/backendapi';
+import {NamespaceDetail} from '@api/backendapi';
+import {Subscription} from 'rxjs/Subscription';
 
 import {ActionbarService, ResourceMeta} from '../../../../common/services/global/actionbar';
 import {NotificationsService} from '../../../../common/services/global/notifications';
-import {ResourceService} from 'common/services/resource/resource';
-import {EndpointManager, Resource} from 'common/services/resource/endpoint';
-import {Subscription} from 'rxjs/Subscription';
+import {EndpointManager, Resource} from '../../../../common/services/resource/endpoint';
+import {ResourceService} from '../../../../common/services/resource/resource';
 
 @Component({
-  selector: 'kd-tenant-detail',
+  selector: 'kd-clusternamespace-detail',
   templateUrl: './template.html',
 })
-export class TenantNewDetailComponent implements OnInit, OnDestroy {
-  private tenantSubscription_: Subscription;
-  private readonly endpoint_ = EndpointManager.resource(Resource.tenant);
-  tenant: TenantDetail;
+export class NamespaceDetailComponent implements OnInit, OnDestroy {
+  private namespaceSubscription_: Subscription;
+  private readonly endpoint_ = EndpointManager.resource(Resource.namespace, false, true);
+  namespace: NamespaceDetail;
   isInitialized = false;
+  eventListEndpoint: string;
 
   constructor(
-    private readonly tenant_: ResourceService<TenantDetail>,
+    private readonly namespace_: ResourceService<NamespaceDetail>,
     private readonly actionbar_: ActionbarService,
     private readonly activatedRoute_: ActivatedRoute,
     private readonly notifications_: NotificationsService,
@@ -42,18 +44,20 @@ export class TenantNewDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const resourceName = this.activatedRoute_.snapshot.params.resourceName;
 
-    this.tenantSubscription_ = this.tenant_
+    this.eventListEndpoint = this.endpoint_.child(resourceName, Resource.event);
+
+    this.namespaceSubscription_ = this.namespace_
       .get(this.endpoint_.detail(), resourceName)
-      .subscribe((d: TenantDetail) => {
-        this.tenant = d;
+      .subscribe((d: NamespaceDetail) => {
+        this.namespace = d;
         this.notifications_.pushErrors(d.errors);
-        this.actionbar_.onInit.emit(new ResourceMeta('Tenant', d.objectMeta, d.typeMeta));
+        this.actionbar_.onInit.emit(new ResourceMeta('Namespace', d.objectMeta, d.typeMeta));
         this.isInitialized = true;
       });
   }
 
   ngOnDestroy(): void {
-    this.tenantSubscription_.unsubscribe();
+    this.namespaceSubscription_.unsubscribe();
     this.actionbar_.onDetailsLeave.emit();
   }
 }
