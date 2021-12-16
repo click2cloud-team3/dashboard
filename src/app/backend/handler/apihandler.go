@@ -2735,11 +2735,9 @@ func (apiHandler *APIHandler) handleGetReplicationControllerPodsWithMultiTenancy
 
 func (apiHandler *APIHandler) handleCreateClusterRole(request *restful.Request, response *restful.Response) {
   clusterRoleSpec := new(clusterrole.ClusterRoleSpec)
-	if err := request.ReadEntity(clusterRoleSpec); err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
-	if err := clusterrole.CreateClusterRole(clusterRoleSpec, k8sClient); err != nil {
+  k8sClient, err := apiHandler.cManager.Client(request)
+
+  if err = clusterrole.CreateClusterRole(clusterRoleSpec, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
@@ -2836,40 +2834,6 @@ func (apiHandler *APIHandler) handleCreateNamespace(request *restful.Request, re
 		return
 	}
 	response.WriteHeaderAndEntity(http.StatusCreated, namespaceSpec)
-}
-
-func (apiHandler *APIHandler) handleCreateTenant(request *restful.Request, response *restful.Response) {
-	k8sClient, err := apiHandler.cManager.Client(request)
-	if err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
-
-	tenantSpec := new(tenant.TenantSpec)
-	if err := request.ReadEntity(tenantSpec); err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
-	if err := tenant.CreateTenant(tenantSpec, k8sClient); err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
-	response.WriteHeaderAndEntity(http.StatusCreated, tenantSpec)
-}
-
-func (apiHandler *APIHandler) handleDeleteTenant(request *restful.Request, response *restful.Response) {
-	k8sClient, err := apiHandler.cManager.Client(request)
-	if err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
-
-	tenantName := request.PathParameter("tenant")
-	if err := tenant.DeleteTenant(tenantName, k8sClient); err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
-	response.WriteHeader(http.StatusOK)
 }
 
 func (apiHandler *APIHandler) handleGetServiceAccounts(request *restful.Request, response *restful.Response) {
