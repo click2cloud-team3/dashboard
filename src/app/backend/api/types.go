@@ -129,8 +129,10 @@ const (
 	ResourceKindReplicaSet               = "replicaset"
 	ResourceKindReplicationController    = "replicationcontroller"
 	ResourceKindResourceQuota            = "resourcequota"
+	ResourceKindRole                     = "role"
 	ResourceKindSecret                   = "secret"
 	ResourceKindService                  = "service"
+	ResourceKindServiceAccount           = "serviceaccount"
 	ResourceKindStatefulSet              = "statefulset"
 	ResourceKindStorageClass             = "storageclass"
 	ResourceKindClusterRole              = "clusterrole"
@@ -189,6 +191,8 @@ var KindToAPIMapping = map[string]APIMapping{
 	ResourceKindResourceQuota:            {"resourcequotas", ClientTypeDefault, true},
 	ResourceKindSecret:                   {"secrets", ClientTypeDefault, true},
 	ResourceKindService:                  {"services", ClientTypeDefault, true},
+	ResourceKindServiceAccount:           {"servicesaccounts", ClientTypeDefault, true},
+	ResourceKindRole:                     {"roles", ClientTypeDefault, false},
 	ResourceKindStatefulSet:              {"statefulsets", ClientTypeAppsClient, true},
 	ResourceKindStorageClass:             {"storageclasses", ClientTypeStorageClient, false},
 	ResourceKindEndpoint:                 {"endpoints", ClientTypeDefault, true},
