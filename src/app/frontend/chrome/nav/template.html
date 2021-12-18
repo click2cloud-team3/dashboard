@@ -68,7 +68,6 @@ limitations under the License.
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="kd-nav-group">
-
           <kd-nav-item class="kd-nav-item" state="/overview" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Tenant Monitoring
@@ -137,6 +136,34 @@ limitations under the License.
           <kd-nav-item class="kd-nav-item" state="/statefulset" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Stateful Sets
+          </kd-nav-item>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-divider></mat-divider>
+
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <kd-nav-item class="kd-nav-group-item" i18n>
+              <img class="menu_icon" src="assets/images/discovery_load_balancing_icon.svg" alt="">
+              Virtual Machine
+            </kd-nav-item>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="kd-nav-group">
+          <kd-nav-item class="kd-nav-item" state="/instance" i18n>
+            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+            Instances
+          </kd-nav-item>
+          <kd-nav-item class="kd-nav-item" state="/image" i18n>
+            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+            Images
+          </kd-nav-item>
+          <kd-nav-item class="kd-nav-item" state="/keypair" i18n>
+            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+            Key Pairs
           </kd-nav-item>
         </div>
       </mat-expansion-panel>

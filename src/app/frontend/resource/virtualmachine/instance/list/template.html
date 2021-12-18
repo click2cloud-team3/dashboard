@@ -1,0 +1,165 @@
+<!--
+Copyright 2017 The Kubernetes Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="list_container">
+    <div class="filter_section">
+        <div class="filter_sec">
+            <div class="selectdiv">
+                <select class="form-select">
+                    <option selected>Instance ID</option>
+                    <option value="1">Instance ID</option>
+                    <option value="2">Instance ID</option>
+                    <option value="3">Instance ID</option>
+                </select>
+            </div>
+        </div>
+        <div class="filter_sec">
+            <input type="text" class="form-control" placeholder="">
+        </div>
+        <div class="filter_sec">
+            <button type="button" class="btn btn-outline-primary">Filter</button>
+        </div>
+        <div class="filter_sec">
+            <button type="button" class="btn btn-outline-primary">
+                <img class="plus_icon" src="assets/images/plus_icon.svg" alt="">Create Instance</button>
+        </div>
+        <div class="filter_sec">
+            <button type="button" class="btn btn-outline-primary delete_btn">
+                <img class="menu_icon" src="assets/images/delete_white.svg" alt="">Delete Instances</button>
+        </div>
+        <div class="filter_sec">
+            <button type="button" class="btn btn-outline-primary">More Actions</button>
+        </div>
+    </div>
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Instances
+                </mat-panel-title>
+                <mat-panel-description>
+                    <div class="panel_description">
+                        <span>Items: </span>
+                        5
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <mat-header-cell *matHeaderCellDef>
+                        <label class="chk_container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <label class="chk_container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Instance Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> Instance </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <a href="#">{{element.name}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Image Column -->
+                <ng-container matColumnDef="image">
+                    <mat-header-cell *matHeaderCellDef> Image </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.image}} </mat-cell>
+                </ng-container>
+
+                <!-- IP Address Column -->
+                <ng-container matColumnDef="ip">
+                    <mat-header-cell *matHeaderCellDef> IP Address </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.ip}} </mat-cell>
+                </ng-container>
+
+                <!-- Flavor Column -->
+                <ng-container matColumnDef="flavor">
+                    <mat-header-cell *matHeaderCellDef> Flavor </mat-header-cell>
+                    <mat-cell *matCellDef="let element"><a href="#">{{element.flavor}}</a></mat-cell>
+                </ng-container>
+
+                <!-- Key Pair Column -->
+                <ng-container matColumnDef="keypair">
+                    <mat-header-cell *matHeaderCellDef style="flex: 0 0 130px !important;"> Key Pair </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="flex: 0 0 130px !important;"> {{element.keypair}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Status Column -->
+                <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                </ng-container>
+
+                <!-- Availability Zone Column -->
+                <ng-container matColumnDef="zone">
+                    <mat-header-cell *matHeaderCellDef> Availability Zone </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.zone}} </mat-cell>
+                </ng-container>
+
+                <!-- Task Column -->
+                <ng-container matColumnDef="task">
+                    <mat-header-cell *matHeaderCellDef> Task </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.task}} </mat-cell>
+                </ng-container>
+
+                <!-- Power State Column -->
+                <ng-container matColumnDef="state">
+                    <mat-header-cell *matHeaderCellDef> Power State </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.state}} </mat-cell>
+                </ng-container>
+
+                <!-- Time since created Column -->
+                <ng-container matColumnDef="time">
+                    <mat-header-cell *matHeaderCellDef style="flex: 0 0 120px !important;"> Time since created
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="flex: 0 0 120px !important;"> {{element.time}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef style="flex: 0 0 140px !important;">Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="flex: 0 0 140px !important;">
+                        <div class="selectdiv">
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Create Snapshot</option>
+                                <option value="1">Delete Snapshot</option>
+                                <option value="1">Start Instance</option>
+                                <option value="1">Restart Instance</option>
+                                <option value="1">Stop Instance</option>
+                            </select>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

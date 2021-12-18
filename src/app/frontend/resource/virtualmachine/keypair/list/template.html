@@ -1,0 +1,99 @@
+<!--
+Copyright 2017 The Kubernetes Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="list_container list_container2">
+    <div class="filter_section">        
+        <div class="filter_sec">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">
+                    <img class="search_icon" src="assets/images/search_icon.svg" alt="">
+                </span>
+                <input type="text" class="form-control" placeholder="Click here for filters...." aria-label="Username" aria-describedby="basic-addon1">
+              </div>            
+        </div>
+        <div class="filter_sec">
+            <button type="button" class="btn btn-outline-primary">
+                <img class="plus_icon" src="assets/images/plus_icon.svg" alt="">Create Key Pair</button>
+        </div>
+        <div class="filter_sec">
+            <button type="button" class="btn btn-outline-primary">Import Public Key</button>
+        </div>        
+        <div class="filter_sec">
+            <button type="button" class="btn btn-outline-primary delete_btn">
+                <img class="menu_icon" src="assets/images/delete_white.svg" alt="">Delete Key Pairs</button>
+        </div>
+    </div>
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Key Pairs
+                </mat-panel-title>
+                <mat-panel-description>
+                    <div class="panel_description">
+                        <span>Items: </span>
+                        5
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <mat-header-cell *matHeaderCellDef>
+                        <label class="chk_container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <label class="chk_container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <a href="#">{{element.name}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Fingerprint Column -->
+                <ng-container matColumnDef="fingerpring">
+                    <mat-header-cell *matHeaderCellDef> Fingerprint </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.fingerpring}}</mat-cell>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <button type="button" class="btn btn-outline-primary delete_btn delete_btn2">
+                            <img class="menu_icon" src="assets/images/delete_white.svg" alt="">Delete Key Pairs</button>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

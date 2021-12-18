@@ -119,6 +119,24 @@ const routes: Routes = [
         loadChildren: 'resource/workloads/statefulset/module#StatefulSetModule',
       },
 
+      // Virtual Machine
+      // {
+      //   path: 'virtualmachine',
+      //   loadChildren: 'resource/virtualmachine/module#VirtualmachineModule',
+      // },
+      {
+        path: 'instance',
+        loadChildren: 'resource/virtualmachine/instance/module#InstanceModule',
+      },
+      {
+        path: 'image',
+        loadChildren: 'resource/virtualmachine/image/module#ImageModule',
+      },
+      {
+        path: 'keypair',
+        loadChildren: 'resource/virtualmachine/keypair/module#KeypairModule',
+      },
+
       // Discovery and load balancing group
       {
         path: 'discovery',
@@ -160,7 +178,10 @@ const routes: Routes = [
       },
 
       // Custom resource definitions
-      {path: 'customresourcedefinition', loadChildren: 'crd/module#CrdModule'},
+      {
+        path: 'customresourcedefinition',
+        loadChildren: 'crd/module#CrdModule'},
+
       // Others
       {
         path: 'settings',
@@ -180,7 +201,6 @@ const routes: Routes = [
       },
       {
         path: 'tenantmonitoring',
-
         loadChildren: 'tenantmanagement/tenantmonitoring/module#TenantMonitoringModule',
 
       },

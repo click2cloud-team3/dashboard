@@ -28,7 +28,7 @@ body {
   margin: 0;
 }
 
-*{  
+*{
   font-family: Roboto, "Helvetica Neue", sans-serif;
  }
 
@@ -342,7 +342,7 @@ router-outlet::after {
   font-family: Roboto, sans-serif;
 }
 
-// 16/11/2121 
+// 16/11/2121
 
 .kd-light-theme .kd-bg-primary {
   background-color: #fff !important;
@@ -365,7 +365,7 @@ router-outlet::after {
   background-color: #fff;
   border: 1px solid #ccc;
 }
-.kd-search{ 
+.kd-search{
   margin-top: 0px;
   height: 32px !important;
 }
@@ -410,7 +410,7 @@ router-outlet::after {
   font-size: 14px !important;
 }
 .mat-drawer .kd-nav-group-item .kd-nav-item-button{
-  font-size: 13px !important;  
+  font-size: 13px !important;
 }
 .mat-drawer .kd-nav-item .kd-nav-item-button{
   font-size: 12px !important;
@@ -436,7 +436,7 @@ router-outlet::after {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
 }
 .mat-drawer-container {
-  border-right: 1px solid rgba(0, 0, 0, 0.12) !important;  
+  border-right: 1px solid rgba(0, 0, 0, 0.12) !important;
 }
 .mat-drawer .mat-form-field-infix {
   background-color: #eeeeee !important;
@@ -499,7 +499,7 @@ router-outlet::after {
 }
 .kd-second-toolbar .kd-accent .mat-button-wrapper .mat-icon{
   line-height: 28px !important;
-  font-size: 21px !important;  
+  font-size: 21px !important;
   color: #565656 !important;
 }
 .logo_icon{
@@ -676,11 +676,11 @@ router-outlet::after {
   font-size: 11px !important;
   padding: 4px 10px !important;
 }
-.kd-light-theme .mat-row, 
-.kd-light-theme .mat-header-row, 
-.kd-light-theme .mat-footer-row, 
-.kd-light-theme th.mat-header-cell, 
-.kd-light-theme td.mat-cell, 
+.kd-light-theme .mat-row,
+.kd-light-theme .mat-header-row,
+.kd-light-theme .mat-footer-row,
+.kd-light-theme th.mat-header-cell,
+.kd-light-theme td.mat-cell,
 .kd-light-theme td.mat-footer-cell{
   border-bottom-color: #e7e5e5 !important;
 }
@@ -729,7 +729,7 @@ router-outlet::after {
   }
 
   .card_item:hover {
-    box-shadow: 0px 1px 15px 2px #ccc; 
+    box-shadow: 0px 1px 15px 2px #ccc;
   }
 
   .mt_15 {
@@ -867,7 +867,7 @@ router-outlet::after {
 /* When the radio button is checked, add a blue background */
 .radio_container input:checked ~ .checkmark {
   background-color: #fff;
-  border: 1px solid #4174ff; 
+  border: 1px solid #4174ff;
 }
 
 /* Create the indicator (the dot/circle - hidden when not checked) */
@@ -889,7 +889,7 @@ router-outlet::after {
 /* Style the indicator (dot/circle) */
 .radio_container .checkmark:after {
      top: 3px;
-    left: 3px;	
+    left: 3px;
     border-radius: 50%;
     background: white;
 }
@@ -915,13 +915,16 @@ router-outlet::after {
   padding: 0 !important;
   font-size: 14px !important;
   color: #565656 !important;
-  margin-bottom: 0.6rem !important; 
+  margin-bottom: 0.6rem !important;
 }
 .tab_content{
   min-height: 410px;
 }
 .second_tab_content{
   display: none;
+}
+.d_block{
+  display: block;
 }
 .second_tab_content .cdk-text-field-autofill-monitored{
   resize: none;
@@ -1033,7 +1036,7 @@ router-outlet::after {
   font-size: 14px !important;
 }
 .kd-graph-legend-entry{
-  font-size: 12px !important;  
+  font-size: 12px !important;
 }
 .mat-dialog-actions button:last-child {
   color: #326de6;
@@ -1106,7 +1109,7 @@ router-outlet::after {
   padding-bottom: 1.55em !important;
 }
 .login_container .mat-form-field:first-child{
-  margin-bottom: 15px;  
+  margin-bottom: 15px;
 }
 .login_container .mat-button-wrapper{
   font-size: 15px !important;
@@ -1146,6 +1149,272 @@ router-outlet::after {
   color: inherit !important;
 }
 
+// new panel table css
+.list_container .mat-expansion-panel {
+  margin: 25px 20px !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+}
+.list_container .mat-expansion-panel-body {
+  padding: 0 !important;
+}
+.list_container .mat-expansion-panel-header {
+  background-color: #e9efff !important;
+  height: 33px !important;
+  padding: 0 24px 0 0px !important;
+}
+.list_container .mat-expansion-panel-header-title {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #343434 !important;
+  padding: 5px 0 5px 14px !important;
+  min-height: 33px;
+  line-height: 23px;
+  justify-content: space-between;
+  flex: 1 1 27%;
+}
+.list_container .panel_description {
+  font-size: 12px !important;
+  font-weight: 500;
+  color: #464545 !important;
+  display: flex;
+  align-items: center;
+}
+.list_container .panel_description span {
+  color: #565656 !important;
+  font-weight: 400 !important;
+}
+
+.mat-expansion-indicator::after {
+  border-style: initial !important;
+  border-width: unset;
+  content: '';
+  display: inline-block;
+  padding: 0px !important;
+  transform: rotate(90deg) !important;
+  vertical-align: middle;
+  border-left: 5px solid rgba(0, 0, 0, 0.54) !important;
+  border-top: 5px solid transparent !important;
+  border-bottom: 5px solid transparent !important;
+  position: absolute;
+  top: -5px;
+  right: 0px;
+}
+.list_container .mat-table {
+box-shadow: none !important;
+}
+.list_container .mat-table .mat-header-cell,
+.list_container .mat-table .mat-cell{
+  flex: 0 0 97px !important;
+}
+.list_container .mat-table a,
+.list_container .mat-table a:hover{
+  color: #326de6;
+  text-decoration: none;
+}
+.list_container .mat-table select {
+  height: 26px !important;
+  font-size: 12px !important;
+  line-height: 13px !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+.list_container .mat-checkbox-inner-container{
+  height: 12px !important;
+  width: 12px !important;
+}
+.list_container .filter_section{
+  display: flex;
+  justify-content: flex-end;
+  margin: 0px 20px;
+}
+.list_container .filter_section .filter_sec{
+  margin-right: 7px;
+}
+.list_container .filter_section .filter_sec:last-child{
+  margin-right: 0px;
+}
+.list_container .filter_section select,
+.list_container .filter_section input,
+.list_container .filter_section button{
+  height: 30px !important;
+  font-size: 12px !important;
+  color: #000;
+  opacity: .8;
+  border: 1px solid #ccc;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+.list_container select{
+  background-image: none !important;
+}
+.list_container .filter_section select{
+  background-color: #e1e1e1;
+}
+.list_container .filter_section .btn-outline-primary:hover,
+.list_container .filter_section .btn-outline-primary:focus{
+  background-color: transparent !important;
+}
+.list_container .filter_section .delete_btn,
+.list_container .filter_section .delete_btn:hover,
+.list_container .filter_section .delete_btn:focus {
+  background-color: #e76e6e !important;
+  color: #fff !important;
+  border: 1px solid #e76e6e !important;
+}
+.selectdiv {
+  position: relative;
+}
+.selectdiv:after {
+  content: '';
+  position: absolute;
+  border: 1px solid #E9EFF4 !important;
+  border-top: 5px solid rgba(0, 0, 0, 0.54) !important;
+  border-left: 4px solid transparent !important;
+  border-right: 4px solid transparent !important;
+  top: 14px;
+  right: 12px;
+}
+.list_container .mat-table .selectdiv:after {
+  top: 10px;
+}
+.list_container .menu_icon {
+  width: 12px;
+}
+.plus_icon{
+  width: 12px;
+  margin-right: 5px;
+  margin-top: -3px;
+}
+.search_icon{
+  width: 14px;
+}
+.input-group-text {
+  background-color: #e1e1e1;
+  border: 1px solid #ccc;
+  border-radius: 4px 0px 0px 4px !important;
+}
+.list_container .input-group .form-control{
+  border-radius: 0px 4px 4px 0px !important;
+}
+.delete_btn2{
+  height: 28px !important;
+  font-size: 11px !important;
+  opacity: .8;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+.delete_btn2,
+.delete_btn2:hover,
+.delete_btn2:focus {
+  background-color: #e76e6e !important;
+  color: #fff !important;
+  border: 1px solid #e76e6e !important;
+}
+.list_container2 .mat-table .mat-header-cell,
+.list_container2 .mat-table .mat-cell{
+  flex: 0 0 381px !important;
+}
+.list_container3 .mat-table .mat-header-cell,
+.list_container3 .mat-table .mat-cell{
+  flex: 0 0 130px !important;
+}
+.delete_btn2 .menu_icon {
+  width: 10px !important;
+}
+
+
+/* custom checkbox */
+
+/* The container */
+.chk_container {
+  display: block !important;
+  position: relative !important;
+  padding-left: 25px;
+  margin-bottom: 0px;
+  cursor: pointer;
+  font-size: 11px !important;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  top: 0px !important;
+  left: 0px !important;
+}
+
+/* Hide the browser's default checkbox */
+.chk_container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+/* label size */
+.chk_container .chk_text {
+  font-size: 11px;
+  font-weight: 400;
+  color: #000;
+  opacity: .9;
+}
+
+/* Create a custom checkbox */
+.chk_container .checkmark {
+  position: absolute;
+  top: -7px;
+  left: 0px;
+  height: 12px;
+  width: 12px;
+  border: 1px solid #a3a1a1;
+  border-radius: 2px;
+}
+
+/* On mouse-over, add a grey background color */
+.chk_container:hover input ~ .checkmark {
+  border: 1px solid #a3a1a1;
+}
+/* On mouse-over, add a grey background color */
+.chk_container:hover input:checked ~ .checkmark {
+  border: 1px solid #326de6;
+}
+
+/* When the checkbox is checked, add a blue background */
+.chk_container input:checked ~ .checkmark {
+  background-color: #326de6;
+  border: 1px solid #326de6;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.chk_container .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.chk_container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.chk_container .checkmark:after {
+  left: 3px;
+  top: 0px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 1px 1px 0;
+  -webkit-transform: rotate(
+45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(
+45deg);
+}
+
+/* end of custom checkbox */
 
 // media query
 

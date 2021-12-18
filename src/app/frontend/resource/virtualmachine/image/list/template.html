@@ -1,0 +1,139 @@
+<!--
+Copyright 2017 The Kubernetes Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="list_container list_container3">
+    <div class="filter_section">
+        <div class="filter_sec">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">
+                    <img class="search_icon" src="assets/images/search_icon.svg" alt="">
+                </span>
+                <input type="text" class="form-control" placeholder="Click here for filters...." aria-label="Username"
+                    aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="filter_sec">
+            <button type="button" class="btn btn-outline-primary">
+                <img class="plus_icon" src="assets/images/plus_icon.svg" alt="">Create Image</button>
+        </div>
+        <div class="filter_sec">
+            <button type="button" class="btn btn-outline-primary delete_btn">
+                <img class="menu_icon" src="assets/images/delete_white.svg" alt="">Delete Images</button>
+        </div>
+    </div>
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Images
+                </mat-panel-title>
+                <mat-panel-description>
+                    <div class="panel_description">
+                        <span>Items: </span>
+                        6
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <mat-header-cell *matHeaderCellDef>
+                        <label class="chk_container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <label class="chk_container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </mat-cell>
+                </ng-container>
+                
+                <!-- Owner Column -->
+                <ng-container matColumnDef="owner">
+                    <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.owner}} </mat-cell>
+                </ng-container>                
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <a href="#">{{element.name}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Type Column -->
+                <ng-container matColumnDef="type">
+                    <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.type}} </mat-cell>
+                </ng-container>
+
+                <!-- Status Column -->
+                <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.status}}</mat-cell>
+                </ng-container>
+
+                <!-- Visiblity Column -->
+                <ng-container matColumnDef="visiblity">
+                    <mat-header-cell *matHeaderCellDef> Visiblity </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.visiblity}} </mat-cell>
+                </ng-container>
+
+                <!-- Protected Column -->
+                <ng-container matColumnDef="protected">
+                    <mat-header-cell *matHeaderCellDef> Protected </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.protected}} </mat-cell>
+                </ng-container>
+
+                <!-- Disk Format Column -->
+                <ng-container matColumnDef="diskformat">
+                    <mat-header-cell *matHeaderCellDef> Disk Format </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.diskformat}} </mat-cell>
+                </ng-container>
+
+                <!-- Size Column -->
+                <ng-container matColumnDef="size">
+                    <mat-header-cell *matHeaderCellDef> Size </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+                </ng-container> 
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef style="flex: 0 0 140px !important;">Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let row" style="flex: 0 0 140px !important;">
+                        <div class="selectdiv">
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Launch</option>
+                                <option value="1">Launch</option>
+                                <option value="2">Launch</option>
+                                <option value="3">Launch</option>
+                            </select>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
