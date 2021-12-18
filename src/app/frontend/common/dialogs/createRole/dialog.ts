@@ -14,83 +14,147 @@
 
 
 
-import {Component,Inject} from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {HttpClient} from '@angular/common/http';
-import  {TenantService} from "../../services/global/tenant";
-import {NamespaceService} from "../../services/global/namespace";
-import {AppDeploymentContentSpec} from "@api/backendapi";
-import {MAT_DIALOG_DATA} from '@angular/material';
-import { contact } from './model';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
+import {CONFIG} from "../../../index.config";
+import {CsrfTokenService} from "../../services/global/csrftoken";
+import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
 
+
+export interface CreateRoleDialogMeta {
+  name: string;
+  apiGroups: string []
+  resources: string[]
+  verbs: string[]
+  namespace: string[]
+
+}
 @Component({
-  selector: 'kd-delete-resource-dialog',
+  selector: 'kd-create-role-dialog',
   templateUrl: 'template.html',
 })
 
+export class CreateRoleDialog implements OnInit {
+  form1: FormGroup;
+
+  private readonly config_ = CONFIG;
 
 
-export class CreateRoleDialog {
-  place_holder: string;
-  tenant_name: string;
-  // namespace_name: string;
+  RoleMaxLength = 63;
+  RolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+  name:string = "adminrole"
+  myapiGroups: string[] = ["extensions", "apps"]
+  myresources: string[] = ["pods","services"]
+  myverbs: string[] =  ["get","put"]
+  apigroups1: string[]
+  resources1: string[]
+  verbs1 : string[]
+  constructor(
+    public dialogRef: MatDialogRef<CreateRoleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: CreateRoleDialogMeta,
+    private readonly http_: HttpClient,
+    private readonly csrfToken_: CsrfTokenService,
+    private readonly matDialog_: MatDialog,
+    private readonly fb_: FormBuilder,
+  ) {}
 
-  constructor(public dialog: MatDialog,
-              private http:HttpClient,
-              private readonly namespace_: NamespaceService,
-              private readonly tenant_: TenantService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
-                console.log(" data",this.data);
-                this.place_holder = this.data.displayName;
-                this.dataarray.push(this.obj1);
-              }
-
-  openDialog() {
-    console.log(" htsi is ",this.tenant_name);
-    
-    const dialogRef = this.dialog.open(CreateRoleDialog);
-    var data = {
-      tenant_name: this.tenant_name,
-      // namespace_name: "this.namespace_name"
-    }
-
-     this.http.post<any>('https://192.168.1.244:9445/api/v1/tenant', data);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-      console.log(data);
+  ngOnInit(): void {
+    this.form1 = this.fb_.group({
+      role: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.RoleMaxLength),
+          Validators.pattern(this.RolePattern),
+        ]),
+      ],
+      apigroups: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.RoleMaxLength),
+        ]),
+      ],
+      namespace: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.RoleMaxLength),
+        ]),
+      ],
+      resources: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.RoleMaxLength),
+        ]),
+      ],
+      verbs: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.RoleMaxLength),
+        ]),
+      ],
     });
   }
-  showContent1(){
-    document.getElementById("first_tab_content").style.display = "block"; 
-    document.getElementById("second_tab_content").style.display = "none"; 
+
+  get role(): AbstractControl {
+    return this.form1.get('role');
   }
-  showContent2(){
-    document.getElementById("first_tab_content").style.display = "none"; 
-    document.getElementById("second_tab_content").style.display = "block"; 
+  get namespace(): AbstractControl {
+    return this.form1.get('namespace');
+  }
+  get apigroups(): AbstractControl {
+    return this.form1.get('apigroups');
+  }
+  get verbs(): AbstractControl {
+    return this.form1.get('verbs');
+  }
+  get resources(): AbstractControl {
+    return this.form1.get('resources');
+  }
+  // function for creating new Clusterrole
+  createrole(): void {
+    if (!this.form1.valid) return;
+    this.apigroups1 = this.apigroups.value.split(',')
+    this.resources1 = this.resources.value.split(',')
+    this.verbs1 = this.verbs.value.split(',')
+
+    const tenantSpec= {name: this.role.value, namespace: this.namespace.value, apiGroups: this.apigroups1,verbs: this.verbs1,resources: this.resources1};
+    console.log(tenantSpec)
+    const tokenPromise = this.csrfToken_.getTokenForAction('role');
+    tokenPromise.subscribe(csrfToken => {
+      return this.http_
+        .post<{valid: boolean}>(
+          'api/v1/role',
+          {...tenantSpec},
+          {
+            headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),
+          },
+        )
+        .subscribe(
+          () => {
+            this.dialogRef.close(this.role.value);
+            console.log("role created ")
+          },
+          error => {
+            this.dialogRef.close();
+            const configData: AlertDialogConfig = {
+              title: 'Error creating Role',
+              message: error.data,
+              confirmLabel: 'OK',
+            };
+            this.matDialog_.open(AlertDialog, {data: configData});
+          },
+        );
+    });
   }
 
-
-  obj1 =  new contact();
-  dataarray : any [] = [];
-     
-  // constructor() { 
-  //   this.dataarray.push(this.obj1);
-  // }
-  
-  ngOnInit(): void{
+  isDisabled(): boolean {
+    return this.data.name.indexOf(this.role.value) >= 0;
+  }
+  cancel(): void {
+    this.dialogRef.close();
   }
 
-  addForm(){
-    this.obj1 =  new contact();
-    this.dataarray.push(this.obj1);
-  }   
-
-  removeForm(index:number) {
-    this.dataarray.splice(index,1);
-  }
-  
-  onsubmit() {  
-    console.log(this.dataarray);  
-  }
 }
-

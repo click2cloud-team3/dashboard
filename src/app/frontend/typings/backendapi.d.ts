@@ -70,6 +70,9 @@ export interface ClusterRoleList extends ResourceList {
   items: ClusterRole[];
 }
 
+export interface RoleList extends ResourceList {
+  items: Role[];
+}
 
 
 export interface ConfigMapList extends ResourceList {
@@ -450,6 +453,11 @@ export interface PolicyRule {
 export interface ClusterRoleDetail extends ResourceDetail {
   rules: PolicyRule[];
 }
+
+export interface RoleDetail extends ResourceDetail {
+  rules: PolicyRule[];
+}
+
 
 export interface SecretDetail extends ResourceDetail {
   type: string;
@@ -1186,9 +1194,17 @@ export interface Tenant extends Resource {
   phase: string;
 }
 
+export interface Role extends Resource {
+}
+
 export interface TenantList extends ResourceList {
   tenants: Tenant[];
 }
+
+export interface RoleList extends ResourceList {
+  roles: Role[];
+}
+
 
 export interface TenantDetail extends ResourceDetail {
   phase: string;
