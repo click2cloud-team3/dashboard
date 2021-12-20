@@ -133,7 +133,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetTenantDetail).
 			Writes(tenant.TenantDetail{}))
 
-  //added Delete method for tenant
+	//added Delete method for tenant
 	apiV1Ws.Route(
 		apiV1Ws.DELETE("/tenants/{tenant}").
 			To(apiHandler.handleDeleteTenant))
@@ -784,6 +784,10 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	apiV1Ws.Route(
 		apiV1Ws.GET("/node/{name}").
 			To(apiHandler.handleGetNodeDetail).
+			Writes(node.NodeDetail{}))
+	apiV1Ws.Route(
+		apiV1Ws.POST("/node/{name}").
+			To(apiHandler.handleAddNode).
 			Writes(node.NodeDetail{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/node/{name}/event").
@@ -1595,6 +1599,25 @@ func (apiHandler *APIHandler) handleGetNodeDetail(request *restful.Request, resp
 	dataSelect := parseDataSelectPathParameter(request)
 	dataSelect.MetricQuery = dataselect.StandardMetrics
 	result, err := node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleAddNode(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	name := request.PathParameter("name")
+	dataSelect := parseDataSelectPathParameter(request)
+	dataSelect.MetricQuery = dataselect.StandardMetrics
+	result, err := node.AddNode(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+	//result, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
@@ -2734,10 +2757,10 @@ func (apiHandler *APIHandler) handleGetReplicationControllerPodsWithMultiTenancy
 }
 
 func (apiHandler *APIHandler) handleCreateClusterRole(request *restful.Request, response *restful.Response) {
-  clusterRoleSpec := new(clusterrole.ClusterRoleSpec)
-  k8sClient, err := apiHandler.cManager.Client(request)
+	clusterRoleSpec := new(clusterrole.ClusterRoleSpec)
+	k8sClient, err := apiHandler.cManager.Client(request)
 
-  if err = clusterrole.CreateClusterRole(clusterRoleSpec, k8sClient); err != nil {
+	if err = clusterrole.CreateClusterRole(clusterRoleSpec, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
@@ -2751,7 +2774,7 @@ func (apiHandler *APIHandler) handleGetRoles(request *restful.Request, response 
 		return
 	}
 
-  Namespace := request.PathParameter("namespace")
+	Namespace := request.PathParameter("namespace")
 	var namespaces []string
 	namespaces = append(namespaces, Namespace)
 	namespace := common.NewNamespaceQuery(namespaces)

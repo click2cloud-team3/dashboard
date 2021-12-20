@@ -166,6 +166,23 @@ func GetNodeDetail(client k8sClient.Interface, metricClient metricapi.MetricClie
 	return &nodeDetails, nil
 }
 
+// AddNode
+func AddNode(client k8sClient.Interface, metricClient metricapi.MetricClient, name string,
+	dsQuery *dataselect.DataSelectQuery) (*v1.Node, error) {
+	log.Printf("Getting details of %s node", name)
+
+	node, err := client.CoreV1().Nodes().Create(&v1.Node{
+		ObjectMeta: metaV1.ObjectMeta{
+			Name: name,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return node, nil
+}
+
 func getNodeAllocatedResources(node v1.Node, podList *v1.PodList) (NodeAllocatedResources, error) {
 	reqs, limits := map[v1.ResourceName]resource.Quantity{}, map[v1.ResourceName]resource.Quantity{}
 
