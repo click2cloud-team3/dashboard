@@ -133,7 +133,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetTenantDetail).
 			Writes(tenant.TenantDetail{}))
 
-  //added Delete method for tenant
+	//added Delete method for tenant
 	apiV1Ws.Route(
 		apiV1Ws.DELETE("/tenants/{tenant}").
 			To(apiHandler.handleDeleteTenant))
@@ -2734,10 +2734,18 @@ func (apiHandler *APIHandler) handleGetReplicationControllerPodsWithMultiTenancy
 }
 
 func (apiHandler *APIHandler) handleCreateClusterRole(request *restful.Request, response *restful.Response) {
-  clusterRoleSpec := new(clusterrole.ClusterRoleSpec)
-  k8sClient, err := apiHandler.cManager.Client(request)
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
 
-  if err = clusterrole.CreateClusterRole(clusterRoleSpec, k8sClient); err != nil {
+	clusterRoleSpec := new(clusterrole.ClusterRoleSpec)
+	if err := request.ReadEntity(clusterRoleSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	if err := clusterrole.CreateClusterRole(clusterRoleSpec, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
@@ -2751,7 +2759,7 @@ func (apiHandler *APIHandler) handleGetRoles(request *restful.Request, response 
 		return
 	}
 
-  Namespace := request.PathParameter("namespace")
+	Namespace := request.PathParameter("namespace")
 	var namespaces []string
 	namespaces = append(namespaces, Namespace)
 	namespace := common.NewNamespaceQuery(namespaces)
