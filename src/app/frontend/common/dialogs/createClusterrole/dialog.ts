@@ -12,30 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-
-import {Component,Inject} from '@angular/core';
+import {Component,Inject,OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {TenantService} from "../../services/global/tenant";
-import {NamespaceService} from "../../services/global/namespace";
-import {AppDeploymentContentSpec} from "@api/backendapi";
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
 import { FormGroup, FormControl } from '@angular/forms';
 import {CONFIG} from "../../../index.config";
 import {CsrfTokenService} from "../../services/global/csrftoken";
 import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
-import { Console } from 'console';
-
 
 export interface CreateClusterroleDialogMeta {
   name: string;
   apiGroups: string []
   resources: string[]
   verbs: string[]
-
 }
+
 @Component({
   selector: 'kd-create-clusterrole-dialog',
   templateUrl: 'template.html',
@@ -46,13 +39,14 @@ export class CreateClusterroleDialog implements OnInit {
 
   private readonly config_ = CONFIG;
 
-
   ClusterroleMaxLength = 63;
   ClusterrolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+
   name: string
-  apigroups1: string[]
-  resources1: string[]
-  verbs1 : string[]
+  apigroup: string[]
+  resource: string[]
+  verb : string[]
+
   constructor(
     public dialogRef: MatDialogRef<CreateClusterroleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: CreateClusterroleDialogMeta,
@@ -107,10 +101,10 @@ export class CreateClusterroleDialog implements OnInit {
   // function for creating new Clusterrole
   createclusterrole(): void {
     if (!this.form1.valid) return;
-    this.apigroups1 = this.apigroups.value.split(',')
-    this.resources1 = this.resources.value.split(',')
-    this.verbs1 = this.verbs.value.split(',')
-    const clusterroleSpec= {name: this.clusterrole.value,apiGroups: this.apigroups1,verbs: this.verbs1,resources: this.resources1};
+    this.apigroup = this.apigroups.value.split(',')
+    this.resource = this.resources.value.split(',')
+    this.verb = this.verbs.value.split(',')
+    const clusterroleSpec= {name: this.clusterrole.value,apiGroups: this.apigroup,verbs: this.verb,resources: this.resource};
     const tokenPromise = this.csrfToken_.getTokenForAction('clusterrole');
     console.log(clusterroleSpec)
     tokenPromise.subscribe(csrfToken => {
