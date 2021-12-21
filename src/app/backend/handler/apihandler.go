@@ -16,6 +16,7 @@
 package handler
 
 import (
+	v1 "k8s.io/api/core/v1"
 	"log"
 	"net/http"
 	"strconv"
@@ -585,7 +586,10 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 		apiV1Ws.GET("/namespace/{name}/event").
 			To(apiHandler.handleGetNamespaceEvents).
 			Writes(common.EventList{}))
-
+	apiV1Ws.Route(
+		apiV1Ws.GET("/tenant/{tenant}/namespace/{namespace}").
+			To(apiHandler.handleUpdateQuota).
+			Writes(v1.ResourceQuota{}))
 	apiV1Ws.Route(
 		apiV1Ws.POST("/tenants/{tenant}/namespace"). // TODO
 								To(apiHandler.handleCreateNamespace).
@@ -2991,6 +2995,24 @@ func (apiHandler *APIHandler) handleGetNamespaceDetailWithMultiTenancy(request *
 	tenant := request.PathParameter("tenant")
 	name := request.PathParameter("name")
 	result, err := ns.GetNamespaceDetailWithMultiTenancy(k8sClient, tenant, name)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleUpdateQuota(request *restful.Request, response *restful.Response) {
+	log.Printf("Updating Quota")
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	tenant := request.PathParameter("tenant")
+	namespace := request.PathParameter("namespace")
+	result, err := ns.AddResourceQuotas(k8sClient, namespace, tenant)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
