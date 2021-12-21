@@ -16,81 +16,140 @@
 
 import {Component,Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {HttpClient} from '@angular/common/http';
-import  {TenantService} from "../../services/global/tenant";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {TenantService} from "../../services/global/tenant";
 import {NamespaceService} from "../../services/global/namespace";
 import {AppDeploymentContentSpec} from "@api/backendapi";
-import {MAT_DIALOG_DATA} from '@angular/material';
-import { contact } from './model';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
+import {CONFIG} from "../../../index.config";
+import {CsrfTokenService} from "../../services/global/csrftoken";
+import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
+import { Console } from 'console';
 
+
+export interface CreateClusterroleDialogMeta {
+  name: string;
+  apiGroups: string []
+  resources: string[]
+  verbs: string[]
+
+}
 @Component({
-  selector: 'kd-delete-resource-dialog',
+  selector: 'kd-create-clusterrole-dialog',
   templateUrl: 'template.html',
 })
 
+export class CreateClusterroleDialog implements OnInit {
+  form1: FormGroup;
+
+  private readonly config_ = CONFIG;
 
 
-export class CreateClusterroleDialog {
-  place_holder: string;
-  tenant_name: string;
-  // namespace_name: string;
+  ClusterroleMaxLength = 63;
+  ClusterrolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+  name: string
+  apigroups1: string[]
+  resources1: string[]
+  verbs1 : string[]
+  constructor(
+    public dialogRef: MatDialogRef<CreateClusterroleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: CreateClusterroleDialogMeta,
+    private readonly http_: HttpClient,
+    private readonly csrfToken_: CsrfTokenService,
+    private readonly matDialog_: MatDialog,
+    private readonly fb_: FormBuilder,
+  ) {}
 
-  constructor(public dialog: MatDialog,
-              private http:HttpClient,
-              private readonly namespace_: NamespaceService,
-              private readonly tenant_: TenantService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
-                console.log(" data",this.data);
-                this.place_holder = this.data.displayName;
-                this.dataarray.push(this.obj1);
-              }
-
-  openDialog() {
-    console.log(" htsi is ",this.tenant_name);
-    
-    const dialogRef = this.dialog.open(CreateClusterroleDialog);
-    var data = {
-      tenant_name: this.tenant_name,
-      // namespace_name: "this.namespace_name"
-    }
-
-     this.http.post<any>('https://192.168.1.244:9445/api/v1/tenant', data);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-      console.log(data);
+  ngOnInit(): void {
+    this.form1 = this.fb_.group({
+      clusterrole: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.ClusterroleMaxLength),
+          Validators.pattern(this.ClusterrolePattern),
+        ]),
+      ],
+      apigroups: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.ClusterroleMaxLength),
+        ]),
+      ],
+      resources: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.ClusterroleMaxLength),
+        ]),
+      ],
+      verbs: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.ClusterroleMaxLength),
+        ]),
+      ],
     });
   }
-  showContent1(){
-    document.getElementById("first_tab_content").style.display = "block"; 
-    document.getElementById("second_tab_content").style.display = "none"; 
+
+  get clusterrole(): AbstractControl {
+    return this.form1.get('clusterrole');
   }
-  showContent2(){
-    document.getElementById("first_tab_content").style.display = "none"; 
-    document.getElementById("second_tab_content").style.display = "block"; 
+  get apigroups(): AbstractControl {
+    return this.form1.get('apigroups');
+  }
+  get verbs(): AbstractControl {
+    return this.form1.get('verbs');
+  }
+  get resources(): AbstractControl {
+    return this.form1.get('resources');
+  }
+  // function for creating new Clusterrole
+  createclusterrole(): void {
+    if (!this.form1.valid) return;
+    this.apigroups1 = this.apigroups.value.split(',')
+    this.resources1 = this.resources.value.split(',')
+    this.verbs1 = this.verbs.value.split(',')
+    const clusterroleSpec= {name: this.clusterrole.value,apiGroups: this.apigroups1,verbs: this.verbs1,resources: this.resources1};
+    const tokenPromise = this.csrfToken_.getTokenForAction('clusterrole');
+    console.log(clusterroleSpec)
+    tokenPromise.subscribe(csrfToken => {
+      return this.http_
+        .post<{valid: boolean}>(
+          'api/v1/clusterrole',
+          {...clusterroleSpec},
+          {
+            headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),
+          },
+        )
+        .subscribe(
+          () => {
+            this.dialogRef.close(this.clusterrole.value);
+            this.dialogRef.close();
+            const configData: AlertDialogConfig = {
+              title: 'Successfull',
+              message: "Clusterrole created",
+              confirmLabel: 'CREATED',
+            };
+            this.matDialog_.open(AlertDialog, {data: configData});
+          },
+          error => {
+            this.dialogRef.close();
+            const configData: AlertDialogConfig = {
+              title: 'Error creating Clusterrole',
+              message: error.data,
+              confirmLabel: 'OK',
+            };
+            this.matDialog_.open(AlertDialog, {data: configData});
+          },
+        );
+    });
   }
 
-
-  obj1 =  new contact();
-  dataarray : any [] = [];
-     
-  // constructor() { 
-  //   this.dataarray.push(this.obj1);
-  // }
-  
-  ngOnInit(): void{
+  isDisabled(): boolean {
+    return this.data.name.indexOf(this.clusterrole.value) >= 0;
   }
-
-  addForm(){
-    this.obj1 =  new contact();
-    this.dataarray.push(this.obj1);
-  }   
-
-  removeForm(index:number) {
-    this.dataarray.splice(index,1);
-  }
-  
-  onsubmit() {  
-    console.log(this.dataarray);  
+  cancel(): void {
+    this.dialogRef.close();
   }
 }
-
