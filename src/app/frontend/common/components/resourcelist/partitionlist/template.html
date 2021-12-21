@@ -62,7 +62,7 @@ limitations under the License.
                          disableClear="true"
                          i18n>Name</mat-header-cell>
         <mat-cell *matCellDef="let node">
-          <a routerLink="/node" routerLinkActive="active">
+          <a routerLink="/node" queryParamsHandling="preserve" routerLinkActive="active">
             RP1
           </a>
         </mat-cell>
@@ -142,7 +142,7 @@ limitations under the License.
                              disableClear="true"
                              i18n>Name</mat-header-cell>
             <mat-cell *matCellDef="let node">
-              <a routerLink="/tenantpartition" routerLinkActive="active">
+              <a routerLink="/tenantpartition" queryParamsHandling="preserve" routerLinkActive="active">
                 TP1
               </a>
             </mat-cell>
