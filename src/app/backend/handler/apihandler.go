@@ -587,7 +587,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetNamespaceEvents).
 			Writes(common.EventList{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("/tenant/{tenant}/namespace/{namespace}").
+		apiV1Ws.GET("/rq/{tenant}/namespace/{namespace}").
 			To(apiHandler.handleUpdateQuota).
 			Writes(v1.ResourceQuota{}))
 	apiV1Ws.Route(

@@ -133,7 +133,7 @@ func AddResourceQuotas(client k8sClient.Interface, namespace string, tenant stri
 		TypeMeta: metaV1.TypeMeta{},
 		ObjectMeta: metaV1.ObjectMeta{
 			Name:   "abc-quota",
-			Tenant: "tenant-name",
+			Tenant: tenant,
 		},
 
 		Spec: v1.ResourceQuotaSpec{
