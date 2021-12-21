@@ -1149,7 +1149,6 @@ router-outlet::after {
   color: inherit !important;
 }
 
-// new panel table css
 .list_container .mat-expansion-panel {
   margin: 25px 20px !important;
   border-radius: 0px !important;
@@ -1326,6 +1325,9 @@ box-shadow: none !important;
   width: 10px !important;
 }
 
+.list_container .mat-paginator-page-size {
+  display: none !important;
+}
 
 /* custom checkbox */
 

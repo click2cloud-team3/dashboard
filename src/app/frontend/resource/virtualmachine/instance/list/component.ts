@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {Component, ViewChild, OnInit} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
 
 export interface PeriodicElement {
   name: any;
@@ -34,6 +37,13 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {name: 'Instance3', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.small', keypair: 'openstac-test-keypair', status: 'Active', zone: 'nova', task: 'none', state: 'Running', time: '3 week, 5 days'},
   {name: 'Instance4', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.medium', keypair: 'openstac-test-keypair', status: 'Shutoff', zone: 'nova', task: 'none', state: 'Shut down', time: '1 week, 5 days'},
   {name: 'Instance5', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.large', keypair: 'openstac-test-keypair', status: 'Active', zone: 'nova', task: 'none', state: 'Running', time: '2 week, 5 days'},
+  {name: 'Instance6', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.large', keypair: 'openstac-test-keypair', status: 'Active', zone: 'nova', task: 'none', state: 'Running', time: '2 week, 5 days'},
+  {name: 'Instance7', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.large', keypair: 'openstac-test-keypair', status: 'Active', zone: 'nova', task: 'none', state: 'Running', time: '2 week, 5 days'},
+  {name: 'Instance8', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.large', keypair: 'openstac-test-keypair', status: 'Active', zone: 'nova', task: 'none', state: 'Running', time: '2 week, 5 days'},
+  {name: 'Instance9', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.large', keypair: 'openstac-test-keypair', status: 'Active', zone: 'nova', task: 'none', state: 'Running', time: '2 week, 5 days'},
+  {name: 'Instance10', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.large', keypair: 'openstac-test-keypair', status: 'Active', zone: 'nova', task: 'none', state: 'Running', time: '2 week, 5 days'},
+  {name: 'Instance11', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.large', keypair: 'openstac-test-keypair', status: 'Active', zone: 'nova', task: 'none', state: 'Running', time: '2 week, 5 days'},
+  {name: 'Instance12', image: 'DND-centos7', ip: '192.168.199.3', flavor: 'm1.large', keypair: 'openstac-test-keypair', status: 'Active', zone: 'nova', task: 'none', state: 'Running', time: '2 week, 5 days'},
 ];
 
 @Component({
@@ -41,11 +51,20 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './template.html',
 })
 
-export class InstanceListComponent {
+export class InstanceListComponent implements  OnInit{
 
   panelOpenState = false;
   displayedColumns: string[] = ['select', 'name', 'image', 'ip', 'flavor', 'keypair', 'status', 'zone', 'task', 'state', 'time', 'action'];
-  dataSource = ELEMENT_DATA;
+  // dataSource = ELEMENT_DATA;
+  dataSource = new MatTableDataSource(ELEMENT_DATA);  
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
 }
 

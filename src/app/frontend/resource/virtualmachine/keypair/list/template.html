@@ -15,14 +15,15 @@ limitations under the License.
 -->
 
 <div class="list_container list_container2">
-    <div class="filter_section">        
+    <div class="filter_section">
         <div class="filter_sec">
             <div class="input-group">
                 <span class="input-group-text" id="basic-addon1">
                     <img class="search_icon" src="assets/images/search_icon.svg" alt="">
                 </span>
-                <input type="text" class="form-control" placeholder="Click here for filters...." aria-label="Username" aria-describedby="basic-addon1">
-              </div>            
+                <input type="text" class="form-control" placeholder="Click here for filters...." aria-label="Username"
+                    aria-describedby="basic-addon1">
+            </div>
         </div>
         <div class="filter_sec">
             <button type="button" class="btn btn-outline-primary">
@@ -30,7 +31,7 @@ limitations under the License.
         </div>
         <div class="filter_sec">
             <button type="button" class="btn btn-outline-primary">Import Public Key</button>
-        </div>        
+        </div>
         <div class="filter_sec">
             <button type="button" class="btn btn-outline-primary delete_btn">
                 <img class="menu_icon" src="assets/images/delete_white.svg" alt="">Delete Key Pairs</button>
@@ -50,7 +51,7 @@ limitations under the License.
                 </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
@@ -70,7 +71,7 @@ limitations under the License.
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <a href="#">{{element.name}}</a>
                     </mat-cell>
@@ -94,6 +95,9 @@ limitations under the License.
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10]" [pageSize]="5" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+            </mat-paginator>
         </mat-expansion-panel>
     </mat-accordion>
 </div>

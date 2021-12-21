@@ -48,7 +48,7 @@ limitations under the License.
                 </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
@@ -74,7 +74,7 @@ limitations under the License.
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <a href="#">{{element.name}}</a>
                     </mat-cell>
@@ -134,6 +134,9 @@ limitations under the License.
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10]" [pageSize]="5" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+            </mat-paginator>            
         </mat-expansion-panel>
     </mat-accordion>
 </div>

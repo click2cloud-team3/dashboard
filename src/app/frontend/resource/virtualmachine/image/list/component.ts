@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {Component, ViewChild, OnInit} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
 
 interface PeriodicElement {
   owner: string;
@@ -27,12 +30,16 @@ interface PeriodicElement {
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  {owner: 'admin', name: 'DND-centos7', type: 'Active', status: 'Active', visiblity: 'Private', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
-  {owner: 'admin', name: 'DND-centos7', type: 'Active', status: 'Error', visiblity: 'Public', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
-  {owner: 'admin', name: 'DND-centos7', type: 'Active', status: 'Active', visiblity: 'Private', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
-  {owner: 'admin', name: 'DND-centos7', type: 'Active', status: 'Shutoff', visiblity: 'Shared', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
-  {owner: 'admin', name: 'DND-centos7', type: 'Active', status: 'Active', visiblity: 'Private', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
-  {owner: 'admin', name: 'DND-centos7', type: 'Active', status: 'Active', visiblity: 'Public', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos71', type: 'Active', status: 'Active', visiblity: 'Private', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos72', type: 'Active', status: 'Error', visiblity: 'Public', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos73', type: 'Active', status: 'Active', visiblity: 'Private', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos74', type: 'Active', status: 'Shutoff', visiblity: 'Shared', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos75', type: 'Active', status: 'Active', visiblity: 'Private', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos76', type: 'Active', status: 'Active', visiblity: 'Public', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos77', type: 'Active', status: 'Active', visiblity: 'Public', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos78', type: 'Active', status: 'Active', visiblity: 'Public', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos79', type: 'Active', status: 'Active', visiblity: 'Public', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
+  {owner: 'admin', name: 'DND-centos70', type: 'Active', status: 'Active', visiblity: 'Public', protected: 'No', diskformat: 'QCOW2', size: '331.38 MB'},
 ];
 
 @Component({
@@ -40,10 +47,19 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './template.html',
 })
 
-export class ImageListComponent {
+export class ImageListComponent implements  OnInit{
 
   panelOpenState = false;
   displayedColumns: string[] = ['select', 'owner', 'name', 'type', 'status', 'visiblity', 'protected', 'diskformat', 'size', 'action'];
-  dataSource = ELEMENT_DATA;
+  // dataSource = ELEMENT_DATA;
+  dataSource = new MatTableDataSource(ELEMENT_DATA);  
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 }
 

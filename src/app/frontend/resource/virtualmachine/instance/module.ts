@@ -20,9 +20,10 @@ import {InstanceListComponent} from './list/component';
 import {InstanceRoutingModule} from './routing';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
-  imports: [SharedModule, ComponentsModule, InstanceRoutingModule, MatExpansionModule, MatFormFieldModule],
+  imports: [SharedModule, ComponentsModule, InstanceRoutingModule, MatExpansionModule, MatFormFieldModule, MatPaginatorModule],
   declarations: [InstanceListComponent],
 })
 export class InstanceModule {}
