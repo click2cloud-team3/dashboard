@@ -183,6 +183,19 @@ func AddNode(client k8sClient.Interface, metricClient metricapi.MetricClient, na
 	return node, nil
 }
 
+// Delete Node
+func DeleteNode(client k8sClient.Interface, metricClient metricapi.MetricClient, name string,
+	dsQuery *dataselect.DataSelectQuery) error {
+	log.Printf("Getting details of %s node", name)
+
+	err := client.CoreV1().Nodes().Delete(name, &metaV1.DeleteOptions{})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func getNodeAllocatedResources(node v1.Node, podList *v1.PodList) (NodeAllocatedResources, error) {
 	reqs, limits := map[v1.ResourceName]resource.Quantity{}, map[v1.ResourceName]resource.Quantity{}
 

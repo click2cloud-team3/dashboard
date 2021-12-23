@@ -589,10 +589,17 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetNamespaceEvents).
 			Writes(common.EventList{}))
 	apiV1Ws.Route(
-		apiV1Ws.POST("/tenants/{tenant}/namespace/{name}/quota").
+		apiV1Ws.POST("/tenants/{tenant}/namespace/{namespace}/quota").
 			To(apiHandler.handleAddResourceQuota).
 			Reads(resourcequota.ResourceQuotaSpec{}).
 			Writes(v1.ResourceQuota{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("/tenants/{tenant}/namespace/{namespace}/quota").
+			To(apiHandler.handleGetResourceQuotaList).
+			Writes(v1.ResourceQuotaList{}))
+	apiV1Ws.Route(
+		apiV1Ws.DELETE("/tenants/{tenant}/namespace/{namespace}/quota/{name}").
+			To(apiHandler.handleDeleteResourceQuota))
 	apiV1Ws.Route(
 		apiV1Ws.POST("/tenants/{tenant}/namespace"). // TODO
 								To(apiHandler.handleCreateNamespace).
@@ -796,6 +803,9 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 		apiV1Ws.POST("/node/{name}").
 			To(apiHandler.handleAddNode).
 			Writes(node.NodeDetail{}))
+	apiV1Ws.Route(
+		apiV1Ws.DELETE("/node/{name}").
+			To(apiHandler.handleRemoveNode))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/node/{name}/event").
 			To(apiHandler.handleGetNodeEvents).
@@ -1630,6 +1640,25 @@ func (apiHandler *APIHandler) handleAddNode(request *restful.Request, response *
 		return
 	}
 	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleRemoveNode(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	name := request.PathParameter("name")
+	dataSelect := parseDataSelectPathParameter(request)
+	dataSelect.MetricQuery = dataselect.StandardMetrics
+	err = node.DeleteNode(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+	//result, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeader(http.StatusOK)
 }
 
 func (apiHandler *APIHandler) handleGetNodeEvents(request *restful.Request, response *restful.Response) {
@@ -3027,6 +3056,50 @@ func (apiHandler *APIHandler) handleAddResourceQuota(request *restful.Request, r
 		return
 	}
 	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleGetResourceQuotaList(request *restful.Request, response *restful.Response) {
+
+	log.Printf("Get Quota List")
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	tenant := request.PathParameter("tenant")
+	namespace := request.PathParameter("namespace")
+	result, err := resourcequota.GetResourceQuotaLists(k8sClient, namespace, tenant)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleDeleteResourceQuota(request *restful.Request, response *restful.Response) {
+
+	log.Printf("Deleting Quota")
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	resourceQuotaSpec := new(resourcequota.ResourceQuotaSpec)
+	if err := request.ReadEntity(resourceQuotaSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	tenant := request.PathParameter("tenant")
+	namespace := request.PathParameter("namespace")
+	name := request.PathParameter("name")
+	err = resourcequota.DeleteResourceQuota(k8sClient, namespace, tenant, name)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeader(http.StatusOK)
 }
 
 func (apiHandler *APIHandler) handleGetNamespaceEvents(request *restful.Request, response *restful.Response) {

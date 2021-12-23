@@ -16,7 +16,6 @@ package resourcequota
 
 import (
 	"errors"
-
 	"github.com/kubernetes/dashboard/src/app/backend/api"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -124,6 +123,41 @@ func AddResourceQuotas(client k8sClient.Interface, namespace string, tenant stri
 		},
 		Status: v1.ResourceQuotaStatus{},
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	return resQuota, nil
+}
+
+// DeleteResourceQuota
+
+func DeleteResourceQuota(client k8sClient.Interface, namespace string, tenant string, name string) error {
+	if tenant == "" {
+		tenant = "default"
+	}
+	ns, err := client.CoreV1().NamespacesWithMultiTenancy(tenant).Get(namespace, metaV1.GetOptions{})
+	if err != nil {
+		return nil
+	}
+
+	err = client.CoreV1().ResourceQuotasWithMultiTenancy(namespace, ns.Tenant).Delete(name, &metaV1.DeleteOptions{})
+	if err != nil {
+		return nil
+	}
+
+	return nil
+}
+
+func GetResourceQuotaLists(client k8sClient.Interface, namespace string, tenant string) (*v1.ResourceQuotaList, error) {
+	if tenant == "" {
+		tenant = "default"
+	}
+	ns, err := client.CoreV1().NamespacesWithMultiTenancy(tenant).Get(namespace, metaV1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	resQuota, err := client.CoreV1().ResourceQuotasWithMultiTenancy(namespace, ns.Tenant).List(metaV1.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
