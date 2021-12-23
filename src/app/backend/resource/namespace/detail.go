@@ -16,7 +16,6 @@
 package namespace
 
 import (
-	"k8s.io/apimachinery/pkg/api/resource"
 	"log"
 
 	"github.com/kubernetes/dashboard/src/app/backend/api"
@@ -119,38 +118,6 @@ func getResourceQuotas(client k8sClient.Interface, namespace v1.Namespace) (*rq.
 	}
 
 	return result, err
-}
-
-func AddResourceQuotas(client k8sClient.Interface, namespace string, tenant string) (*v1.ResourceQuota, error) {
-	if tenant == "" {
-		tenant = "default"
-	}
-	ns, err := client.CoreV1().NamespacesWithMultiTenancy(tenant).Get(namespace, metaV1.GetOptions{})
-	if err != nil {
-		return nil, err
-	}
-	resQuota, err := client.CoreV1().ResourceQuotasWithMultiTenancy(ns.Namespace, ns.Tenant).Create(&v1.ResourceQuota{
-		TypeMeta: metaV1.TypeMeta{},
-		ObjectMeta: metaV1.ObjectMeta{
-			Name:   "abc-quota",
-			Tenant: tenant,
-		},
-
-		Spec: v1.ResourceQuotaSpec{
-			Hard: v1.ResourceList{
-				v1.ResourceCPU:    resource.MustParse("100m"),
-				v1.ResourceMemory: resource.MustParse("100Mi"),
-			},
-			Scopes:        nil,
-			ScopeSelector: nil,
-		},
-		Status: v1.ResourceQuotaStatus{},
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return resQuota, nil
 }
 
 func getResourceQuotasWithMultiTenancy(client k8sClient.Interface, tenant string, namespace v1.Namespace) (*rq.ResourceQuotaDetailList, error) {
