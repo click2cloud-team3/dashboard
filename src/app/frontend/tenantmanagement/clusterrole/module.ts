@@ -13,36 +13,16 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {Route, RouterModule} from '@angular/router';
-import {DEFAULT_ACTIONBAR} from '../../../common/components/actionbars/routing';
 
-import {CLUSTER_ROUTE} from '../routing';
+import {ComponentsModule} from '../../common/components/module';
+import {SharedModule} from '../../shared.module';
 
 import {ClusterRoleDetailComponent} from './detail/component';
 import {ClusterRoleListComponent} from './list/component';
-
-const CLUSTERROLE_LIST_ROUTE: Route = {
-  path: '',
-  component: ClusterRoleListComponent,
-  data: {
-    breadcrumb: 'Access Control',
-    parent: CLUSTER_ROUTE,
-  },
-};
-
-const CLUSTERROLE_DETAIL_ROUTE: Route = {
-  path: ':resourceName',
-  component: ClusterRoleDetailComponent,
-  data: {
-    breadcrumb: '{{ resourceName }}',
-    parent: CLUSTERROLE_LIST_ROUTE,
-  },
-};
+import {ClusterRoutingModule} from './routing';
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([CLUSTERROLE_LIST_ROUTE, CLUSTERROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR]),
-  ],
-  exports: [RouterModule],
+  imports: [SharedModule, ComponentsModule, ClusterRoutingModule],
+  declarations: [ClusterRoleListComponent, ClusterRoleDetailComponent],
 })
-export class ClusterRoutingModule {}
+export class ClusterRoleModule {}

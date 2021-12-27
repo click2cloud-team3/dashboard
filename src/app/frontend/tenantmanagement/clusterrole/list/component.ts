@@ -12,17 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
+import {Component} from '@angular/core';
 
-import {ComponentsModule} from '../../../common/components/module';
-import {SharedModule} from '../../../shared.module';
-
-import {RoleDetailComponent} from './detail/component';
-import {RoleListComponent} from './list/component';
-import {RoleRoutingModule} from './routing';
-
-@NgModule({
-  imports: [SharedModule, ComponentsModule, RoleRoutingModule],
-  declarations: [RoleListComponent, RoleDetailComponent],
+@Component({
+  selector: 'kd-cluster-role-list-state',
+  template: '<kd-cluster-role-list></kd-cluster-role-list>',
 })
-export class RoleModule {}
+export class ClusterRoleListComponent {}

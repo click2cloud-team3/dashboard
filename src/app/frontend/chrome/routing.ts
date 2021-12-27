@@ -38,15 +38,15 @@ const routes: Routes = [
       },
       {
         path: 'clusterrole',
-        loadChildren: 'resource/cluster/clusterrole/module#ClusterRoleModule',
+        loadChildren: 'tenantmanagement/clusterrole/module#ClusterRoleModule',
+      },
+      {
+        path: 'role',
+        loadChildren: 'tenantmanagement/role/module#RoleModule',
       },
       {
         path: 'quota',
         loadChildren: 'resource/cluster/quota/module#QuotaModule',
-      },
-      {
-        path: 'role',
-        loadChildren: 'resource/cluster/role/module#RoleModule',
       },
       {
         path: 'tenant',
@@ -198,10 +198,6 @@ const routes: Routes = [
       {
         path: 'tenantmanagement',
         loadChildren: 'tenantmanagement/module#TenantManagementModule',
-      },
-      {
-        path: 'tenantaccesscontrol',
-        loadChildren: 'tenantmanagement/tenantaccesscontrol/module#TenantAccessControlModule',
       },
       {
         path: 'tenantmonitoring',
