@@ -20,9 +20,14 @@ export class RawResource {
       resourceUrl += `/namespace/${objectMeta.namespace}`;
     }
     resourceUrl += `/name/${objectMeta.name}`;
+
     if (resourceUrl.includes('/tenant/name')) {
       resourceUrl = 'api/v1/tenants' + `/${objectMeta.name}`
     }
+    if (resourceUrl.includes('_raw/role/')) {
+      resourceUrl = `api/v1/namespaces/${objectMeta.namespace}/${typeMeta.kind}/${objectMeta.name}`;
+    }
+
     return resourceUrl;
   }
 }

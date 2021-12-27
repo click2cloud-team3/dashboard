@@ -32,7 +32,7 @@ import {VerberService} from '../../../services/global/verber';
 })
 export class ClusterRoleListComponent extends ResourceListBase<ClusterRoleList, ClusterRole> {
   @Input() endpoint = EndpointManager.resource(Resource.clusterRole, false, true).list();
-  typeMeta:any="";
+  typeMeta:any;
   objectMeta:any;
   constructor(
     private readonly verber_: VerberService,
@@ -60,10 +60,6 @@ export class ClusterRoleListComponent extends ResourceListBase<ClusterRoleList, 
   }
 
   onClick(): void {
-    this.verber_.showRoleCreateDialog('Role name',this.typeMeta,this.objectMeta);
-  }
-
-  onClick2(): void {
-    this.verber_.showClusterroleCreateDialog('Role name',this.typeMeta,this.objectMeta);
+    this.verber_.showClusterroleCreateDialog('Cluster Role name',this.typeMeta,this.objectMeta);
   }
 }

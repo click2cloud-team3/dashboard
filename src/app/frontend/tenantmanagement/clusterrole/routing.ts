@@ -15,34 +15,31 @@
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
 import {DEFAULT_ACTIONBAR} from '../../common/components/actionbars/routing';
-import {TENANTMANAGEMENT_ROUTE} from '../routing';
-import {TenantAccessControlDetailComponent} from './detail/component';
-import {TenantAccessControlListComponent} from './list/component';
 
-const ROLE_LIST_ROUTE: Route = {
+import {ClusterRoleDetailComponent} from './detail/component';
+import {ClusterRoleListComponent} from './list/component';
+import {TENANTMANAGEMENT_ROUTE} from "../routing";
+
+const CLUSTERROLE_LIST_ROUTE: Route = {
   path: '',
-  component: TenantAccessControlListComponent,
+  component: ClusterRoleListComponent,
   data: {
-    breadcrumb: 'Access Control',
+    breadcrumb: 'Cluster Roles',
     parent: TENANTMANAGEMENT_ROUTE,
   },
 };
 
-const ROLE_DETAIL_ROUTE: Route = {
+const CLUSTERROLE_DETAIL_ROUTE: Route = {
   path: ':resourceName',
-  component: TenantAccessControlDetailComponent,
+  component: ClusterRoleDetailComponent,
   data: {
     breadcrumb: '{{ resourceName }}',
-    parent: ROLE_LIST_ROUTE,
+    parent: CLUSTERROLE_LIST_ROUTE,
   },
 };
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([ROLE_LIST_ROUTE, ROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR]),
-  ],
+  imports: [RouterModule.forChild([CLUSTERROLE_LIST_ROUTE, CLUSTERROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR])],
   exports: [RouterModule],
 })
-export class TenantAccessControlRoutingModule {
-
-}
+export class ClusterRoutingModule {}

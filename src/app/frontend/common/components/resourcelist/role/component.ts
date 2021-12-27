@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {HttpParams} from '@angular/common/http';
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Role, RoleList} from '@api/backendapi';
 import {Observable} from 'rxjs';
 
@@ -29,18 +29,16 @@ import {VerberService} from '../../../services/global/verber';
 @Component({
   selector: 'kd-role-list',
   templateUrl: './template.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoleListComponent extends ResourceListBase<RoleList, Role> {
   @Input() endpoint = EndpointManager.resource(Resource.role, true).list();
-  typeMeta:any="";
+  typeMeta:any;
   objectMeta:any;
 
   constructor(
     private readonly role_: NamespacedResourceService<RoleList>,
     private readonly verber_: VerberService,
     notifications: NotificationsService,
-    //cdr: ChangeDetectorRef
   ) {
     super('role', notifications);
     this.id = ListIdentifier.role;

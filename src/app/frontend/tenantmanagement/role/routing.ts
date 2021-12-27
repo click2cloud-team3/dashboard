@@ -14,35 +14,32 @@
 
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-import {DEFAULT_ACTIONBAR} from '../../../common/components/actionbars/routing';
-
-import {CLUSTER_ROUTE} from '../routing';
+import {DEFAULT_ACTIONBAR} from '../../common/components/actionbars/routing';
 
 import {RoleDetailComponent} from './detail/component';
 import {RoleListComponent} from './list/component';
+import {TENANTMANAGEMENT_ROUTE} from "../routing";
 
-const CLUSTERROLE_LIST_ROUTE: Route = {
+const ROLE_LIST_ROUTE: Route = {
   path: '',
   component: RoleListComponent,
   data: {
-    breadcrumb: 'Cluster Roles',
-    parent: CLUSTER_ROUTE,
+    breadcrumb: 'Roles',
+    parent: TENANTMANAGEMENT_ROUTE,
   },
 };
 
-const CLUSTERROLE_DETAIL_ROUTE: Route = {
-  path: ':resourceName',
+const ROLE_DETAIL_ROUTE: Route = {
+  path: ':resourceNamespace/:resourceName',
   component: RoleDetailComponent,
   data: {
     breadcrumb: '{{ resourceName }}',
-    parent: CLUSTERROLE_LIST_ROUTE,
+    parent: ROLE_LIST_ROUTE,
   },
 };
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([CLUSTERROLE_LIST_ROUTE, CLUSTERROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR]),
-  ],
+  imports: [RouterModule.forChild([ROLE_LIST_ROUTE, ROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR])],
   exports: [RouterModule],
 })
 export class RoleRoutingModule {}
