@@ -30,6 +30,9 @@ type RoleBindingSpec struct {
 	// Namespace for which role binding is to be created.
 	Namespace string `json:"namespace"`
 
+	// Tenant of the role-binding
+	Tenant string `json:"tenant"`
+
 	// Subject contains a reference to the object or user identities a role binding applies to.  This can either hold a direct API object reference,
 	// or a value for non-objects such as user and group names.
 	Subject v1.Subject `json:"subject"`
@@ -38,8 +41,8 @@ type RoleBindingSpec struct {
 	RoleRef v1.RoleRef `json:"role_ref"`
 }
 
-// CreateRoleBinding creates role-binding based on given specification.
-func CreateRoleBinding(spec *RoleBindingSpec, client kubernetes.Interface) error {
+// CreateRoleBindingsWithMultiTenancy creates role-binding based on given specification.
+func CreateRoleBindingsWithMultiTenancy(spec *RoleBindingSpec, client kubernetes.Interface) error {
 	log.Printf("Creating Role-binding %s", spec.Name)
 
 	var subjects []v1.Subject
@@ -66,7 +69,14 @@ func CreateRoleBinding(spec *RoleBindingSpec, client kubernetes.Interface) error
 		RoleRef:  roleRef,
 	}
 
-	_, err := client.RbacV1().RoleBindings(spec.Namespace).Create(rolebinding)
+	_, err := client.RbacV1().RoleBindingsWithMultiTenancy(spec.Namespace, spec.Tenant).Create(rolebinding)
+	return err
+}
+
+// DeleteRoleBindingsWithMultiTenancy deletes role-binding based on given specification.
+func DeleteRoleBindingsWithMultiTenancy(tenantName string, namespaceName string, rolebindingName string, client kubernetes.Interface) error {
+	log.Printf("Deleting Rolebinding %s", rolebindingName)
+	err := client.RbacV1().RoleBindingsWithMultiTenancy(namespaceName, tenantName).Delete(rolebindingName, &metaV1.DeleteOptions{})
 	return err
 }
 
