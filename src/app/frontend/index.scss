@@ -64,6 +64,7 @@ code {
   margin: 0 auto;
 }
 
+
 .mat-card {
   margin: 2.4 * $baseline-grid;
 
@@ -956,9 +957,8 @@ router-outlet::after {
   margin-bottom: 0.5rem !important;
 }
 .add_btn_sec{
-  margin-top: -10px !important;
-  margin-bottom: 10px !important;
-  margin-right: 56px !important;
+    margin-top: -5px !important;
+    margin-bottom: 20px;
 }
 .add_btn_sec .mat-raised-button{
   font-size: 10px !important;
@@ -971,6 +971,14 @@ router-outlet::after {
   width: 11px;
   margin-top: -3px;
   margin-right: 3px;
+}
+.label_text{
+  font-size: 14px;
+  color: #000;
+  font-weight: 400;
+  margin-bottom: 15px;
+  opacity: .9;
+  margin-top: 10px;
 }
 
 .add_form_container .close_btn_sec img{
@@ -1415,7 +1423,35 @@ box-shadow: none !important;
   transform: rotate(
 45deg);
 }
+.input_info_sec{
+  line-height: 18px;
+}
+.input_info_sec p{
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.87);
+  margin: 0 !important;
+}
 
+.input_info_sec a{
+  font-size: 12px;
+  color: #326de6;
+  text-decoration: none;
+}
+
+.input_info_sec a:hover,
+.input_info_sec a:focus{
+  color: #000;
+}
+
+.input_info_sec .material-icons{
+  font-size: 12px !important;
+  vertical-align: middle;
+}
+
+.input_info_sec a:hover .material-icons,
+.input_info_sec a:focus .material-icons{
+  color: #326de6;
+}
 /* end of custom checkbox */
 
 // media query

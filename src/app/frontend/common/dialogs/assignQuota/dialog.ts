@@ -18,8 +18,8 @@ import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
-import { FormGroup, FormControl } from '@angular/forms';
+import {AbstractControl, Validators,FormBuilder,FormArray} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import {CONFIG} from "../../../index.config";
 import {CsrfTokenService} from "../../services/global/csrftoken";
 import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
@@ -63,23 +63,38 @@ export class assignQuotaDialog implements OnInit {
 
   ngOnInit(): void {
     this.form1 = this.fb_.group({
-        tenant: [
-          '',
-          Validators.compose([
-            Validators.maxLength(this.tenantMaxLength),
-            Validators.pattern(this.tenantPattern),
-          ]),
-        ],
-        StorageClusterId :[
-          '',
-          Validators.compose([
-            Validators.maxLength(this.storageidMaxLength),
-            Validators.pattern(this.storageidPattern),
-          ]),
-        ],
-      }
-    );
+      users: this.fb_.array([
+        this.fb_.group({
+          formselect: [''],
+          forminput: ['']
+        })
+      ])
+    })
 
+  }
+  removeFormControl(i: number) {
+    let usersArray = this.form1.get('users') as FormArray;
+    usersArray.removeAt(i);
+  }
+
+  addFormControl() {
+    let usersArray = this.form1.get('users') as FormArray;
+    let arraylen = usersArray.length;
+
+    let newUsergroup: FormGroup = this.fb_.group({
+      formselect: [''],
+      forminput: ['']
+    })
+
+    usersArray.insert(arraylen, newUsergroup);
+  }
+
+  get userFormGroups (){
+    return this.form1.get('users') as FormArray
+  }
+
+  onSubmit(){
+    console.log(this.form1.value);
   }
 
   get tenant(): AbstractControl {
@@ -88,7 +103,7 @@ export class assignQuotaDialog implements OnInit {
   /**
    * Creates new tenant based on the state of the controller.
    */
-  createTenant(): void {
+  createQuota(): void {
     if (!this.form1.valid) return;
     const tenantSpec= {name: this.tenant.value,StorageClusterId: this.tenant.value};
     const tokenPromise = this.csrfToken_.getTokenForAction('tenant');
