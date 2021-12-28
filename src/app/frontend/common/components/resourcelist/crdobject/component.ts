@@ -55,4 +55,8 @@ export class CRDObjectListComponent extends ResourceListBase<CRDObjectList, CRDO
   getDisplayColumns(): string[] {
     return ['name', 'namespace', 'age'];
   }
+
+  getDisplayColumns2(): string[] {
+    return ['name', 'namespace', 'age'];
+  }
 }

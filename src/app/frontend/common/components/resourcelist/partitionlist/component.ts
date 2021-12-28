@@ -31,7 +31,6 @@ export class PartitionListComponent extends ResourceListWithStatuses<NodeList, N
 
     // Register action columns.
     this.registerActionColumn<MenuComponent>('menu', MenuComponent);
-
     // Register status icon handlers
     this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
     this.registerBinding(this.icon.help, 'kd-muted', this.isInUnknownState);
@@ -59,7 +58,11 @@ export class PartitionListComponent extends ResourceListWithStatuses<NodeList, N
   }
 
   getDisplayColumns(): string[] {
-    return ['statusicon', 'name', 'age'];
+    return ['statusicon', 'name', 'nodecount','cpulim','memlim','health','etcd'];
+  }
+
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'nodecount','cpulim','memlim','tentcount','health','etcd'];
   }
 
   //added the code

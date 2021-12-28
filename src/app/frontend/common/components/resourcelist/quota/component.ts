@@ -71,6 +71,11 @@ export class QuotaListComponent extends ResourceListWithStatuses<QuotaList, Quot
     return ['name', 'age', 'status'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['name', 'age', 'status'];
+  }
+
+
   getDataSource(): MatTableDataSource<ResourceQuotaDetail> {
     const tableData = new MatTableDataSource<ResourceQuotaDetail>();
     tableData.data = this.quotas;

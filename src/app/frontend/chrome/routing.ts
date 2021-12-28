@@ -122,12 +122,6 @@ const routes: Routes = [
         path: 'statefulset',
         loadChildren: 'resource/workloads/statefulset/module#StatefulSetModule',
       },
-
-      // Virtual Machine
-      // {
-      //   path: 'virtualmachine',
-      //   loadChildren: 'resource/virtualmachine/module#VirtualmachineModule',
-      // },
       {
         path: 'instance',
         loadChildren: 'resource/virtualmachine/instance/module#InstanceModule',

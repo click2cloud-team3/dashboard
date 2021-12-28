@@ -70,4 +70,7 @@ export class EventListComponent extends ResourceListWithStatuses<EventList, Even
   getDisplayColumns(): string[] {
     return ['statusicon', 'message', 'source', 'subobject', 'count', 'firstseen', 'lastseen'];
   }
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'message', 'source', 'subobject', 'count', 'firstseen', 'lastseen'];
+  }
 }

@@ -1336,6 +1336,12 @@ box-shadow: none !important;
 .list_container .mat-paginator-page-size {
   display: none !important;
 }
+.mat-form-field-ripple {
+  display: none !important;
+}
+.mat-select-arrow {
+  color: #0000008a !important;
+}
 
 /* custom checkbox */
 
@@ -1365,10 +1371,17 @@ box-shadow: none !important;
 }
 /* label size */
 .chk_container .chk_text {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   color: #000;
   opacity: .9;
+  margin-left: -5px;
+}
+
+.chk_container input[type=checkbox]:checked ~ .chk_text {
+  color: black !important;
+  font-weight: 500;
+  opacity: 1;
 }
 
 /* Create a custom checkbox */
@@ -1454,6 +1467,43 @@ box-shadow: none !important;
 }
 /* end of custom checkbox */
 
+
+.kd-nav-group{
+  margin-right: -3px !important;
+}
+
+.kd-nav-group .mat-accordion .kd-nav-group-item {
+  margin-left: 8px;
+}
+.kd-nav-group .mat-accordion .kd-nav-item{
+  margin-left: 0px !important;
+}
+.kd-nav-group .mat-expansion-panel-header::after {
+  right: 0px !important;
+}
+
+.checkbox_section .chk_container{
+  margin-bottom: 10px !important;
+  width: 40px;
+}
+.checkbox_section .chk_container .checkmark {
+  top: 2px !important;
+}
+.label_text{
+  font-size: 14px;
+  color: #000;
+  font-weight: 400;
+  margin-bottom: 15px;
+  opacity: .9;
+  margin-top: 10px;
+}
+.mat-form-field-label-wrapper{
+  top: -1.25em;
+}
+.kd-nav-group .kd-nav-group-item .kd-nav-item-button,
+.kd-nav-group .kd-nav-group-item .kd-nav-item-button{
+  font-weight: normal !important;
+}
 // media query
 
 @media screen and (min-width:1023px) and (max-width:1024px){

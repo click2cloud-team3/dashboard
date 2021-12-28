@@ -67,6 +67,10 @@ export class RoleListComponent extends ResourceListBase<RoleList, Role> {
     return ['name', 'created'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['name', 'created'];
+  }
+
   onClick(): void {
     this.verber_.showRoleCreateDialog('Role name',this.typeMeta,this.objectMeta);
   }
