@@ -16,12 +16,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from '../common/services/guard/auth';
-import {SystemGuard} from '../common/services/guard/system';
 import {ChromeComponent} from './component';
 
 
 const routes: Routes = [
-  {path: '', redirectTo: '/overview', pathMatch: 'full'},
+  {path: '', redirectTo: '/tenantmonitoring', pathMatch: 'full'},
   {
     path: '',
     component: ChromeComponent,
@@ -39,16 +38,21 @@ const routes: Routes = [
       },
       {
         path: 'clusterrole',
-        loadChildren: 'resource/cluster/clusterrole/module#ClusterRoleModule',
+        loadChildren: 'tenantmanagement/clusterrole/module#ClusterRoleModule',
       },
       {
-        path: 'tenant',
-        loadChildren: 'resource/cluster/tenant/module#TenantModule',
+        path: 'role',
+        loadChildren: 'tenantmanagement/role/module#RoleModule',
       },
       {
         path: 'quota',
         loadChildren: 'resource/cluster/quota/module#QuotaModule',
       },
+      {
+        path: 'tenant',
+        loadChildren: 'resource/cluster/tenant/module#TenantModule',
+      },
+
       {
         path: 'namespace',
         loadChildren: 'resource/cluster/namespace/module#NamespaceModule',
@@ -58,6 +62,18 @@ const routes: Routes = [
         loadChildren: 'resource/cluster/node/module#NodeModule',
 
       },
+      {
+        path: 'partition',
+        loadChildren: 'resource/cluster/partition/module#PartitionModule',
+
+      },
+      {
+        path: 'tenantpartition',
+        loadChildren: 'resource/cluster/tenantpartition/module#TenantPartitionModule',
+
+      },
+
+
       // Overview
       {
         path: 'overview',
@@ -68,6 +84,11 @@ const routes: Routes = [
       {
         path: 'workloads',
         loadChildren: 'resource/workloads/module#WorkloadsModule',
+      },
+      {
+        path: 'namespace',
+        loadChildren: 'resource/workloads/namespace/module#NamespaceModule',
+
       },
       {
         path: 'cronjob',
@@ -100,6 +121,24 @@ const routes: Routes = [
       {
         path: 'statefulset',
         loadChildren: 'resource/workloads/statefulset/module#StatefulSetModule',
+      },
+
+      // Virtual Machine
+      // {
+      //   path: 'virtualmachine',
+      //   loadChildren: 'resource/virtualmachine/module#VirtualmachineModule',
+      // },
+      {
+        path: 'instance',
+        loadChildren: 'resource/virtualmachine/instance/module#InstanceModule',
+      },
+      {
+        path: 'image',
+        loadChildren: 'resource/virtualmachine/image/module#ImageModule',
+      },
+      {
+        path: 'keypair',
+        loadChildren: 'resource/virtualmachine/keypair/module#KeypairModule',
       },
 
       // Discovery and load balancing group
@@ -143,7 +182,9 @@ const routes: Routes = [
       },
 
       // Custom resource definitions
-      {path: 'customresourcedefinition', loadChildren: 'crd/module#CrdModule'},
+      {
+        path: 'customresourcedefinition',
+        loadChildren: 'crd/module#CrdModule'},
 
       // Others
       {
@@ -168,38 +209,13 @@ const routes: Routes = [
         loadChildren: 'tenantmanagement/tenantnamespace/module#TenantNamespaceModule',
 
       },
-      {
-        path: 'tenantaccesscontrol',
-        loadChildren: 'tenantmanagement/tenantaccesscontrol/module#TenantAccessControlModule',
 
-      },
-      {
-        path: 'tenantquota',
-        loadChildren: 'tenantmanagement/tenantquota/module#TenantQuotasModule',
-
-      },
       {
         path: 'tenantuser',
         loadChildren: 'tenantmanagement/tenantuser/module#TenantUsersModule',
 
       },
       //here
-
-      {
-        path: 'usermanagement',
-        loadChildren: 'usermanagement/module#UserManagementModule',
-      },
-      {
-        path: 'usermonitoring',
-        loadChildren: 'usermanagement/usermonitoring/module#UserMonitoringModule',
-
-      },
-      {
-        path: 'usernamespace',
-        loadChildren: 'usermanagement/usernamespace/module#UserNamespaceModule',
-
-      },
-
       {
         path: 'create',
         loadChildren: 'create/module#CreateModule',

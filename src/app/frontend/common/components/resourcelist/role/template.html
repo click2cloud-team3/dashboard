@@ -14,6 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<div class="col-12 col-sm-12 col-md-12 col-lg-12">
+
+  <div class="create_btn_sec mt_10" align="right">
+    <button mat-raised-button matTooltip="Add Role" color="primary" (click)="onClick()">
+      <img class="add_icon" src="assets/images/plus_icon_white.svg" alt="">
+      Add Role</button>
+  </div>
+</div>
+
 <kd-card role="table"
          [hidden]="isHidden()">
   <div title
@@ -32,7 +41,7 @@ limitations under the License.
 
     <mat-table [dataSource]="getData()"
                matSort
-               [matSortActive]="getColumns()[1]"
+               matSortActive="created"
                matSortDisableClear
                matSortDirection="asc">
 
@@ -42,16 +51,23 @@ limitations under the License.
                          disableClear="true"
                          i18n>Name</mat-header-cell>
         <mat-cell *matCellDef="let role">
-          <a [routerLink]="getDetailsHref(role.objectMeta.name)"
+          <a [routerLink]="getDetailsHref(role.objectMeta.name, role.objectMeta.namespace)"
              queryParamsHandling="preserve">{{role.objectMeta.name}}</a>
         </mat-cell>
       </ng-container>
 
-      <ng-container [matColumnDef]="getColumns()[1]">
+      <ng-container *ngIf="shouldShowColumn('namespace')"
+                    matColumnDef="namespace">
+        <mat-header-cell *matHeaderCellDef
+                         i18n>Namespace</mat-header-cell>
+        <mat-cell *matCellDef="let role">{{role.objectMeta.namespace}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="created">
         <mat-header-cell *matHeaderCellDef
                          mat-sort-header
                          disableClear="true"
-                         i18n>Age</mat-header-cell>
+                         i18n>Created</mat-header-cell>
         <mat-cell *matCellDef="let role">
           <kd-date [date]="role.objectMeta.creationTimestamp"
                    relative></kd-date>

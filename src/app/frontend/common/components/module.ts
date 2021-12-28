@@ -64,7 +64,6 @@ import {PropertyComponent} from './property/component';
 import {ProxyComponent} from './proxy/component';
 import {ResourceQuotaListComponent} from './quotas/component';
 import {ClusterRoleListComponent} from './resourcelist/clusterrole/component';
-import {RoleListComponent} from './resourcelist/role/component';
 import {ConfigMapListComponent} from './resourcelist/configmap/component';
 import {CRDListComponent} from './resourcelist/crd/component';
 import {CRDObjectListComponent} from './resourcelist/crdobject/component';
@@ -96,8 +95,10 @@ import {ZeroStateComponent} from './zerostate/component';
 import {TenantSelectorComponent} from './tenant/component';
 import {TenantListComponent} from './resourcelist/tenantlist/component';
 import {UserListComponent} from "./resourcelist/user/component";
-import {QuotasListComponent} from "./resourcelist/quota/component";
-
+import {QuotaListComponent} from "./resourcelist/quota/component";
+import {PartitionListComponent} from "./resourcelist/partitionlist/component";
+import {TenantPartitionListComponent} from "./resourcelist/tenantpartitionlist/component";
+import {RoleListComponent} from "./resourcelist/role/component";
 
 const components = [
   ActionbarDetailActionsComponent,
@@ -110,15 +111,14 @@ const components = [
   ActionbarComponent,
   AllocationChartComponent,
   ActionbarDetailTriggerComponent,
-
   BreadcrumbsComponent,
+  TenantPartitionListComponent,
 
   CardComponent,
   CardListFilterComponent,
   ChipsComponent,
   CronJobListComponent,
   ClusterRoleListComponent,
-  RoleListComponent,
   ConfigMapListComponent,
   ColumnComponent,
   ChipDialog,
@@ -162,6 +162,7 @@ const components = [
 
   ObjectMetaComponent,
 
+  PartitionListComponent,
   PodStatusCardComponent,
   PropertyComponent,
   ProxyComponent,
@@ -176,6 +177,8 @@ const components = [
   ReplicaSetListComponent,
   ReplicationControllerListComponent,
   RowDetailComponent,
+  RoleListComponent,
+
 
   StorageClassListComponent,
   StatefulSetListComponent,
@@ -198,7 +201,7 @@ const components = [
   TenantListComponent,
 
   UserListComponent,
-  QuotasListComponent,
+  QuotaListComponent,
 ];
 
 @NgModule({

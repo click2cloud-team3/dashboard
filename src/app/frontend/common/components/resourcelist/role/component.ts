@@ -1,5 +1,4 @@
 // Copyright 2017 The Kubernetes Authors.
-// Copyright 2020 Authors of Arktos - file modified.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,44 +14,60 @@
 
 import {HttpParams} from '@angular/common/http';
 import {Component, Input} from '@angular/core';
-import {ClusterRole, ClusterRoleList} from '@api/backendapi';
-import {Observable} from 'rxjs/Observable';
+import {Role, RoleList} from '@api/backendapi';
+import {Observable} from 'rxjs';
 
 import {ResourceListBase} from '../../../resources/list';
 import {NotificationsService} from '../../../services/global/notifications';
 import {EndpointManager, Resource} from '../../../services/resource/endpoint';
-import {ResourceService} from '../../../services/resource/resource';
+import {NamespacedResourceService, ResourceService} from '../../../services/resource/resource';
 import {MenuComponent} from '../../list/column/menu/component';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
+import {VerberService} from '../../../services/global/verber';
+
 
 @Component({
   selector: 'kd-role-list',
   templateUrl: './template.html',
 })
-export class RoleListComponent extends ResourceListBase<ClusterRoleList, ClusterRole> {
-  @Input() endpoint = EndpointManager.resource(Resource.clusterRole, false, true).list();
+export class RoleListComponent extends ResourceListBase<RoleList, Role> {
+  @Input() endpoint = EndpointManager.resource(Resource.role, true).list();
+  typeMeta:any;
+  objectMeta:any;
 
   constructor(
-    private readonly clusterRole_: ResourceService<ClusterRoleList>,
+    private readonly role_: NamespacedResourceService<RoleList>,
+    private readonly verber_: VerberService,
     notifications: NotificationsService,
   ) {
-    super('clusterrole', notifications);
-    this.id = ListIdentifier.clusterRole;
+    super('role', notifications);
+    this.id = ListIdentifier.role;
     this.groupId = ListGroupIdentifier.cluster;
 
     // Register action columns.
     this.registerActionColumn<MenuComponent>('menu', MenuComponent);
+
+    // Register dynamic columns.
+    this.registerDynamicColumn('namespace', 'name', this.shouldShowNamespaceColumn_.bind(this));
   }
 
-  getResourceObservable(params?: HttpParams): Observable<ClusterRoleList> {
-    return this.clusterRole_.get(this.endpoint, undefined, params);
+  private shouldShowNamespaceColumn_(): boolean {
+    return this.namespaceService_.areMultipleNamespacesSelected();
   }
 
-  map(clusterRoleList: ClusterRoleList): ClusterRole[] {
-    return clusterRoleList.items;
+  getResourceObservable(params?: HttpParams): Observable<RoleList> {
+    return this.role_.get(this.endpoint, undefined, undefined, params);
+  }
+
+  map(roleList: RoleList): Role[] {
+    return roleList.items;
   }
 
   getDisplayColumns(): string[] {
-    return ['name', 'age'];
+    return ['name', 'created'];
+  }
+
+  onClick(): void {
+    this.verber_.showRoleCreateDialog('Role name',this.typeMeta,this.objectMeta);
   }
 }

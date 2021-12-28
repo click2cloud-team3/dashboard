@@ -70,6 +70,11 @@ export interface ClusterRoleList extends ResourceList {
   items: ClusterRole[];
 }
 
+export interface RoleList extends ResourceList {
+  items: Role[];
+}
+
+
 export interface ConfigMapList extends ResourceList {
   items: ConfigMap[];
 }
@@ -121,11 +126,21 @@ export interface JobList extends ResourceList {
 
 export interface NamespaceList extends ResourceList {
   namespaces: Namespace[];
+
 }
 
 export interface NodeList extends ResourceList {
   nodes: Node[];
 }
+
+export interface QuotaList extends ResourceList {
+  quotas: Node[];
+}
+
+export interface PartitionList extends ResourceList {
+  partitions: Partition[];
+}
+
 
 export interface PersistentVolumeClaimList extends ResourceList {
   items: PersistentVolumeClaim[];
@@ -179,6 +194,8 @@ export interface StorageClassList extends ResourceList {
 
 // Simple detail types
 export interface ClusterRole extends Resource {}
+
+export interface Role extends Resource {}
 
 export interface ConfigMap extends Resource {}
 
@@ -285,6 +302,15 @@ export interface Namespace extends Resource {
 }
 
 export interface Node extends Resource {
+  ready: string;
+}
+
+export interface Quota extends Resource {
+  ready: string;
+}
+
+
+export interface Partition extends Resource {
   ready: string;
 }
 
@@ -428,6 +454,11 @@ export interface ClusterRoleDetail extends ResourceDetail {
   rules: PolicyRule[];
 }
 
+export interface RoleDetail extends ResourceDetail {
+  rules: PolicyRule[];
+}
+
+
 export interface SecretDetail extends ResourceDetail {
   type: string;
   data: StringMap;
@@ -533,6 +564,23 @@ export interface NodeDetail extends ResourceDetail {
   podList: PodList;
   eventList: EventList;
 }
+
+export interface PartitionDetail extends ResourceDetail {
+  phase: string;
+  podCIDR: string;
+  providerID: string;
+  unschedulable: boolean;
+  allocatedResources: NodeAllocatedResources;
+  nodeInfo: NodeInfo;
+  containerImages: string[];
+  initContainerImages: string[];
+  addresses: NodeAddress[];
+  taints: NodeTaint[];
+  conditions: Condition[];
+  podList: PodList;
+  eventList: EventList;
+}
+
 
 export interface HorizontalPodAutoscalerDetail extends ResourceDetail {
   scaleTargetRef: ScaleTargetRef;
@@ -818,7 +866,19 @@ export interface NodeAddress {
   address: string;
 }
 
+export interface PartitionAddress {
+  type: string;
+  address: string;
+}
+
 export interface NodeTaint {
+  key: string;
+  value: string;
+  effect: string;
+  timeAdded: number;
+}
+
+export interface PartitionTaint {
   key: string;
   value: string;
   effect: string;
@@ -1134,9 +1194,17 @@ export interface Tenant extends Resource {
   phase: string;
 }
 
+export interface Role extends Resource {
+}
+
 export interface TenantList extends ResourceList {
   tenants: Tenant[];
 }
+
+export interface RoleList extends ResourceList {
+  roles: Role[];
+}
+
 
 export interface TenantDetail extends ResourceDetail {
   phase: string;

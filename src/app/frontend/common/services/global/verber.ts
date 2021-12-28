@@ -33,6 +33,8 @@ import {CreateNamespaceDialog} from '../../dialogs/createNamespace/dialog'; // n
 import {CreateRoleDialog} from '../../dialogs/createRole/dialog'; // role dialog
 // clusterrole dialog
 import {CreateClusterroleDialog} from '../../dialogs/createClusterrole/dialog';
+import { assignQuotaDialog } from './../../dialogs/assignQuota/dialog';
+
 
 import {ResourceMeta} from './actionbar';
 import {TenantService} from './tenant';
@@ -47,13 +49,13 @@ export class VerberService {
   onEdit = new EventEmitter<boolean>();
   onScale = new EventEmitter<boolean>();
   onTrigger = new EventEmitter<boolean>();
+  onCreateQuota = new EventEmitter<boolean>();
 
   constructor(
     private readonly dialog_: MatDialog,
     private readonly http_: HttpClient,
     private tenant_: TenantService,
   ) {}
-
   showCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
     const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
     this.dialog_
@@ -100,6 +102,23 @@ export class VerberService {
         }
       });
   }
+
+  //Create Quota
+  showQuotaCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
+    const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
+    this.dialog_
+      .open(assignQuotaDialog, dialogConfig)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
+          this.http_
+            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
+            .subscribe(() => this.onCreateQuota.emit(true), this.handleErrorResponse_.bind(this));
+        }
+      });
+  }
+
   // create Role
   showRoleCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
     const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
