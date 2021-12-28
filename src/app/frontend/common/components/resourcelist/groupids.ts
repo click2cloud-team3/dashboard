@@ -38,6 +38,8 @@ export enum ListIdentifier {
   resource = 'resource',
   tenant = 'tenant',
   quota = 'quota',
+  role = 'roleList',
+  tenantpartition = 'tenantpartition'
 }
 
 export enum ListGroupIdentifier {

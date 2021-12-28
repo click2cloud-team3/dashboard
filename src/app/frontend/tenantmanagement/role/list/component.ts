@@ -16,9 +16,6 @@ import {Component} from '@angular/core';
 
 @Component({
   selector: 'kd-role-list-state',
-  template: '<kd-cluster-role-list></kd-cluster-role-list>'
+  template: '<kd-role-list></kd-role-list>',
 })
-export class TenantAccessControlListComponent {
-
-
-}
+export class RoleListComponent {}

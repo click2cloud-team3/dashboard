@@ -14,15 +14,15 @@
 
 import {NgModule} from '@angular/core';
 
-import {ComponentsModule} from '../../../common/components/module';
-import {SharedModule} from '../../../shared.module';
+import {ComponentsModule} from '../../common/components/module';
+import {SharedModule} from '../../shared.module';
 
-import {ClusterRoleDetailComponent} from './detail/component';
-import {ClusterRoleListComponent} from './list/component';
-import {ClusterRoutingModule} from './routing';
+import {RoleDetailComponent} from './detail/component';
+import {RoleListComponent} from './list/component';
+import {RoleRoutingModule} from './routing';
 
 @NgModule({
-  imports: [SharedModule, ComponentsModule, ClusterRoutingModule],
-  declarations: [ClusterRoleListComponent, ClusterRoleDetailComponent],
+  imports: [SharedModule, ComponentsModule, RoleRoutingModule],
+  declarations: [RoleListComponent, RoleDetailComponent],
 })
-export class ClusterRoleModule {}
+export class RoleModule {}

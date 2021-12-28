@@ -98,6 +98,7 @@ import {UserListComponent} from "./resourcelist/user/component";
 import {QuotaListComponent} from "./resourcelist/quota/component";
 import {PartitionListComponent} from "./resourcelist/partitionlist/component";
 import {TenantPartitionListComponent} from "./resourcelist/tenantpartitionlist/component";
+import {RoleListComponent} from "./resourcelist/role/component";
 
 const components = [
   ActionbarDetailActionsComponent,
@@ -176,6 +177,7 @@ const components = [
   ReplicaSetListComponent,
   ReplicationControllerListComponent,
   RowDetailComponent,
+  RoleListComponent,
 
 
   StorageClassListComponent,

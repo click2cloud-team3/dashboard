@@ -27,7 +27,7 @@ import {ResourceService} from '../../../common/services/resource/resource';
   selector: 'kd-cluster-role-detail',
   templateUrl: './template.html',
 })
-export class TenantAccessControlDetailComponent implements OnInit, OnDestroy {
+export class ClusterRoleDetailComponent implements OnInit, OnDestroy {
   private clusterRoleSubscription_: Subscription;
   private readonly endpoint_ = EndpointManager.resource(Resource.clusterRole, false, true);
   clusterRole: ClusterRoleDetail;
@@ -37,7 +37,7 @@ export class TenantAccessControlDetailComponent implements OnInit, OnDestroy {
     private readonly clusterRole_: ResourceService<ClusterRoleDetail>,
     private readonly actionbar_: ActionbarService,
     private readonly route_: ActivatedRoute,
-    private readonly notifications_: NotificationsService,
+    private readonly notifications_: NotificationsService
   ) {}
 
   ngOnInit(): void {

@@ -13,16 +13,16 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
+import {ComponentsModule} from '../../../common/components/module';
 
-import {ComponentsModule} from '../../common/components/module';
-import {SharedModule} from '../../shared.module';
-
-import {TenantAccessControlDetailComponent} from './detail/component';
-import {TenantAccessControlListComponent} from './list/component';
-import {TenantAccessControlRoutingModule} from './routing';
+import {SharedModule} from '../../../shared.module';
+import {ImageListComponent} from './list/component';
+import {ImageRoutingModule} from './routing';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
-  imports: [SharedModule, ComponentsModule, TenantAccessControlRoutingModule],
-  declarations: [TenantAccessControlListComponent, TenantAccessControlDetailComponent],
+  imports: [SharedModule, ComponentsModule, ImageRoutingModule, MatExpansionModule, MatFormFieldModule],
+  declarations: [ImageListComponent],
 })
-export class TenantAccessControlModule {}
+export class ImageModule {}

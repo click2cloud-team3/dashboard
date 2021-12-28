@@ -14,35 +14,25 @@
 
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-import {DEFAULT_ACTIONBAR} from '../../common/components/actionbars/routing';
-import {TENANTMANAGEMENT_ROUTE} from '../routing';
-import {TenantAccessControlDetailComponent} from './detail/component';
-import {TenantAccessControlListComponent} from './list/component';
+import {TRIGGER_DEFAULT_ACTIONBAR} from '../../../common/components/actionbars/routing';
 
-const ROLE_LIST_ROUTE: Route = {
+import {WORKLOADS_ROUTE} from '../routing';
+
+import {ImageListComponent} from './list/component';
+
+const CRONJOB_LIST_ROUTE: Route = {
   path: '',
-  component: TenantAccessControlListComponent,
+  component: ImageListComponent,
   data: {
-    breadcrumb: 'Access Control',
-    parent: TENANTMANAGEMENT_ROUTE,
-  },
-};
-
-const ROLE_DETAIL_ROUTE: Route = {
-  path: ':resourceName',
-  component: TenantAccessControlDetailComponent,
-  data: {
-    breadcrumb: '{{ resourceName }}',
-    parent: ROLE_LIST_ROUTE,
+    breadcrumb: 'Images',
+    parent: WORKLOADS_ROUTE,
   },
 };
 
 @NgModule({
   imports: [
-    RouterModule.forChild([ROLE_LIST_ROUTE, ROLE_DETAIL_ROUTE, DEFAULT_ACTIONBAR]),
+    RouterModule.forChild([CRONJOB_LIST_ROUTE, TRIGGER_DEFAULT_ACTIONBAR]),
   ],
   exports: [RouterModule],
 })
-export class TenantAccessControlRoutingModule {
-
-}
+export class ImageRoutingModule {}

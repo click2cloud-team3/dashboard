@@ -1,124 +1,42 @@
-<div class="row">
-  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-    <h2 mat-dialog-title>New Clusterrole</h2>
-  </div>
-</div>
-<div class="row">
-  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-    <div class="form-check form-check-inline">
-      <label class="radio_container">
-        <input type="radio" name="radio" id="first_tab" checked (click)="showContent1();">
-        <span class="checkmark"></span>
-        <span class="radio_text">Create from form</span>
-      </label>
+<form [formGroup]="form1">
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+      <h2 mat-dialog-title>Create a new Clusterrole</h2>
     </div>
-    <div class="form-check form-check-inline">
-      <label class="radio_container">
-        <input type="radio" name="radio" id="second_tab" (click)="showContent2();">
-        <span class="checkmark"></span>
-        <span class="radio_text">Create from input</span>
-      </label>
-    </div>
-  </div>
-</div>
-<div class="tab_content first_tab_content" id="first_tab_content">
-  <div class="content_body">
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="tab_content first_tab_content" id="first_tab_content">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
           <mat-label>Name</mat-label>
-          <input matInput>
+          <input matInput type="text" formControlName="clusterrole" required />
+          <mat-hint align="end"></mat-hint>
         </mat-form-field>
       </div>
-      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
-          <mat-label>Role</mat-label>
-          <input matInput>
+          <mat-label>Apigroups</mat-label>
+          <input matInput formControlName="apigroups" required/>
         </mat-form-field>
       </div>
-      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
-          <mat-label>Namespace</mat-label>
-          <input matInput>
+          <mat-label>Resources</mat-label>
+          <input matInput formControlName="resources" required/>
         </mat-form-field>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-        <h5 class="form_input_head">Subject</h5>
+      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+        <mat-form-field appearance="fill">
+          <mat-label>Verbs</mat-label>
+          <input matInput formControlName="verbs" required/>
+        </mat-form-field>
       </div>
-    </div>
-    <div class="add_form_container">
-      <div class="row" *ngFor="let obj of dataarray; let i = index">
-        <div class="col-12 col-sm-6 col-md-6 col-lg-5 col_pad1">
-          <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput name="name{{i}}" [(ngModel)]="obj.name">
-          </mat-form-field>
-        </div>
-        <div class="col-12 col-sm-6 col-md-6 col-lg-5 col_pad2">
-          <mat-form-field appearance="fill">
-            <mat-label>Kind</mat-label>
-            <mat-select name="kind{{i}}" [(ngModel)]="obj.kind">
-              <mat-option value="Kind">Kind</mat-option>
-              <mat-option value="Kind">Kind</mat-option>
-              <mat-option value="Kind">Kind</mat-option>
-              <mat-option value="Kind">Kind</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-12 col-sm-2 col-md-2 col-lg-2" align="end">
-          <div class="close_btn_sec" (click)="removeForm(i)" *ngIf="i!=0">
-            <img src="assets/images/close_icon.svg" alt="">
-          </div>
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12" align="end" *ngIf="i==0">
-          <div class="add_btn_sec">
-            <button mat-raised-button matTooltip="Add Role" color="primary" (click)="addForm()">
-              <img class="add_icon" src="assets/images/plus_icon_white.svg" alt="">
-              Add</button>
-          </div>
-        </div>
+      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
       </div>
-    </div>
-  </div>
-
-  <div class="content_footer">
-    <div class="row">
       <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <mat-dialog-actions align="end">
           <button mat-button mat-dialog-close>Cancel</button>
-          <button mat-button [mat-dialog-close]="true">Create</button>
+          <button mat-button [mat-dialog-close]="true" type="submit" (click)="createclusterrole()">Create</button>
         </mat-dialog-actions>
       </div>
     </div>
   </div>
-
-</div>
-<div class="tab_content second_tab_content" id="second_tab_content">
-  <div class="content_body">
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-          <mat-button-toggle value="bold">YAML</mat-button-toggle>
-          <mat-button-toggle value="italic">JSON</mat-button-toggle>
-        </mat-button-toggle-group>
-        <p>
-          <mat-form-field class="custom_textarea" appearance="fill">
-            <textarea matInput></textarea>
-          </mat-form-field>
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class="content_footer">
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-        <mat-dialog-actions align="end">
-          <button mat-button mat-dialog-close>Cancel</button>
-          <button mat-button [mat-dialog-close]="true">Upload</button>
-        </mat-dialog-actions>
-      </div>
-    </div>
-  </div>
-</div>
+</form>
