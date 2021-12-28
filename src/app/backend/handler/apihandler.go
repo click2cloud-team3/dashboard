@@ -879,34 +879,38 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetRoles).
 			Writes(role.RoleList{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("/namespace/{namespace}/role/{name}").
-			To(apiHandler.handleGetRoleDetail).
+		apiV1Ws.GET("tenants/{tenant}/namespaces/{namespace}/role/{name}").
+			To(apiHandler.handleGetRoleDetailWithMultiTenancy).
 			Writes(role.RoleDetail{}))
 	apiV1Ws.Route(
 		apiV1Ws.POST("/role").
-			To(apiHandler.handleCreateRole).
+			To(apiHandler.handleCreateRolesWithMultiTenancy).
 			Reads(role.Role{}).
 			Writes(role.Role{}))
 	apiV1Ws.Route(
-		apiV1Ws.DELETE("/namespaces/{namespace}/role/{role}").
-			To(apiHandler.handleDeleteRole))
+		apiV1Ws.DELETE("tenants/{tenant}/namespaces/{namespace}/role/{role}").
+			To(apiHandler.handleDeleteRolesWithMultiTenancy))
 
 	apiV1Ws.Route(
 		apiV1Ws.GET("/serviceaccount").
-			To(apiHandler.handleGetServiceAccounts).
+			To(apiHandler.handleGetServiceAccountList).
 			Writes(serviceaccount.ServiceAccountList{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("/namespace/{namespace}/serviceaccount/{name}").
-			To(apiHandler.handleGetServiceAccountDetail).
+		apiV1Ws.GET("tenants/{tenant}/namespaces/{namespace}/serviceaccount").
+			To(apiHandler.handleGetServiceAccountListWithMultiTenancy).
+			Writes(serviceaccount.ServiceAccountList{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("tenants/{tenant}/namespaces/{namespace}/serviceaccounts/{name}").
+			To(apiHandler.handleGetServiceAccountDetailWithMultiTenancy).
 			Writes(serviceaccount.ServiceAccountDetail{}))
 	apiV1Ws.Route(
 		apiV1Ws.POST("/serviceaccount").
-			To(apiHandler.handleCreateServiceAccount).
+			To(apiHandler.handleCreateServiceAccountsWithMultiTenancy).
 			Reads(serviceaccount.ServiceAccount{}).
 			Writes(serviceaccount.ServiceAccount{}))
 	apiV1Ws.Route(
-		apiV1Ws.DELETE("/namespaces/{namespace}/serviceaccounts/{serviceaccount}").
-			To(apiHandler.handleDeleteServiceAccount))
+		apiV1Ws.DELETE("tenants/{tenant}/namespaces/{namespace}/serviceaccounts/{serviceaccount}").
+			To(apiHandler.handleDeleteServiceAccountsWithMultiTenancy))
 
 	apiV1Ws.Route(
 		apiV1Ws.GET("/tenants/{tenant}/clusterrole").
@@ -2888,16 +2892,17 @@ func (apiHandler *APIHandler) handleGetRoles(request *restful.Request, response 
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
-func (apiHandler *APIHandler) handleGetRoleDetail(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandler) handleGetRoleDetailWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
 
-	name := request.PathParameter("name")
+	tenant := request.PathParameter("tenant")
 	namespace := request.PathParameter("namespace")
-	result, err := role.GetRoleDetail(k8sClient, namespace, name)
+	name := request.PathParameter("name")
+	result, err := role.GetRoleDetailWithMultiTenancy(k8sClient, tenant, namespace, name)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
@@ -2905,7 +2910,7 @@ func (apiHandler *APIHandler) handleGetRoleDetail(request *restful.Request, resp
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
-func (apiHandler *APIHandler) handleCreateRole(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandler) handleCreateRolesWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
 		errors.HandleInternalError(response, err)
@@ -2917,23 +2922,25 @@ func (apiHandler *APIHandler) handleCreateRole(request *restful.Request, respons
 		errors.HandleInternalError(response, err)
 		return
 	}
-	if err := role.CreateRole(roleSpec, k8sClient); err != nil {
+  
+	if err := role.CreateRolesWithMultiTenancy(roleSpec, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
 	response.WriteHeaderAndEntity(http.StatusCreated, roleSpec)
 }
 
-func (apiHandler *APIHandler) handleDeleteRole(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandler) handleDeleteRolesWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
 
+	tenant := request.PathParameter("tenant")
+	namespace := request.PathParameter("namespace")
 	roleName := request.PathParameter("role")
-	namespaceName := request.PathParameter("namespace")
-	if err := role.DeleteRole(namespaceName, roleName, k8sClient); err != nil {
+	if err := role.DeleteRolesWithMultiTenancy(tenant, namespace, roleName, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
@@ -2959,7 +2966,7 @@ func (apiHandler *APIHandler) handleCreateNamespace(request *restful.Request, re
 	response.WriteHeaderAndEntity(http.StatusCreated, namespaceSpec)
 }
 
-func (apiHandler *APIHandler) handleGetServiceAccounts(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandler) handleGetServiceAccountList(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
 		errors.HandleInternalError(response, err)
@@ -2980,16 +2987,21 @@ func (apiHandler *APIHandler) handleGetServiceAccounts(request *restful.Request,
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
-func (apiHandler *APIHandler) handleGetServiceAccountDetail(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandler) handleGetServiceAccountListWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
 
-	name := request.PathParameter("name")
-	namespace := request.PathParameter("namespace")
-	result, err := serviceaccount.GetServiceAccountDetail(k8sClient, namespace, name)
+	tenant := request.PathParameter("tenant")
+	Namespace := request.PathParameter("namespace")
+	var namespaces []string
+	namespaces = append(namespaces, Namespace)
+	namespace := common.NewNamespaceQuery(namespaces)
+	dataSelect := parseDataSelectPathParameter(request)
+
+	result, err := serviceaccount.GetServiceAccountListWithMultiTenancy(k8sClient, tenant, namespace, dataSelect)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
@@ -2997,7 +3009,25 @@ func (apiHandler *APIHandler) handleGetServiceAccountDetail(request *restful.Req
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
-func (apiHandler *APIHandler) handleCreateServiceAccount(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandler) handleGetServiceAccountDetailWithMultiTenancy(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	name := request.PathParameter("name")
+	tenant := request.PathParameter("tenant")
+	namespace := request.PathParameter("namespace")
+	result, err := serviceaccount.GetServiceAccountDetailWithMultiTenancy(k8sClient, tenant, namespace, name)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleCreateServiceAccountsWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
 		errors.HandleInternalError(response, err)
@@ -3009,14 +3039,15 @@ func (apiHandler *APIHandler) handleCreateServiceAccount(request *restful.Reques
 		errors.HandleInternalError(response, err)
 		return
 	}
-	if err := serviceaccount.CreateServiceAccount(serviceaccountSpec, k8sClient); err != nil {
+
+	if err := serviceaccount.CreateServiceAccountsWithMultiTenancy(serviceaccountSpec, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
 	response.WriteHeaderAndEntity(http.StatusCreated, serviceaccountSpec)
 }
 
-func (apiHandler *APIHandler) handleDeleteServiceAccount(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandler) handleDeleteServiceAccountsWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
 		errors.HandleInternalError(response, err)
@@ -3024,8 +3055,9 @@ func (apiHandler *APIHandler) handleDeleteServiceAccount(request *restful.Reques
 	}
 
 	serviceaccountName := request.PathParameter("serviceaccount")
+	tenantName := request.PathParameter("tenant")
 	namespaceName := request.PathParameter("namespace")
-	if err := serviceaccount.DeleteServiceAccount(namespaceName, serviceaccountName, k8sClient); err != nil {
+	if err := serviceaccount.DeleteServiceAccountsWithMultiTenancy(tenantName, namespaceName, serviceaccountName, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}

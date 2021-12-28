@@ -50,6 +50,19 @@ func GetServiceAccountList(client client.Interface, namespace *common.NamespaceQ
 	return toServiceAccountList(saList.Items, nonCriticalErrors, dsQuery), nil
 }
 
+// GetServiceAccountListWithMultiTenancy lists service accounts from given tenant and namespace using given data select query.
+func GetServiceAccountListWithMultiTenancy(client client.Interface, tenant string, namespace *common.NamespaceQuery,
+	dsQuery *dataselect.DataSelectQuery) (*ServiceAccountList, error) {
+	saList, err := client.CoreV1().ServiceAccountsWithMultiTenancy(namespace.ToRequestParam(), tenant).List(api.ListEverything)
+
+	nonCriticalErrors, criticalError := errors.HandleError(err)
+	if criticalError != nil {
+		return nil, criticalError
+	}
+
+	return toServiceAccountList(saList.Items, nonCriticalErrors, dsQuery), nil
+}
+
 func toServiceAccount(sa *v1.ServiceAccount) ServiceAccount {
 	return ServiceAccount{
 		ObjectMeta: api.NewObjectMeta(sa.ObjectMeta),
