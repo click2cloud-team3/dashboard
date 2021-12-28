@@ -848,7 +848,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Writes(clusterrole.ClusterRoleList{}))
 	apiV1Ws.Route(
 		apiV1Ws.POST("/clusterrole").
-			To(apiHandler.handleCreateClusterRole).
+			To(apiHandler.handleCreateCreateClusterRolesWithMultiTenancy).
 			Reads(clusterrole.ClusterRoleSpec{}).
 			Writes(clusterrole.ClusterRoleSpec{}))
 	apiV1Ws.Route(
@@ -2776,7 +2776,7 @@ func (apiHandler *APIHandler) handleGetReplicationControllerPodsWithMultiTenancy
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
-func (apiHandler *APIHandler) handleCreateClusterRole(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandler) handleCreateCreateClusterRolesWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
 		errors.HandleInternalError(response, err)
@@ -2788,7 +2788,8 @@ func (apiHandler *APIHandler) handleCreateClusterRole(request *restful.Request, 
 		errors.HandleInternalError(response, err)
 		return
 	}
-	if err := clusterrole.CreateClusterRole(clusterRoleSpec, k8sClient); err != nil {
+
+	if err := clusterrole.CreateClusterRolesWithMultiTenancy(clusterRoleSpec, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
