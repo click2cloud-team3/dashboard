@@ -12,10 +12,72 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {Component,OnInit,Input} from '@angular/core';
+import {ActionbarService, ResourceMeta} from "../../../../common/services/global/actionbar";
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {ResourceListWithStatuses} from "../../../../common/resources/list";
+import {CronJob, CronJobList} from "@api/backendapi";
+import {EndpointManager, Resource} from "../../../../common/services/resource/endpoint";
+import {NamespacedResourceService} from "../../../../common/services/resource/resource";
+import {NotificationsService} from "../../../../common/services/global/notifications";
+import {
+  ListGroupIdentifier,
+  ListIdentifier
+} from "../../../../common/components/resourcelist/groupids";
+import {MenuComponent} from "../../../../common/components/list/column/menu/component";
+import {HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'kd-cron-job-list-state',
   template: '<kd-cron-job-list></kd-cron-job-list>',
 })
-export class CronJobListComponent {}
+export class CronJobListComponent extends ResourceListWithStatuses<CronJobList, CronJob> {
+  @Input() endpoint = EndpointManager.resource(Resource.cronJob, true, true).list();
+  constructor(
+    private readonly cronJob_: NamespacedResourceService<CronJobList>,
+    notifications: NotificationsService,
+  ) {
+    super('cronjob', notifications);
+    this.id = ListIdentifier.cronJob;
+    this.groupId = ListGroupIdentifier.workloads;
+
+    // Register status icon handlers
+    this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
+    this.registerBinding(this.icon.error, 'kd-error', this.isInErrorState);
+
+    // Register action columns.
+    this.registerActionColumn<MenuComponent>('menu', MenuComponent);
+
+    // Register dynamic columns.
+    this.registerDynamicColumn('namespace', 'name', this.shouldShowNamespaceColumn_.bind(this));
+  }
+
+  getResourceObservable(params?: HttpParams): Observable<CronJobList> {
+    return this.cronJob_.get(this.endpoint, undefined, undefined, params);
+  }
+
+  map(cronJobList: CronJobList): CronJob[] {
+    return cronJobList.items;
+  }
+
+  isInErrorState(resource: CronJob): boolean {
+    return resource.suspend;
+  }
+
+  isInSuccessState(resource: CronJob): boolean {
+    return !resource.suspend;
+  }
+
+  getDisplayColumns(): string[] {
+    return ['statusicon', 'name', 'labels', 'schedule', 'suspend', 'active', 'lastschedule', 'age'];
+  }
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'schedule', 'suspend', 'active', 'lastschedule', 'age'];
+  }
+
+  private shouldShowNamespaceColumn_(): boolean {
+    return this.namespaceService_.areMultipleNamespacesSelected();
+  }
+}

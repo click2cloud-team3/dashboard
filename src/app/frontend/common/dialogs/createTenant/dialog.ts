@@ -31,7 +31,6 @@ import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
 export interface CreateTenantDialogMeta {
   tenants: string[];
   StorageClusterId: string []
-  //storageclusterid: string[];
   data : string[]
 }
 @Component({
@@ -94,7 +93,7 @@ export class CreateTenantDialog implements OnInit {
    */
   createTenant(): void {
     if (!this.form1.valid) return;
-    const tenantSpec= {name: this.tenant.value,StorageClusterId: this.tenant.value};
+    const tenantSpec= {name: this.tenant.value};
     const tokenPromise = this.csrfToken_.getTokenForAction('tenant');
     tokenPromise.subscribe(csrfToken => {
       return this.http_

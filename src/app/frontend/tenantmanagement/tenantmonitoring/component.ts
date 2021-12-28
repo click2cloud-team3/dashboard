@@ -72,4 +72,8 @@ export class TenantMonitoringComponent extends ResourceListWithStatuses<NodeList
   getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'labels', 'ready', 'cpureq', 'cpulim', 'memreq', 'memlim', 'age'];
   }
+
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'ready', 'cpureq', 'cpulim', 'memreq', 'memlim', 'age'];
+  }
 }

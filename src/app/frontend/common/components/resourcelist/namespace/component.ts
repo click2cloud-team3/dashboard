@@ -72,6 +72,10 @@ export class NamespaceListComponent extends ResourceListWithStatuses<NamespaceLi
   getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'labels', 'phase', 'age'];
   }
+
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'phase', 'age'];
+  }
   //added the code
   onClick(): void {
     this.verber_.showNamespaceCreateDialog(this.displayName, this.typeMeta, this.objectMeta); //added showNamespaceCreateDialog

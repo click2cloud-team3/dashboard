@@ -75,6 +75,10 @@ export class ServiceListComponent extends ResourceListWithStatuses<ServiceList, 
     return ['statusicon', 'name', 'labels', 'clusterip', 'internalendp', 'externalendp', 'age'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'clusterip', 'internalendp', 'externalendp', 'age'];
+  }
+
   private shouldShowNamespaceColumn_(): boolean {
     return this.namespaceService_.areMultipleNamespacesSelected();
   }

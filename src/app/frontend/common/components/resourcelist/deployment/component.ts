@@ -76,6 +76,10 @@ export class DeploymentListComponent extends ResourceListWithStatuses<Deployment
     return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
+  }
+
   hasErrors(deployment: Deployment): boolean {
     return deployment.pods.warnings.length > 0;
   }

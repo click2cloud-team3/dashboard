@@ -79,6 +79,10 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
     return ['statusicon', 'name', 'phase', 'age'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'phase', 'age'];
+  }
+
   //added the code
   onClick(): void {
     this.verber_.showTenantCreateDialog(this.displayName, this.typeMeta, this.objectMeta);  //changes needed

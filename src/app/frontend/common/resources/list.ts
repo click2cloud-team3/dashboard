@@ -167,8 +167,22 @@ export abstract class ResourceListBase<T extends ResourceList, R extends Resourc
         displayColumns.splice(afterColIdx + 1, 0, condition.col);
       }
     }
-
     return displayColumns.concat(...actionColumns);
+  }
+
+  //added func for tenant partition columns
+  getColumns2(): string[] {
+    const displayColumns2 = this.getDisplayColumns2();
+    const actionColumns = this.actionColumns_.map(col => col.name);
+
+    for (const condition of this.dynamicColumns_) {
+      if (condition.whenCallback()) {
+        const afterColIdx = displayColumns2.indexOf(condition.afterCol);
+        displayColumns2.splice(afterColIdx + 1, 0, condition.col);
+      }
+    }
+
+    return displayColumns2.concat(...actionColumns);
   }
 
   getActionColumns(): Array<ActionColumnDef<ActionColumn>> {
@@ -338,6 +352,8 @@ export abstract class ResourceListBase<T extends ResourceList, R extends Resourc
   }
 
   protected abstract getDisplayColumns(): string[];
+
+  protected abstract getDisplayColumns2(): string[];
 
   abstract getResourceObservable(params?: HttpParams): Observable<T>;
 

@@ -79,6 +79,10 @@ export class StatefulSetListComponent extends ResourceListWithStatuses<
     return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
+  }
+
   hasErrors(statefulSet: StatefulSet): boolean {
     return statefulSet.podInfo.warnings.length > 0;
   }

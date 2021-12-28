@@ -17,7 +17,6 @@ import {HttpParams} from '@angular/common/http';
 import {Component, Input} from '@angular/core';
 import {ClusterRole, ClusterRoleList} from '@api/backendapi';
 import {Observable} from 'rxjs/Observable';
-
 import {ResourceListBase} from '../../../resources/list';
 import {NotificationsService} from '../../../services/global/notifications';
 import {EndpointManager, Resource} from '../../../services/resource/endpoint';
@@ -56,6 +55,10 @@ export class ClusterRoleListComponent extends ResourceListBase<ClusterRoleList, 
   }
 
   getDisplayColumns(): string[] {
+    return ['name', 'age'];
+  }
+
+  getDisplayColumns2(): string[] {
     return ['name', 'age'];
   }
 

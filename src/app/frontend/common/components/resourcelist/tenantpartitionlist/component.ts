@@ -77,6 +77,10 @@ export class TenantPartitionListComponent extends ResourceListWithStatuses<Tenan
     return ['statusicon', 'name', 'phase', 'age'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'nodecount','cpulim','memlim','tentcount','health','etcd'];
+  }
+
   //added the code
   onClick(): void {
     this.verber_.showTenantCreateDialog(this.displayName, this.typeMeta, this.objectMeta);  //changes needed

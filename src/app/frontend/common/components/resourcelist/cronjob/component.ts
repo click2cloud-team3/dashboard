@@ -68,6 +68,9 @@ export class CronJobListComponent extends ResourceListWithStatuses<CronJobList, 
   getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'labels', 'schedule', 'suspend', 'active', 'lastschedule', 'age'];
   }
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'schedule', 'suspend', 'active', 'lastschedule', 'age'];
+  }
 
   private shouldShowNamespaceColumn_(): boolean {
     return this.namespaceService_.areMultipleNamespacesSelected();

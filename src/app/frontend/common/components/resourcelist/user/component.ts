@@ -66,4 +66,8 @@ export class UserListComponent extends ResourceListWithStatuses<TenantList, Tena
   getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'phase', 'age'];
   }
+
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'phase', 'age'];
+  }
 }

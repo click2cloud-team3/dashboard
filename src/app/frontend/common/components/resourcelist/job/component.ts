@@ -78,6 +78,10 @@ export class JobListComponent extends ResourceListWithStatuses<JobList, Job> {
     return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
+  }
+
   hasErrors(job: Job): boolean {
     return job.podInfo.warnings.length > 0;
   }
