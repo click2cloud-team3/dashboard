@@ -34,6 +34,28 @@ type ServiceAccountSpec struct {
 	Tenant string `json:"tenant"`
 }
 
+// CreateServiceAccount creates Service Account based on given specification.
+func CreateServiceAccount(spec *ServiceAccountSpec, client kubernetes.Interface) error {
+	log.Printf("Creating Service-account %s", spec.Name)
+
+	serviceaccount := &v1.ServiceAccount{
+		ObjectMeta: metaV1.ObjectMeta{
+			Name:      spec.Name,
+			Namespace: spec.Namespace,
+		},
+	}
+
+	_, err := client.CoreV1().ServiceAccounts(spec.Namespace).Create(serviceaccount)
+	return err
+}
+
+// DeleteServiceAccount deletes service-account based on given specification.
+func DeleteServiceAccount(namespaceName string, serviceaccountName string, client kubernetes.Interface) error {
+	log.Printf("Deleting Service-Account %s", serviceaccountName)
+	err := client.CoreV1().ServiceAccounts(namespaceName).Delete(serviceaccountName, &metaV1.DeleteOptions{})
+	return err
+}
+
 // CreateServiceAccountsWithMultiTenancy creates Service Account based on given specification.
 func CreateServiceAccountsWithMultiTenancy(spec *ServiceAccountSpec, client kubernetes.Interface) error {
 	log.Printf("Creating Service-account %s", spec.Name)
