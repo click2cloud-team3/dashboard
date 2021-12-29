@@ -41,6 +41,45 @@ type RoleBindingSpec struct {
 	RoleRef v1.RoleRef `json:"role_ref"`
 }
 
+// CreateRoleBindings creates role-binding based on given specification.
+func CreateRoleBindings(spec *RoleBindingSpec, client kubernetes.Interface) error {
+	log.Printf("Creating Role-binding %s", spec.Name)
+
+	var subjects []v1.Subject
+	subject := v1.Subject{
+		Kind:      spec.Subject.Kind,
+		APIGroup:  spec.Subject.APIGroup,
+		Name:      spec.Subject.Name,
+		Namespace: spec.Subject.Namespace,
+	}
+	subjects = append(subjects, subject)
+
+	roleRef := v1.RoleRef{
+		APIGroup: spec.RoleRef.APIGroup,
+		Kind:     spec.RoleRef.Kind,
+		Name:     spec.RoleRef.Name,
+	}
+
+	rolebinding := &v1.RoleBinding{
+		ObjectMeta: metaV1.ObjectMeta{
+			Name:      spec.Name,
+			Namespace: spec.Namespace,
+		},
+		Subjects: subjects,
+		RoleRef:  roleRef,
+	}
+
+	_, err := client.RbacV1().RoleBindings(spec.Namespace).Create(rolebinding)
+	return err
+}
+
+// DeleteRoleBindings deletes role-binding based on given specification.
+func DeleteRoleBindings(namespaceName string, rolebindingName string, client kubernetes.Interface) error {
+	log.Printf("Deleting Rolebinding %s", rolebindingName)
+	err := client.RbacV1().RoleBindings(namespaceName).Delete(rolebindingName, &metaV1.DeleteOptions{})
+	return err
+}
+
 // CreateRoleBindingsWithMultiTenancy creates role-binding based on given specification.
 func CreateRoleBindingsWithMultiTenancy(spec *RoleBindingSpec, client kubernetes.Interface) error {
 	log.Printf("Creating Role-binding %s", spec.Name)
@@ -64,6 +103,7 @@ func CreateRoleBindingsWithMultiTenancy(spec *RoleBindingSpec, client kubernetes
 		ObjectMeta: metaV1.ObjectMeta{
 			Name:      spec.Name,
 			Namespace: spec.Namespace,
+			Tenant:    spec.Tenant,
 		},
 		Subjects: subjects,
 		RoleRef:  roleRef,
