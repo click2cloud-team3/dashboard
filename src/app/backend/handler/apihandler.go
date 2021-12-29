@@ -893,7 +893,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetServiceAccounts).
 			Writes(serviceaccount.ServiceAccountList{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("/namespace/{namespace}/serviceaccount/{name}").
+		apiV1Ws.GET("/serviceaccount/{namespace}/{serviceaccount}").
 			To(apiHandler.handleGetServiceAccountDetail).
 			Writes(serviceaccount.ServiceAccountDetail{}))
 	apiV1Ws.Route(
@@ -902,7 +902,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Reads(serviceaccount.ServiceAccount{}).
 			Writes(serviceaccount.ServiceAccount{}))
 	apiV1Ws.Route(
-		apiV1Ws.DELETE("/namespaces/{namespace}/serviceaccounts/{serviceaccount}").
+		apiV1Ws.DELETE("/namespace/{namespace}/serviceaccount/{serviceaccount}").
 			To(apiHandler.handleDeleteServiceAccount))
 
 	apiV1Ws.Route(
@@ -2950,7 +2950,7 @@ func (apiHandler *APIHandler) handleGetServiceAccountDetail(request *restful.Req
 		return
 	}
 
-	name := request.PathParameter("name")
+	name := request.PathParameter("serviceaccount")
 	namespace := request.PathParameter("namespace")
 	result, err := serviceaccount.GetServiceAccountDetail(k8sClient, namespace, name)
 	if err != nil {

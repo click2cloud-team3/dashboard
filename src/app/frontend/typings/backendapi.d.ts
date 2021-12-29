@@ -118,6 +118,9 @@ export interface HorizontalPodAutoscalerList extends ResourceList {
 export interface IngressList extends ResourceList {
   items: Ingress[];
 }
+export interface ServiceAccountList extends ResourceList {
+  items: ServiceAccount[];
+}
 
 export interface JobList extends ResourceList {
   jobs: Job[];
@@ -193,6 +196,8 @@ export interface StorageClassList extends ResourceList {
 }
 
 // Simple detail types
+export interface ServiceAccount extends Resource {}
+
 export interface ClusterRole extends Resource {}
 
 export interface Role extends Resource {}
@@ -465,6 +470,13 @@ export interface SecretDetail extends ResourceDetail {
 }
 
 export interface IngressDetail extends ResourceDetail {}
+
+export interface ServiceAccountDetail extends ResourceDetail {
+  name: string;
+  phase: string;
+ namespace:string;
+ labels:string;
+}
 
 export interface PersistentVolumeClaimDetail extends ResourceDetail {
   status: string;
@@ -1196,7 +1208,9 @@ export interface Tenant extends Resource {
 
 export interface Role extends Resource {
 }
-
+export interface ServiceAccount extends Resource {
+  type: string;
+}
 export interface TenantList extends ResourceList {
   tenants: Tenant[];
 }
