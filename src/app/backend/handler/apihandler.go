@@ -855,14 +855,30 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetClusterRoleList).
 			Writes(clusterrole.ClusterRoleList{}))
 	apiV1Ws.Route(
-		apiV1Ws.POST("/clusterrole").
-			To(apiHandler.handleCreateCreateClusterRolesWithMultiTenancy).
-			Reads(clusterrole.ClusterRoleSpec{}).
-			Writes(clusterrole.ClusterRoleSpec{}))
-	apiV1Ws.Route(
 		apiV1Ws.GET("/clusterrole/{name}").
 			To(apiHandler.handleGetClusterRoleDetail).
 			Writes(clusterrole.ClusterRoleDetail{}))
+	apiV1Ws.Route(
+		apiV1Ws.POST("/clusterrole").
+			To(apiHandler.handleCreateCreateClusterRole).
+			Reads(clusterrole.ClusterRoleSpec{}).
+			Writes(clusterrole.ClusterRoleSpec{}))
+
+	// ClusterRole with Multi Tenancy.
+	apiV1Ws.Route(
+		apiV1Ws.POST("/clusterroles").
+			To(apiHandler.handleCreateCreateClusterRolesWithMultiTenancy).
+			Reads(clusterrole.ClusterRoleSpec{}).
+			Writes(clusterrole.ClusterRoleSpec{}))
+
+	apiV1Ws.Route(
+		apiV1Ws.POST("/rolebinding").
+			To(apiHandler.handleCreateRoleBindings).
+			Reads(rolebinding.RoleBinding{}).
+			Writes(rolebinding.RoleBinding{}))
+	apiV1Ws.Route(
+		apiV1Ws.DELETE("/namespaces/{namespace}/rolebindings/{rolebinding}").
+			To(apiHandler.handleDeleteRoleBindings))
 
 	apiV1Ws.Route(
 		apiV1Ws.POST("/rolebindings").
@@ -873,6 +889,16 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 		apiV1Ws.DELETE("tenants/{tenant}/namespaces/{namespace}/rolebindings/{rolebinding}").
 			To(apiHandler.handleDeleteRoleBindingsWithMultiTenancy))
 
+	apiV1Ws.Route(
+		apiV1Ws.POST("/clusterrolebinding").
+			To(apiHandler.handleCreateClusterRoleBindings).
+			Reads(clusterrolebinding.ClusterRoleBinding{}).
+			Writes(clusterrolebinding.ClusterRoleBinding{}))
+	apiV1Ws.Route(
+		apiV1Ws.DELETE("/clusterrolebindings/{clusterrolebinding}").
+			To(apiHandler.handleDeleteClusterRoleBindings))
+
+	// ClusterRoleBinding with Multi Tenancy
 	apiV1Ws.Route(
 		apiV1Ws.POST("/clusterrolebindings").
 			To(apiHandler.handleCreateClusterRoleBindingsWithMultiTenancy).
@@ -891,7 +917,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetRoleDetailWithMultiTenancy).
 			Writes(role.RoleDetail{}))
 	apiV1Ws.Route(
-		apiV1Ws.POST("/role").
+		apiV1Ws.POST("/roles").
 			To(apiHandler.handleCreateRolesWithMultiTenancy).
 			Reads(role.Role{}).
 			Writes(role.Role{}))
@@ -926,7 +952,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetServiceAccountDetailWithMultiTenancy).
 			Writes(serviceaccount.ServiceAccountDetail{}))
 	apiV1Ws.Route(
-		apiV1Ws.POST("/serviceaccount").
+		apiV1Ws.POST("/serviceaccounts").
 			To(apiHandler.handleCreateServiceAccountsWithMultiTenancy).
 			Reads(serviceaccount.ServiceAccount{}).
 			Writes(serviceaccount.ServiceAccount{}))
@@ -2802,6 +2828,26 @@ func (apiHandler *APIHandler) handleGetReplicationControllerPodsWithMultiTenancy
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
+func (apiHandler *APIHandler) handleCreateCreateClusterRole(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	clusterRoleSpec := new(clusterrole.ClusterRoleSpec)
+	if err := request.ReadEntity(clusterRoleSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	if err := clusterrole.CreateClusterRole(clusterRoleSpec, k8sClient); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusCreated, clusterRoleSpec)
+}
+
 func (apiHandler *APIHandler) handleCreateCreateClusterRolesWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
@@ -2820,6 +2866,41 @@ func (apiHandler *APIHandler) handleCreateCreateClusterRolesWithMultiTenancy(req
 		return
 	}
 	response.WriteHeaderAndEntity(http.StatusCreated, clusterRoleSpec)
+}
+
+func (apiHandler *APIHandler) handleCreateRoleBindings(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	roleBindingSpec := new(rolebinding.RoleBindingSpec)
+	if err := request.ReadEntity(roleBindingSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	if err := rolebinding.CreateRoleBindings(roleBindingSpec, k8sClient); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusCreated, roleBindingSpec)
+}
+
+func (apiHandler *APIHandler) handleDeleteRoleBindings(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	namespaceName := request.PathParameter("namespace")
+	rolebindingName := request.PathParameter("rolebinding")
+	if err := rolebinding.DeleteRoleBindings(namespaceName, rolebindingName, k8sClient); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeader(http.StatusOK)
 }
 
 func (apiHandler *APIHandler) handleCreateRoleBindingsWithMultiTenancy(request *restful.Request, response *restful.Response) {
@@ -2852,6 +2933,40 @@ func (apiHandler *APIHandler) handleDeleteRoleBindingsWithMultiTenancy(request *
 	namespaceName := request.PathParameter("namespace")
 	rolebindingName := request.PathParameter("rolebinding")
 	if err := rolebinding.DeleteRoleBindingsWithMultiTenancy(tenantName, namespaceName, rolebindingName, k8sClient); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeader(http.StatusOK)
+}
+
+func (apiHandler *APIHandler) handleCreateClusterRoleBindings(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	clusterRoleBindingSpec := new(clusterrolebinding.ClusterRoleBindingSpec)
+	if err := request.ReadEntity(clusterRoleBindingSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	if err := clusterrolebinding.CreateClusterRoleBindings(clusterRoleBindingSpec, k8sClient); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusCreated, clusterRoleBindingSpec)
+}
+
+func (apiHandler *APIHandler) handleDeleteClusterRoleBindings(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	clusterrolebindingName := request.PathParameter("clusterrolebinding")
+	if err := clusterrolebinding.DeleteClusterRoleBindings(clusterrolebindingName, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}

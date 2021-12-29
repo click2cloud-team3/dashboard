@@ -52,6 +52,30 @@ type ClusterRoleSpec struct {
 	NonResourceURLs []string `json:"nonResourceURLs,omitempty" protobuf:"bytes,5,rep,name=nonResourceURLs"`
 }
 
+// CreateClusterRole creates Cluster-role based on given specification.
+func CreateClusterRole(spec *ClusterRoleSpec, client kubernetes.Interface) error {
+	log.Printf("Creating Cluster-role %s", spec.Name)
+
+	var policies []v1.PolicyRule
+	policy := v1.PolicyRule{
+		Verbs:           spec.Verbs,
+		APIGroups:       spec.APIGroups,
+		Resources:       spec.Resources,
+		ResourceNames:   spec.ResourceNames,
+		NonResourceURLs: spec.NonResourceURLs,
+	}
+	policies = append(policies, policy)
+	clusterrole := &v1.ClusterRole{
+		ObjectMeta: metaV1.ObjectMeta{
+			Name: spec.Name,
+		},
+		Rules: policies,
+	}
+
+	_, err := client.RbacV1().ClusterRoles().Create(clusterrole)
+	return err
+}
+
 // CreateClusterRolesWithMultiTenancy creates Cluster-role based on given specification.
 func CreateClusterRolesWithMultiTenancy(spec *ClusterRoleSpec, client kubernetes.Interface) error {
 	log.Printf("Creating Cluster-role %s", spec.Name)
@@ -67,7 +91,8 @@ func CreateClusterRolesWithMultiTenancy(spec *ClusterRoleSpec, client kubernetes
 	policies = append(policies, policy)
 	clusterrole := &v1.ClusterRole{
 		ObjectMeta: metaV1.ObjectMeta{
-			Name: spec.Name,
+			Name:   spec.Name,
+			Tenant: spec.Tenant,
 		},
 		Rules: policies,
 	}
