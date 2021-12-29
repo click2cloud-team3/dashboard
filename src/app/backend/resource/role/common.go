@@ -55,6 +55,42 @@ type RoleSpec struct {
 	NonResourceURLs []string `json:"nonResourceURLs,omitempty" protobuf:"bytes,5,rep,name=nonResourceURLs"`
 }
 
+// CreateRole creates Role based on given specification.
+func CreateRole(spec *RoleSpec, client kubernetes.Interface) error {
+	log.Printf("Creating role %s", spec.Name)
+
+	// setting default namespace if no namespace is specified
+	if spec.Namespace == "" {
+		spec.Namespace = "default"
+	}
+
+	var policies []v1.PolicyRule
+	policy := v1.PolicyRule{
+		Verbs:           spec.Verbs,
+		APIGroups:       spec.APIGroups,
+		Resources:       spec.Resources,
+		ResourceNames:   spec.ResourceNames,
+		NonResourceURLs: spec.NonResourceURLs,
+	}
+	policies = append(policies, policy)
+	role := &v1.Role{
+		ObjectMeta: metaV1.ObjectMeta{
+			Name: spec.Name,
+		},
+		Rules: policies,
+	}
+
+	_, err := client.RbacV1().Roles(spec.Namespace).Create(role)
+	return err
+}
+
+// DeleteRole deletes role based on given specification.
+func DeleteRole(namespace string, roleName string, client kubernetes.Interface) error {
+	log.Printf("Deleting role %s", roleName)
+	err := client.RbacV1().Roles(namespace).Delete(roleName, &metaV1.DeleteOptions{})
+	return err
+}
+
 // CreateRolesWithMultiTenancy creates Role based on given specification.
 func CreateRolesWithMultiTenancy(spec *RoleSpec, client kubernetes.Interface) error {
 	log.Printf("Creating role %s", spec.Name)
