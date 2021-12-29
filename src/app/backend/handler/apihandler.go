@@ -832,7 +832,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	apiV1Ws.Route(
 		apiV1Ws.PUT("/tenants/{tenant}/_raw/{kind}/name/{name}").
 			To(apiHandler.handlePutResourceWithMultiTenancy))
-  
+
 	apiV1Ws.Route(
 		apiV1Ws.GET("/role/{namespace}").
 			To(apiHandler.handleGetRoleList).
@@ -2892,6 +2892,23 @@ func (apiHandler *APIHandler) handleGetRoles(request *restful.Request, response 
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
+func (apiHandler *APIHandler) handleGetRoleDetail(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	name := request.PathParameter("name")
+	namespace := request.PathParameter("namespace")
+	result, err := role.GetRoleDetail(k8sClient, namespace, name)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
 func (apiHandler *APIHandler) handleGetRoleDetailWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
@@ -2922,7 +2939,7 @@ func (apiHandler *APIHandler) handleCreateRolesWithMultiTenancy(request *restful
 		errors.HandleInternalError(response, err)
 		return
 	}
-  
+
 	if err := role.CreateRolesWithMultiTenancy(roleSpec, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
