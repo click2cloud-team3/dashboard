@@ -116,6 +116,10 @@ export class NamespaceListComponent extends ResourceListWithStatuses<NamespaceLi
   getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'labels', 'phase', 'age'];
   }
+
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'phase', 'age'];
+  }
   //added the code
   onClick(): void {
     this.verber_.showNamespaceCreateDialog(this.displayName, this.typeMeta, this.objectMeta); //added showNamespaceCreateDialog
@@ -168,6 +172,10 @@ export class DeploymentListComponent extends ResourceListWithStatuses<Deployment
 
   getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
+  }
+
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'phase', 'age'];
   }
 
   hasErrors(deployment: Deployment): boolean {
@@ -229,6 +237,10 @@ export class PodListComponent extends ResourceListWithStatuses<PodList, Pod> {
 
   protected getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'labels', 'node', 'status', 'restarts', 'cpu', 'mem', 'age'];
+  }
+
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'phase', 'age'];
   }
 
   private shouldShowNamespaceColumn_(): boolean {
@@ -333,6 +345,10 @@ export class ReplicaSetListComponent extends ResourceListWithStatuses<ReplicaSet
 
   protected getDisplayColumns(): string[] {
     return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
+  }
+
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'phase', 'age'];
   }
 
   private shouldShowNamespaceColumn_(): boolean {

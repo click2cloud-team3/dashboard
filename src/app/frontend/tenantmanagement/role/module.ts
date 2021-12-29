@@ -12,10 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {NgModule} from '@angular/core';
 
-@Component({
-  selector: 'kd-namespace-list-state',
-  template: '<kd-namespace-list></kd-namespace-list>',
+import {ComponentsModule} from '../../common/components/module';
+import {SharedModule} from '../../shared.module';
+
+import {RoleDetailComponent} from './detail/component';
+import {RoleListComponent} from './list/component';
+import {RoleRoutingModule} from './routing';
+
+@NgModule({
+  imports: [SharedModule, ComponentsModule, RoleRoutingModule],
+  declarations: [RoleListComponent, RoleDetailComponent],
 })
-export class NamespaceListComponent {}
+export class RoleModule {}

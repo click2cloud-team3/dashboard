@@ -31,6 +31,7 @@ import (
 	metricapi "github.com/kubernetes/dashboard/src/app/backend/integration/metric/api"
 	"github.com/kubernetes/dashboard/src/app/backend/plugin"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/clusterrole"
+	"github.com/kubernetes/dashboard/src/app/backend/resource/clusterrolebinding"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/common"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/configmap"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/container"
@@ -53,6 +54,7 @@ import (
 	"github.com/kubernetes/dashboard/src/app/backend/resource/replicaset"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/replicationcontroller"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/role"
+	"github.com/kubernetes/dashboard/src/app/backend/resource/rolebinding"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/secret"
 	resourceService "github.com/kubernetes/dashboard/src/app/backend/resource/service"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/serviceaccount"
@@ -833,6 +835,15 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	apiV1Ws.Route(
 		apiV1Ws.PUT("/tenants/{tenant}/_raw/{kind}/name/{name}").
 			To(apiHandler.handlePutResourceWithMultiTenancy))
+  
+	apiV1Ws.Route(
+		apiV1Ws.GET("/role/{namespace}").
+			To(apiHandler.handleGetRoleList).
+			Writes(role.RoleList{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("/role/{namespace}/{name}").
+			To(apiHandler.handleGetRoleDetail).
+			Writes(role.RoleDetail{}))
 
 	apiV1Ws.Route(
 		apiV1Ws.GET("/clusterrole").
@@ -847,6 +858,18 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 		apiV1Ws.GET("/clusterrole/{name}").
 			To(apiHandler.handleGetClusterRoleDetail).
 			Writes(clusterrole.ClusterRoleDetail{}))
+
+	apiV1Ws.Route(
+		apiV1Ws.POST("/rolebindings").
+			To(apiHandler.handleCreateRoleBinding).
+			Reads(rolebinding.RoleBinding{}).
+			Writes(rolebinding.RoleBinding{}))
+
+	apiV1Ws.Route(
+		apiV1Ws.POST("/clusterrolebindings").
+			To(apiHandler.handleCreateClusterRoleBinding).
+			Reads(clusterrolebinding.ClusterRoleBinding{}).
+			Writes(clusterrolebinding.ClusterRoleBinding{}))
 
 	apiV1Ws.Route(
 		apiV1Ws.GET("/role").
@@ -1120,6 +1143,23 @@ func (apiHandler *APIHandler) handleGetTenantDetail(request *restful.Request, re
 	name := request.PathParameter("name")
 
 	result, err := tenant.GetTenantDetail(k8sClient, name)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleGetRoleList(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	namespace := parseNamespacePathParameter(request)
+	dataSelect := parseDataSelectPathParameter(request)
+	result, err := role.GetRoleList(k8sClient, namespace, dataSelect)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
@@ -2750,6 +2790,44 @@ func (apiHandler *APIHandler) handleCreateClusterRole(request *restful.Request, 
 		return
 	}
 	response.WriteHeaderAndEntity(http.StatusCreated, clusterRoleSpec)
+}
+
+func (apiHandler *APIHandler) handleCreateRoleBinding(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	roleBindingSpec := new(rolebinding.RoleBindingSpec)
+	if err := request.ReadEntity(roleBindingSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	if err := rolebinding.CreateRoleBinding(roleBindingSpec, k8sClient); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusCreated, roleBindingSpec)
+}
+
+func (apiHandler *APIHandler) handleCreateClusterRoleBinding(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	clusterRoleBindingSpec := new(clusterrolebinding.ClusterRoleBindingSpec)
+	if err := request.ReadEntity(clusterRoleBindingSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	if err := clusterrolebinding.CreateClusterRoleBinding(clusterRoleBindingSpec, k8sClient); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusCreated, clusterRoleBindingSpec)
 }
 
 func (apiHandler *APIHandler) handleGetRoles(request *restful.Request, response *restful.Response) {

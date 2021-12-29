@@ -56,6 +56,10 @@ export class IngressListComponent extends ResourceListBase<IngressList, Ingress>
     return ['name', 'labels', 'endpoints', 'age'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['name', 'labels', 'endpoints', 'age'];
+  }
+
   private shouldShowNamespaceColumn_(): boolean {
     return this.namespaceService_.areMultipleNamespacesSelected();
   }

@@ -31,7 +31,7 @@ import {VerberService} from '../../../services/global/verber';
   templateUrl: './template.html',
 })
 export class RoleListComponent extends ResourceListBase<RoleList, Role> {
-  @Input() endpoint = EndpointManager.resource(Resource.role, false).list();
+  @Input() endpoint = EndpointManager.resource(Resource.role, true).list();
   typeMeta:any;
   objectMeta:any;
 
@@ -64,6 +64,10 @@ export class RoleListComponent extends ResourceListBase<RoleList, Role> {
   }
 
   getDisplayColumns(): string[] {
+    return ['name', 'created'];
+  }
+
+  getDisplayColumns2(): string[] {
     return ['name', 'created'];
   }
 

@@ -75,6 +75,10 @@ export class NodeListComponent extends ResourceListWithStatuses<NodeList, Node> 
     return ['statusicon', 'name', 'labels', 'ready', 'cpureq', 'cpulim', 'memreq', 'memlim', 'age'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'ready', 'cpureq', 'cpulim', 'memreq', 'memlim', 'age'];
+  }
+
   //added the code
   onClick(): void {
     this.verber_.showNodeCreateDialog(this.displayName, this.typeMeta, this.objectMeta); //added

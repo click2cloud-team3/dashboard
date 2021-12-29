@@ -85,6 +85,10 @@ export class DaemonSetListComponent extends ResourceListWithStatuses<DaemonSetLi
     return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
   }
 
+  getDisplayColumns2(): string[] {
+    return ['statusicon', 'name', 'labels', 'pods', 'age', 'images'];
+  }
+
   private shouldShowNamespaceColumn_(): boolean {
     return this.namespaceService_.areMultipleNamespacesSelected();
   }

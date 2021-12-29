@@ -38,15 +38,15 @@ const routes: Routes = [
       },
       {
         path: 'clusterrole',
-        loadChildren: 'resource/cluster/clusterrole/module#ClusterRoleModule',
+        loadChildren: 'tenantmanagement/clusterrole/module#ClusterRoleModule',
+      },
+      {
+        path: 'role',
+        loadChildren: 'tenantmanagement/role/module#RoleModule',
       },
       {
         path: 'quota',
         loadChildren: 'resource/cluster/quota/module#QuotaModule',
-      },
-      {
-        path: 'role',
-        loadChildren: 'resource/cluster/role/module#RoleModule',
       },
       {
         path: 'tenant',
@@ -127,12 +127,6 @@ const routes: Routes = [
         path: 'statefulset',
         loadChildren: 'resource/workloads/statefulset/module#StatefulSetModule',
       },
-
-      // Virtual Machine
-      // {
-      //   path: 'virtualmachine',
-      //   loadChildren: 'resource/virtualmachine/module#VirtualmachineModule',
-      // },
       {
         path: 'instance',
         loadChildren: 'resource/virtualmachine/instance/module#InstanceModule',
@@ -203,10 +197,6 @@ const routes: Routes = [
       {
         path: 'tenantmanagement',
         loadChildren: 'tenantmanagement/module#TenantManagementModule',
-      },
-      {
-        path: 'tenantaccesscontrol',
-        loadChildren: 'tenantmanagement/tenantaccesscontrol/module#TenantAccessControlModule',
       },
       {
         path: 'tenantmonitoring',
