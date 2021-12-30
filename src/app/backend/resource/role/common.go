@@ -31,6 +31,9 @@ type RoleSpec struct {
 	// Namespace of the role.
 	Namespace string `json:"namespace"`
 
+	// Tenant of the role
+	Tenant string `json:"tenant"`
+
 	// Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds.
 	Verbs []string `json:"verbs" protobuf:"bytes,1,rep,name=verbs"`
 
@@ -82,9 +85,46 @@ func CreateRole(spec *RoleSpec, client kubernetes.Interface) error {
 }
 
 // DeleteRole deletes role based on given specification.
-func DeleteRole(namespaceName string, roleName string, client kubernetes.Interface) error {
+func DeleteRole(namespace string, roleName string, client kubernetes.Interface) error {
 	log.Printf("Deleting role %s", roleName)
-	err := client.RbacV1().Roles(namespaceName).Delete(roleName, &metaV1.DeleteOptions{})
+	err := client.RbacV1().Roles(namespace).Delete(roleName, &metaV1.DeleteOptions{})
+	return err
+}
+
+// CreateRolesWithMultiTenancy creates Role based on given specification.
+func CreateRolesWithMultiTenancy(spec *RoleSpec, client kubernetes.Interface) error {
+	log.Printf("Creating role %s", spec.Name)
+
+	// setting default namespace if no namespace is specified
+	if spec.Namespace == "" {
+		spec.Namespace = "default"
+	}
+
+	var policies []v1.PolicyRule
+	policy := v1.PolicyRule{
+		Verbs:           spec.Verbs,
+		APIGroups:       spec.APIGroups,
+		Resources:       spec.Resources,
+		ResourceNames:   spec.ResourceNames,
+		NonResourceURLs: spec.NonResourceURLs,
+	}
+	policies = append(policies, policy)
+	role := &v1.Role{
+		ObjectMeta: metaV1.ObjectMeta{
+			Name:   spec.Name,
+			Tenant: spec.Tenant,
+		},
+		Rules: policies,
+	}
+
+	_, err := client.RbacV1().RolesWithMultiTenancy(spec.Namespace, spec.Tenant).Create(role)
+	return err
+}
+
+// DeleteRolesWithMultiTenancy deletes role based on given specification.
+func DeleteRolesWithMultiTenancy(tenant string, namespace string, roleName string, client kubernetes.Interface) error {
+	log.Printf("Deleting role %s", roleName)
+	err := client.RbacV1().RolesWithMultiTenancy(namespace, tenant).Delete(roleName, &metaV1.DeleteOptions{})
 	return err
 }
 

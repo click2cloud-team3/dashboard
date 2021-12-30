@@ -28,6 +28,9 @@ type ClusterRoleSpec struct {
 	// Name of the cluster-role.
 	Name string `json:"name"`
 
+	// Tenant of the cluster-role
+	Tenant string `json:"tenant"`
+
 	// Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds.
 	Verbs []string `json:"verbs" protobuf:"bytes,1,rep,name=verbs"`
 
@@ -70,6 +73,31 @@ func CreateClusterRole(spec *ClusterRoleSpec, client kubernetes.Interface) error
 	}
 
 	_, err := client.RbacV1().ClusterRoles().Create(clusterrole)
+	return err
+}
+
+// CreateClusterRolesWithMultiTenancy creates Cluster-role based on given specification.
+func CreateClusterRolesWithMultiTenancy(spec *ClusterRoleSpec, client kubernetes.Interface) error {
+	log.Printf("Creating Cluster-role %s", spec.Name)
+
+	var policies []v1.PolicyRule
+	policy := v1.PolicyRule{
+		Verbs:           spec.Verbs,
+		APIGroups:       spec.APIGroups,
+		Resources:       spec.Resources,
+		ResourceNames:   spec.ResourceNames,
+		NonResourceURLs: spec.NonResourceURLs,
+	}
+	policies = append(policies, policy)
+	clusterrole := &v1.ClusterRole{
+		ObjectMeta: metaV1.ObjectMeta{
+			Name:   spec.Name,
+			Tenant: spec.Tenant,
+		},
+		Rules: policies,
+	}
+
+	_, err := client.RbacV1().ClusterRolesWithMultiTenancy(spec.Tenant).Create(clusterrole)
 	return err
 }
 
