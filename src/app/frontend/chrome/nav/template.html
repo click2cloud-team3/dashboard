@@ -26,13 +26,6 @@ limitations under the License.
       <mat-divider></mat-divider>
     </div>
 
-
-<!--    <div class="kd-nav-group">-->
-<!--      <kd-nav-item class="kd-nav-group-item" state="/overview" i18n>-->
-<!--      </kd-nav-item>-->
-<!--    </div>-->
-
-
     <mat-accordion>
       <mat-expansion-panel [expanded]="true" *ngIf="isCurrentSystem">
         <mat-expansion-panel-header>
@@ -82,7 +75,7 @@ limitations under the License.
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Cluster roles
           </kd-nav-item>
-          <kd-nav-item class="kd-nav-item" state="/quota" i18n>
+          <kd-nav-item class="kd-nav-item" state="/resourcequota" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Quota
           </kd-nav-item>

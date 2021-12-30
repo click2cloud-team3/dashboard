@@ -1,0 +1,18 @@
+
+<kd-object-meta [initialized]="isInitialized"
+                [objectMeta]="resourcequota?.objectMeta"></kd-object-meta>
+
+<kd-card [initialized]="isInitialized">
+  <div title
+       i18n>Resource information</div>
+  <div content
+       *ngIf="isInitialized"
+       fxLayout="row wrap">
+    <kd-property *ngIf="resourcequota?.phase">
+      <div key
+           i18n>Status</div>
+      <div value>{{resourcequota?.phase}}</div>
+    </kd-property>
+  </div>
+</kd-card>
+

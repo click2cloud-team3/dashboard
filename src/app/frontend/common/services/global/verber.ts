@@ -18,7 +18,6 @@ import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ObjectMeta, TypeMeta} from '@api/backendapi';
 
 import {AlertDialog, AlertDialogConfig} from '../../dialogs/alert/dialog';
-import {CreateResourceDialog} from '../../dialogs/createresource/dialog';
 import {DeleteResourceDialog} from '../../dialogs/deleteresource/dialog';
 import {EditResourceDialog} from '../../dialogs/editresource/dialog';
 import {ScaleResourceDialog} from '../../dialogs/scaleresource/dialog';
@@ -34,8 +33,6 @@ import {CreateRoleDialog} from '../../dialogs/createRole/dialog'; // role dialog
 // clusterrole dialog
 import {CreateClusterroleDialog} from '../../dialogs/createClusterrole/dialog';
 import { assignQuotaDialog } from './../../dialogs/assignQuota/dialog';
-
-
 import {ResourceMeta} from './actionbar';
 import {TenantService} from './tenant';
 import {CreateNodeDialog} from "../../dialogs/createNode/dialog";
@@ -56,20 +53,7 @@ export class VerberService {
     private readonly http_: HttpClient,
     private tenant_: TenantService,
   ) {}
-  showCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
-    const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
-    this.dialog_
-      .open(CreateResourceDialog, dialogConfig)
-      .afterClosed()
-      .subscribe(result => {
-        if (result) {
-          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
-          this.http_
-            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
-            .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
-        }
-      });
-  }
+
 
   // create tenant
   showTenantCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
@@ -101,10 +85,11 @@ export class VerberService {
             .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
         }
       });
+
   }
 
   //Create Quota
-  showQuotaCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
+  showResourceQuotaCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
     const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
     this.dialog_
       .open(assignQuotaDialog, dialogConfig)
@@ -118,7 +103,6 @@ export class VerberService {
         }
       });
   }
-
   // create Role
   showRoleCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
     const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);

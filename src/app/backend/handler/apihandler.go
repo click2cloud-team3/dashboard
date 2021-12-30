@@ -53,6 +53,7 @@ import (
 	"github.com/kubernetes/dashboard/src/app/backend/resource/pod"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/replicaset"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/replicationcontroller"
+	"github.com/kubernetes/dashboard/src/app/backend/resource/resourcequota"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/role"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/rolebinding"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/secret"
@@ -67,6 +68,7 @@ import (
 	"github.com/kubernetes/dashboard/src/app/backend/systembanner"
 	"github.com/kubernetes/dashboard/src/app/backend/validation"
 	"golang.org/x/net/xsrftoken"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/tools/remotecommand"
 )
@@ -103,7 +105,6 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	wsContainer.EnableContentEncoding(true)
 
 	apiV1Ws := new(restful.WebService)
-
 	InstallFilters(apiV1Ws, cManager)
 
 	apiV1Ws.Path("/api/v1").
@@ -587,7 +588,18 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 		apiV1Ws.GET("/namespace/{name}/event").
 			To(apiHandler.handleGetNamespaceEvents).
 			Writes(common.EventList{}))
-
+	apiV1Ws.Route(
+		apiV1Ws.POST("/resourcequota").
+			To(apiHandler.handleAddResourceQuota).
+			Reads(resourcequota.ResourceQuotaSpec{}).
+			Writes(v1.ResourceQuota{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("/tenants/{tenant}/resourcequota/{namespace}").
+			To(apiHandler.handleGetResourceQuotaList).
+			Writes(v1.ResourceQuotaList{}))
+	apiV1Ws.Route(
+		apiV1Ws.DELETE("/tenants/{tenant}/namespace/{namespace}/resourcequota/{name}").
+			To(apiHandler.handleDeleteResourceQuota))
 	apiV1Ws.Route(
 		apiV1Ws.POST("/tenants/{tenant}/namespace"). // TODO
 								To(apiHandler.handleCreateNamespace).
@@ -835,7 +847,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	apiV1Ws.Route(
 		apiV1Ws.PUT("/tenants/{tenant}/_raw/{kind}/name/{name}").
 			To(apiHandler.handlePutResourceWithMultiTenancy))
-  
+
 	apiV1Ws.Route(
 		apiV1Ws.GET("/role/{namespace}").
 			To(apiHandler.handleGetRoleList).
@@ -2903,6 +2915,73 @@ func (apiHandler *APIHandler) handleDeleteRole(request *restful.Request, respons
 	response.WriteHeader(http.StatusOK)
 }
 
+func (apiHandler *APIHandler) handleAddResourceQuota(request *restful.Request, response *restful.Response) {
+
+	log.Printf("Adding Quota")
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	resourceQuotaSpec := new(resourcequota.ResourceQuotaSpec)
+	if err := request.ReadEntity(resourceQuotaSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	//tenant := request.PathParameter("tenant")
+	//namespace := request.PathParameter("namespace")
+	result, err := resourcequota.AddResourceQuotas(k8sClient, resourceQuotaSpec.NameSpace, resourceQuotaSpec.Tenant, resourceQuotaSpec)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleGetResourceQuotaList(request *restful.Request, response *restful.Response) {
+
+	log.Printf("Get Quota List")
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	tenant := request.PathParameter("tenant")
+	namespace := request.PathParameter("namespace")
+	result, err := resourcequota.GetResourceQuotaLists(k8sClient, namespace, tenant)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleDeleteResourceQuota(request *restful.Request, response *restful.Response) {
+
+	log.Printf("Deleting Quota")
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	resourceQuotaSpec := new(resourcequota.ResourceQuotaSpec)
+	if err := request.ReadEntity(resourceQuotaSpec); err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	tenant := request.PathParameter("tenant")
+	namespace := request.PathParameter("namespace")
+	name := request.PathParameter("name")
+	err = resourcequota.DeleteResourceQuota(k8sClient, namespace, tenant, name)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeader(http.StatusOK)
+}
 func (apiHandler *APIHandler) handleCreateNamespace(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {

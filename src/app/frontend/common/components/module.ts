@@ -62,7 +62,6 @@ import {PodStatusCardComponent} from './podstatus/component';
 import {PolicyRuleListComponent} from './policyrule/component';
 import {PropertyComponent} from './property/component';
 import {ProxyComponent} from './proxy/component';
-import {ResourceQuotaListComponent} from './quotas/component';
 import {ClusterRoleListComponent} from './resourcelist/clusterrole/component';
 import {ConfigMapListComponent} from './resourcelist/configmap/component';
 import {CRDListComponent} from './resourcelist/crd/component';
@@ -95,10 +94,11 @@ import {ZeroStateComponent} from './zerostate/component';
 import {TenantSelectorComponent} from './tenant/component';
 import {TenantListComponent} from './resourcelist/tenantlist/component';
 import {UserListComponent} from "./resourcelist/user/component";
-import {QuotaListComponent} from "./resourcelist/quota/component";
+import {ResourceQuotasListComponent} from "./resourcelist/resourcequotalist/component";
 import {PartitionListComponent} from "./resourcelist/partitionlist/component";
 import {TenantPartitionListComponent} from "./resourcelist/tenantpartitionlist/component";
 import {RoleListComponent} from "./resourcelist/role/component";
+import {ResourceQuotaListComponent} from "./quotas/component";
 
 const components = [
   ActionbarDetailActionsComponent,
@@ -135,11 +135,9 @@ const components = [
   DateComponent,
   DeploymentListComponent,
   DefaultActionbar,
-
   EndpointListComponent,
   ExternalEndpointComponent,
   EventListComponent,
-
   HiddenPropertyComponent,
 
   IngressListComponent,
@@ -172,12 +170,13 @@ const components = [
   PolicyRuleListComponent,
   PinDefaultActionbar,
 
-  ResourceQuotaListComponent,
+  ResourceQuotasListComponent,
   ResourceLimitListComponent,
   ReplicaSetListComponent,
   ReplicationControllerListComponent,
   RowDetailComponent,
   RoleListComponent,
+  ResourceQuotaListComponent,
 
 
   StorageClassListComponent,
@@ -201,7 +200,6 @@ const components = [
   TenantListComponent,
 
   UserListComponent,
-  QuotaListComponent,
 ];
 
 @NgModule({

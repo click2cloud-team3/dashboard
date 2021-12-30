@@ -16,9 +16,7 @@ import {NgModule} from '@angular/core';
 
 import {SharedModule} from '../../shared.module';
 import {ComponentsModule} from '../components/module';
-
 import {AlertDialog} from './alert/dialog';
-import {CreateResourceDialog} from './createresource/dialog';
 import {CreateTenantDialog} from './createTenant/dialog';
 import {CreateNamespaceDialog} from './createNamespace/dialog';
 import {CreateRoleDialog} from './createRole/dialog';
@@ -35,7 +33,6 @@ import {assignQuotaDialog} from './assignQuota/dialog';
   imports: [SharedModule, ComponentsModule],
   declarations: [
     AlertDialog,
-    CreateResourceDialog,
     CreateTenantDialog,
     CreateNamespaceDialog,
     CreateRoleDialog,
@@ -47,11 +44,9 @@ import {assignQuotaDialog} from './assignQuota/dialog';
     TriggerResourceDialog,
     CreateNodeDialog,
     assignQuotaDialog,
-
   ],
   exports: [
     AlertDialog,
-    CreateResourceDialog,
     CreateTenantDialog,
     CreateNamespaceDialog,
     CreateRoleDialog,
@@ -63,11 +58,9 @@ import {assignQuotaDialog} from './assignQuota/dialog';
     TriggerResourceDialog,
     CreateNodeDialog,
     assignQuotaDialog,
-
   ],
   entryComponents: [
     AlertDialog,
-    CreateResourceDialog,
     CreateTenantDialog,
     CreateNamespaceDialog,
     CreateRoleDialog,
@@ -81,4 +74,6 @@ import {assignQuotaDialog} from './assignQuota/dialog';
     assignQuotaDialog,
   ],
 })
+
+
 export class DialogsModule {}
