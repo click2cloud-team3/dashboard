@@ -1,33 +1,32 @@
-<form [formGroup]="form1" style="overflow: scroll">
+<form [formGroup]="form1">
 
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-      <h2 mat-dialog-title>Create a new Quota</h2>
+      <label><strong>Create a New Quota</strong></label>
     </div>
+  <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+    <p class="note_text">*Use lower case alphanumeric characters or '-'.</p>
+  </div>
     <div class="tab_content first_tab_content" id="first_tab_content">
-
-      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+      <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Name</mat-label>
           <input matInput type="text" formControlName="quotaname" required />
           <mat-hint align="end"></mat-hint>
         </mat-form-field>
       </div>
-
-      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+      <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Tenant</mat-label>
           <input type="text" matInput formControlName="tenant" required/>
         </mat-form-field>
       </div>
-
-      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+      <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Namespace</mat-label>
           <input type="text" matInput formControlName="namespace" required/>
         </mat-form-field>
       </div>
-
-      <h5 mat-dialog-title>Enter Object Count</h5>
+      <label><b>Enter Object Count</b></label>
       <div class="row">
       <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">

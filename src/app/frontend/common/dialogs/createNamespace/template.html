@@ -4,9 +4,13 @@
       <h2 mat-dialog-title>Create a new Namespace</h2>
       <h2 class="dialog_title">The new namespace will be added to the cluster.</h2>
     </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+      <p class="note_text">*Use lower case alphanumeric characters or '-'.</p>
+    </div>
+
     <div class="col-12 col-sm-6 col-md-6 col-lg-6">
       <mat-form-field appearance="fill">
-        <mat-label>Namespace Name *</mat-label>
+        <mat-label>Namespace Name</mat-label>
         <input matInput type="text"   formControlName="namespace" required />
         <mat-hint align="end">0/24</mat-hint>
       </mat-form-field>

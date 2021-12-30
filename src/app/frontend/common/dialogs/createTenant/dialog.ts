@@ -17,9 +17,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {TenantService} from "../../services/global/tenant";
-import {NamespaceService} from "../../services/global/namespace";
-import {AppDeploymentContentSpec} from "@api/backendapi";
+
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -31,7 +29,7 @@ import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
 export interface CreateTenantDialogMeta {
   tenants: string[];
   StorageClusterId: string []
-  data : string[]
+
 }
 @Component({
   selector: 'kd-create-tenant-dialog',
@@ -88,12 +86,15 @@ export class CreateTenantDialog implements OnInit {
   get tenant(): AbstractControl {
     return this.form1.get('tenant');
   }
+  get StorageClusterId(): AbstractControl {
+    return this.form1.get('StorageClusterId')
+  }
   /**
    * Creates new tenant based on the state of the controller.
    */
   createTenant(): void {
     if (!this.form1.valid) return;
-    const tenantSpec= {name: this.tenant.value};
+    const tenantSpec= {name: this.tenant.value,StorageClusterId: this.StorageClusterId.value};
     const tokenPromise = this.csrfToken_.getTokenForAction('tenant');
     tokenPromise.subscribe(csrfToken => {
       return this.http_
@@ -106,7 +107,6 @@ export class CreateTenantDialog implements OnInit {
         )
         .subscribe(
           () => {
-            // this.log_.info('Successfully created namespace:', savedConfig);
             this.dialogRef.close(this.tenant.value);
           },
           error => {
@@ -134,13 +134,5 @@ export class CreateTenantDialog implements OnInit {
    */
   cancel(): void {
     this.dialogRef.close();
-  }
-  showContent1(){
-    document.getElementById("first_tab_content").style.display = "block";
-    document.getElementById("second_tab_content").style.display = "none";
-  }
-  showContent2(){
-    document.getElementById("first_tab_content").style.display = "none";
-    document.getElementById("second_tab_content").style.display = "block";
   }
 }

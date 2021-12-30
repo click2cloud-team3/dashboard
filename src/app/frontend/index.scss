@@ -1067,7 +1067,7 @@ router-outlet::after {
   flex-basis: 100% !important;
 }
 .mat-dialog-container {
-  width: 70% !important;
+  width: 65% !important;
   margin: 0px auto;
 }
 // login page css
@@ -1080,7 +1080,6 @@ router-outlet::after {
   width: 100%;
 }
 .login_container .mat-card {
-  height: 410px;
   min-width: 445px !important;
   margin-left: 135px !important;
   margin-top: 40px !important;
@@ -1504,6 +1503,14 @@ box-shadow: none !important;
 .kd-nav-group .kd-nav-group-item .kd-nav-item-button{
   font-weight: normal !important;
 }
+.note_text{
+    font-size: 12px;
+    padding: 0;
+    margin: 0;
+    color: #f37d7d;
+    margin-bottom: 5px;
+}
+
 // media query
 
 @media screen and (min-width:1023px) and (max-width:1024px){
