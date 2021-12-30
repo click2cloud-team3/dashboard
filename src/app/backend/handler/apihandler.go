@@ -904,7 +904,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetServiceAccountList).
 			Writes(serviceaccount.ServiceAccountList{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("namespaces/{namespace}/serviceaccounts/{name}").
+		apiV1Ws.GET("/serviceaccount/{namespace}/{serviceaccount}").
 			To(apiHandler.handleGetServiceAccountDetail).
 			Writes(serviceaccount.ServiceAccountDetail{}))
 	apiV1Ws.Route(
@@ -913,7 +913,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Reads(serviceaccount.ServiceAccount{}).
 			Writes(serviceaccount.ServiceAccount{}))
 	apiV1Ws.Route(
-		apiV1Ws.DELETE("/namespaces/{namespace}/serviceaccounts/{serviceaccount}").
+		apiV1Ws.DELETE("/namespace/{namespace}/serviceaccount/{serviceaccount}").
 			To(apiHandler.handleDeleteServiceAccount))
 
 	// Service Account with Multi Tenancy
@@ -3069,7 +3069,7 @@ func (apiHandler *APIHandler) handleGetServiceAccountDetail(request *restful.Req
 		return
 	}
 
-	name := request.PathParameter("name")
+	name := request.PathParameter("serviceaccount")
 	namespace := request.PathParameter("namespace")
 	result, err := serviceaccount.GetServiceAccountDetail(k8sClient, namespace, name)
 	if err != nil {
