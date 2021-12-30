@@ -26,16 +26,25 @@ import (
 // NamespaceSpec is a specification of namespace to create.
 type NamespaceSpec struct {
 	// Name of the namespace.
-	Name string `json:"name"`
+	Name   string `json:"name"`
+	Tenant string `json:"tenant"`
 }
 
 // CreateNamespace creates namespace based on given specification.
-func CreateNamespace(spec *NamespaceSpec, client kubernetes.Interface) error {
+func CreateNamespace(spec *NamespaceSpec, tenant string, client kubernetes.Interface) error {
 	log.Printf("Creating namespace %s", spec.Name)
 
+	if tenant == "" {
+		tenant = "default"
+	}
+
+	if spec.Tenant == "" {
+		spec.Tenant = tenant
+	}
 	namespace := &api.Namespace{
 		ObjectMeta: metaV1.ObjectMeta{
-			Name: spec.Name,
+			Name:   spec.Name,
+			Tenant: spec.Tenant,
 		},
 	}
 

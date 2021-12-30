@@ -3228,7 +3228,7 @@ func (apiHandler *APIHandler) handleCreateNamespace(request *restful.Request, re
 		errors.HandleInternalError(response, err)
 		return
 	}
-	if err := ns.CreateNamespace(namespaceSpec, k8sClient); err != nil {
+	if err := ns.CreateNamespace(namespaceSpec, namespaceSpec.Tenant, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}

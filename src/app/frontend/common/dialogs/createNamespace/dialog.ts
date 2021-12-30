@@ -23,6 +23,7 @@ import {CONFIG} from '../../../index.config';
 
 export interface CreateNamespaceDialogMeta {
   namespaces: string[];
+  tenants: string[];
 }
 
 /**
@@ -42,9 +43,17 @@ export class CreateNamespaceDialog implements OnInit {
    */
   namespaceMaxLength = 63;
   /**
+   * Max-length validation rule for tenant
+   */
+  tenantMaxLength = 63;
+  /**
    * Pattern validation rule for namespace
    */
   namespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+  /**
+   * Pattern validation rule for tenant
+   */
+  tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
   constructor(
     public dialogRef: MatDialogRef<CreateNamespaceDialog>,
@@ -64,18 +73,29 @@ export class CreateNamespaceDialog implements OnInit {
           Validators.pattern(this.namespacePattern),
         ]),
       ],
+      tenant: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.tenantMaxLength),
+          Validators.pattern(this.tenantPattern),
+        ]),
+      ],
     });
   }
 
   get namespace(): AbstractControl {
     return this.form1.get('namespace');
   }
+
+  get tenant(): AbstractControl {
+    return this.form1.get('tenant');
+  }
   /**
    * Creates new namespace based on the state of the controller.
    */
   createNamespace(): void {
     if (!this.form1.valid) return;
-    const namespaceSpec = {name: this.namespace.value};
+    const namespaceSpec = {name: this.namespace.value, tenant: this.tenant.value};
     const tokenPromise = this.csrfToken_.getTokenForAction('namespace');
     tokenPromise.subscribe(csrfToken => {
       return this.http_
@@ -108,6 +128,7 @@ export class CreateNamespaceDialog implements OnInit {
   /**
    * Returns true if new namespace name hasn't been filled by the user, i.e, is empty.
    */
+
   isDisabled(): boolean {
     return this.data.namespaces.indexOf(this.namespace.value) >= 0;
   }
