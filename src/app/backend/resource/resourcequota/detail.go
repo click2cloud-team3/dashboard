@@ -1,22 +1,9 @@
-// Copyright 2017 The Kubernetes Authors.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package resourcequota
 
 import (
 	"errors"
 	"github.com/kubernetes/dashboard/src/app/backend/api"
+	"github.com/kubernetes/dashboard/src/app/backend/resource/dataselect"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -45,8 +32,22 @@ type ResourceStatus struct {
 	Hard string `json:"hard,omitempty"`
 }
 
+func toResourceQuota(resourcequota v1.ResourceQuota) ResourceQuota {
+	return ResourceQuota{
+		ObjectMeta: api.NewObjectMeta(resourcequota.ObjectMeta),
+		TypeMeta:   api.NewTypeMeta(api.ResourceKindResourceQuota),
+	}
+}
+
+type ResourceQuota struct {
+	ObjectMeta api.ObjectMeta `json:"objectMeta"`
+	TypeMeta   api.TypeMeta   `json:"typeMeta"`
+}
+
 // ResourceQuotaDetail provides the presentation layer view of Kubernetes Resource Quotas resource.
 type ResourceQuotaDetail struct {
+	ResourceQuota `json:",inline"`
+
 	ObjectMeta api.ObjectMeta `json:"objectMeta"`
 	TypeMeta   api.TypeMeta   `json:"typeMeta"`
 
@@ -55,6 +56,9 @@ type ResourceQuotaDetail struct {
 
 	// StatusList is a set of (resource name, Used, Hard) tuple.
 	StatusList map[v1.ResourceName]ResourceStatus `json:"statusList,omitempty"`
+
+	// List of non-critical errors, that occurred during resource retrieval.
+	Errors []error `json:"errors"`
 }
 
 // ResourceQuotaDetailList
@@ -175,6 +179,74 @@ func GetResourceQuotaLists(client k8sClient.Interface, namespace string, tenant 
 
 }
 
+func GetResourceQuotaDetails(client k8sClient.Interface, namespace string, tenant string, name string) (*ResourceQuotaDetail, error) {
+	if tenant == "" {
+		tenant = "default"
+	}
+	ns, err := client.CoreV1().NamespacesWithMultiTenancy(tenant).Get(namespace, metaV1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	list, err := client.CoreV1().ResourceQuotasWithMultiTenancy(namespace, ns.Tenant).List(metaV1.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+	itemNew := new(ResourceQuotaDetail)
+
+	for _, item := range list.Items {
+		if name == item.GetName() {
+			detail := ToResourceQuotaDetail(&item)
+			itemNew = detail
+		}
+
+	}
+
+	return itemNew, nil
+
+}
+
+type ResourceQuotaCell ResourceQuota
+
+func (self ResourceQuotaCell) GetProperty(name dataselect.PropertyName) dataselect.ComparableValue {
+	switch name {
+	case dataselect.NameProperty:
+		return dataselect.StdComparableString(self.ObjectMeta.Name)
+	case dataselect.CreationTimestampProperty:
+		return dataselect.StdComparableTime(self.ObjectMeta.CreationTimestamp.Time)
+	case dataselect.NamespaceProperty:
+		return dataselect.StdComparableString(self.ObjectMeta.Namespace)
+	default:
+		// if name is not supported then just return a constant dummy value, sort will have no effect.
+		return nil
+	}
+}
+
+func toCells(std []ResourceQuota) []dataselect.DataCell {
+	cells := make([]dataselect.DataCell, len(std))
+	for i := range std {
+		cells[i] = ResourceQuotaCell(std[i])
+	}
+	return cells
+}
+
+func fromCells(cells []dataselect.DataCell) []ResourceQuota {
+	std := make([]ResourceQuota, len(cells))
+	for i := range std {
+		std[i] = ResourceQuota(cells[i].(ResourceQuotaCell))
+	}
+	return std
+}
+
+func GetResourceQuotaDetail(client k8sClient.Interface, namespace string, name string) (*ResourceQuotaDetail, error) {
+	rawObject, err := client.CoreV1().ResourceQuotas(namespace).Get(name, metaV1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	cr := toResourceQuotaDetail(*rawObject)
+	return &cr, nil
+}
+
 func ToResourceQuotaDetail(rawResourceQuota *v1.ResourceQuota) *ResourceQuotaDetail {
 	statusList := make(map[v1.ResourceName]ResourceStatus)
 
@@ -185,10 +257,17 @@ func ToResourceQuotaDetail(rawResourceQuota *v1.ResourceQuota) *ResourceQuotaDet
 			Hard: value.String(),
 		}
 	}
+
 	return &ResourceQuotaDetail{
 		ObjectMeta: api.NewObjectMeta(rawResourceQuota.ObjectMeta),
 		TypeMeta:   api.NewTypeMeta(api.ResourceKindResourceQuota),
 		Scopes:     rawResourceQuota.Spec.Scopes,
 		StatusList: statusList,
+	}
+}
+func toResourceQuotaDetail(cr v1.ResourceQuota) ResourceQuotaDetail {
+	return ResourceQuotaDetail{
+		ResourceQuota: toResourceQuota(cr),
+		Errors:        []error{},
 	}
 }
