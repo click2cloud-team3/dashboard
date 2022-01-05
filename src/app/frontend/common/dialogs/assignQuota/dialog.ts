@@ -123,14 +123,6 @@ get config_maps(): AbstractControl {
         )
         .subscribe(
           () => {
-            this.dialogRef.close(this.quotanames.value);
-            this.dialogRef.close();
-            const configData: AlertDialogConfig = {
-              title: 'Successful',
-              message: "Quota created",
-              confirmLabel: 'CREATED',
-            };
-            this.matDialog_.open(AlertDialog, {data: configData});
           },
           error => {
             this.dialogRef.close();
@@ -144,8 +136,6 @@ get config_maps(): AbstractControl {
         );
     });
   }
-
-
 
   isDisabled(): boolean {
     return this.data.quotanames.indexOf(this.quotanames.value) >= 0;

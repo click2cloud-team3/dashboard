@@ -48,7 +48,6 @@ export class ResourceQuotasListComponent extends ResourceListWithStatuses<Resour
   }
 
   map(resourcequotaList: ResourceQuotaList): ResourceQuota[] {
-    console.log("resourcequotaList",resourcequotaList)
     return resourcequotaList.items;
   }
 

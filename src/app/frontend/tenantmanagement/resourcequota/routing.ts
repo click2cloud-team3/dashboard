@@ -14,9 +14,7 @@
 
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
-
 import {TENANTMANAGEMENT_ROUTE} from '../routing';
-
 import {ResourceQuotasListComponent} from './list/component';
 import {ResourceQuotaDetailComponent} from './detail/component';
 
@@ -42,4 +40,6 @@ const TENANT_DETAIL_ROUTE: Route = {
   imports: [RouterModule.forChild([TENANT_LIST_ROUTE, TENANT_DETAIL_ROUTE])],
   exports: [RouterModule],
 })
-export class ResourceQuotaRoutingModule {}
+export class ResourceQuotaRoutingModule {
+
+}

@@ -1,8 +1,9 @@
 <form [formGroup]="form1">
 
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-      <label><strong>Create a New Quota</strong></label>
+      <h2 mat-dialog-title>Create a New Quota</h2>
     </div>
+
   <div class="col-12 col-sm-12 col-md-12 col-lg-12">
     <p class="note_text">*Use lower case alphanumeric characters or '-'.</p>
   </div>
@@ -14,18 +15,21 @@
           <mat-hint align="end"></mat-hint>
         </mat-form-field>
       </div>
+
       <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Tenant</mat-label>
           <input type="text" matInput formControlName="tenant" required/>
         </mat-form-field>
       </div>
+
       <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Namespace</mat-label>
           <input type="text" matInput formControlName="namespace" required/>
         </mat-form-field>
       </div>
+
       <label><b>Enter Object Count</b></label>
       <div class="row">
       <div class="col-12 col-sm-6 col-md-6 col-lg-6">
@@ -34,42 +38,49 @@
           <input type="text" matInput formControlName="service"/>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
           <mat-label>Memory</mat-label>
           <input type="text" matInput formControlName="memory"/>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
           <mat-label>CPUs</mat-label>
           <input type="text" matInput formControlName="cpu"/>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
           <mat-label>Pods</mat-label>
           <input type="text" matInput formControlName="pod"/>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
           <mat-label>PVC</mat-label>
           <input type="text" matInput formControlName="pvc"/>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
           <mat-label>Config Maps</mat-label>
           <input type="text" matInput formControlName="config_maps"/>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
           <mat-label>Secrets</mat-label>
           <input type="text" matInput formControlName="secrets"/>
         </mat-form-field>
       </div>
+
       <div class="col-12 col-sm-6 col-md-6 col-lg-6">
         <mat-form-field appearance="fill">
           <mat-label>Ephemeral Storage</mat-label>
@@ -77,8 +88,6 @@
         </mat-form-field>
       </div>
 
-      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-      </div>
       <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <mat-dialog-actions align="end">
           <button mat-button mat-dialog-close>Cancel</button>

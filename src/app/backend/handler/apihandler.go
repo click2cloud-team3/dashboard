@@ -595,6 +595,11 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetResourceQuotaList).
 			Writes(v1.ResourceQuotaList{}))
 	apiV1Ws.Route(
+		apiV1Ws.GET("/tenants/{tenant}/resourcequota/{namespace}/{name}"). // TODO
+											To(apiHandler.handleGetResourceQuotaDetails).
+											Reads(v1.ResourceQuotaSpec{}).
+											Writes(v1.ResourceQuotaSpec{}))
+	apiV1Ws.Route(
 		apiV1Ws.DELETE("/tenants/{tenant}/namespace/{namespace}/resourcequota/{name}").
 			To(apiHandler.handleDeleteResourceQuota))
 	apiV1Ws.Route(
@@ -3185,6 +3190,27 @@ func (apiHandler *APIHandler) handleGetResourceQuotaList(request *restful.Reques
 	tenant := request.PathParameter("tenant")
 	namespace := request.PathParameter("namespace")
 	result, err := resourcequota.GetResourceQuotaLists(k8sClient, namespace, tenant)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleGetResourceQuotaDetails(request *restful.Request, response *restful.Response) {
+
+	log.Printf("Get Quota List calling details")
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	tenant := request.PathParameter("tenant")
+	namespace := request.PathParameter("namespace")
+	name := request.PathParameter("name")
+
+	result, err := resourcequota.GetResourceQuotaDetails(k8sClient, namespace, tenant, name)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return

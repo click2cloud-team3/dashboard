@@ -20,7 +20,7 @@
           <div kdLoadingSpinner [isLoading]="isLoading"></div>
           <mat-table [dataSource]="getData()"
                      matSort
-                     [matSortActive]="getColumns()[3]"
+                     [matSortActive]="getColumns()[5]"
                      matSortDisableClear
                      matSortDirection="asc">
             <ng-container [matColumnDef]="getColumns()[0]">
@@ -32,13 +32,16 @@
               </mat-cell>
             </ng-container>
 
+
             <ng-container [matColumnDef]="getColumns()[1]">
               <mat-header-cell *matHeaderCellDef
                                mat-sort-header
                                disableClear="true"
                                i18n>Name</mat-header-cell>
               <mat-cell *matCellDef="let resourcequota">
-                {{resourcequota.objectMeta.name}}
+                <a [routerLink]="getDetailsHref(resourcequota.objectMeta.name)"
+                   queryParamsHandling="preserve">{{resourcequota.objectMeta.name}}</a>
+
               </mat-cell>
             </ng-container>
 
@@ -74,7 +77,6 @@
                 <ng-container *ngIf="!resourcequota.statusList">-</ng-container>
               </mat-cell>
             </ng-container>
-
 
             <ng-container *ngFor="let col of getActionColumns()"
                           [matColumnDef]="col.name">
