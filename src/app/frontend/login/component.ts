@@ -1,16 +1,23 @@
+// Copyright 2017 The Kubernetes Authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Component, NgZone, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {
-  AuthenticationMode,
-  EnabledAuthenticationModes,
-  LoginSkippableResponse,
-  LoginSpec,
-} from '@api/backendapi';
+import {AuthenticationMode, EnabledAuthenticationModes, LoginSkippableResponse, LoginSpec} from '@api/backendapi';
 import {KdError, KdFile, StateError} from '@api/frontendapi';
 import {map} from 'rxjs/operators';
-
 import {AsKdError, K8SError} from '../common/errors/errors';
 import {AuthService} from '../common/services/global/authentication';
 
@@ -25,6 +32,7 @@ enum LoginModes {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
+
 export class LoginComponent implements OnInit {
   loginModes = LoginModes;
   selectedAuthenticationMode = LoginModes.Basic;
@@ -36,6 +44,7 @@ export class LoginComponent implements OnInit {
   private token_: string;
   private username_: string;
   private password_: string;
+  private responseData: any;
 
   constructor(
     private readonly authService_: AuthService,
@@ -46,6 +55,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     this.http_
       .get<EnabledAuthenticationModes>('api/v1/login/modes')
       .subscribe((enabledModes: EnabledAuthenticationModes) => {
@@ -57,7 +67,6 @@ export class LoginComponent implements OnInit {
       .subscribe((loginSkippableResponse: LoginSkippableResponse) => {
         this.isLoginSkippable_ = loginSkippableResponse.skippable;
       });
-
 
     this.route_.paramMap.pipe(map(() => window.history.state)).subscribe((state: StateError) => {
       if (state.error) {
@@ -78,8 +87,8 @@ export class LoginComponent implements OnInit {
     return this.enabledAuthenticationModes_;
   }
 
-  login(): void {
-    this.authService_.login(this.getLoginSpec_()).subscribe(
+  async login() {
+    this.authService_.login(await this.getLoginSpec_()).subscribe(
       (errors: K8SError[]) => {
         if (errors.length > 0) {
           this.errors = errors.map(error => error.toKdError());
@@ -87,7 +96,14 @@ export class LoginComponent implements OnInit {
         }
 
         this.ngZone_.run(() => {
-          this.state_.navigate(['partition']);
+          const usertype = sessionStorage.getItem('type');
+          if(usertype =='cluster-admin') {
+            this.state_.navigate(['partition']);
+          }else if(usertype =='tenant-admin'){
+            this.state_.navigate(['overview']);
+          }else{
+            this.state_.navigate(['workloadoverview']);
+          }
         });
       },
       (err: HttpErrorResponse) => {
@@ -98,7 +114,7 @@ export class LoginComponent implements OnInit {
 
   skip(): void {
     this.authService_.skipLoginPage(true);
-    this.state_.navigate(['partition']);
+    this.state_.navigate(['overview']);
   }
 
   isSkipButtonEnabled(): boolean {
@@ -116,7 +132,9 @@ export class LoginComponent implements OnInit {
       case LoginModes.Basic:
         if ((event.target as HTMLInputElement).id === 'username') {
           this.username_ = (event.target as HTMLInputElement).value;
-        } else {
+          this.setUsername(this.username_);
+        }
+        else {
           this.password_ = (event.target as HTMLInputElement).value;
         }
         break;
@@ -124,23 +142,46 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  public GetCurrentUserInformation(username:any): Promise<any>{
+    return this.http_.get('/api/v1/users/'+username, {responseType: 'json'}).toPromise()
+  }
+
   private onFileLoad_(file: KdFile): void {
     this.kubeconfig_ = file.content;
   }
 
-  private getLoginSpec_(): LoginSpec {
+  private async getLoginSpec_():Promise<LoginSpec>  {
+
     switch (this.selectedAuthenticationMode) {
       case LoginModes.Kubeconfig:
         return {kubeConfig: this.kubeconfig_} as LoginSpec;
       case LoginModes.Token:
+
         return {token: this.token_} as LoginSpec;
       case LoginModes.Basic:
-        return {
-          username: this.username_,
-          password: this.password_,
-        } as LoginSpec;
+        this.responseData = await this.GetCurrentUserInformation(this.username_)
+        this.setTenantname(this.responseData.objectMeta.tenant);//added
+        this.setTenanttype(this.responseData.objectMeta.type);//added
+
+        if (this.responseData.objectMeta.password == this.password_){
+          return this.responseData.objectMeta as LoginSpec;
+        }
+        else{
+          return {} as LoginSpec;
+        }
       default:
         return {} as LoginSpec;
     }
   }
+
+  private setUsername (username_:string) {
+    sessionStorage.setItem('username', username_);
+  }
+  private setTenantname (tenant_:string) {//added
+    sessionStorage.setItem('tenant', tenant_);
+  }
+  private setTenanttype (type_:string) {//added
+    sessionStorage.setItem('type', type_);
+  }
+
 }

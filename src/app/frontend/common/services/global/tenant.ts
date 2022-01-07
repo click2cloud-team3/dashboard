@@ -21,20 +21,19 @@ export class TenantService {
   private isSystemTenant_: boolean;
   private authTenant_: string;
   private currentTenant_ = '';
-
   private readonly tenantRegex = /^([a-z0-9]([-a-z0-9]*[a-z0-9])?)$/; // TODO: need to verify
 
   constructor(private readonly cookies_: CookieService) {
     const tenantCookie = this.cookies_.get(CONFIG.authTenantCookieName) || '';
-    this.setAuthTenant(tenantCookie);
+    const tenant = sessionStorage.getItem('tenant');
+    this.setAuthTenant(tenant);
   }
+
   setCurrent(tenant: string) {
     if (this.isSystemTenant_) {
       this.currentTenant_ = tenant;
     }
-
   }
-
 
   current(): string {
     if (this.isSystemTenant_) {

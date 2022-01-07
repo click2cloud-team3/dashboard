@@ -45,6 +45,8 @@ export enum Resource {
   resourcequota = 'resourcequota',
   role = 'role',
   tenantpartition = 'tenantpartition',
+  serviceaccount= 'serviceaccount',
+  imagePullSecret= 'imagePullSecret'
 }
 
 export enum Utility {

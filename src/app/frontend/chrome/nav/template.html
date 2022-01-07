@@ -11,7 +11,7 @@
     </div>
 
     <mat-accordion>
-      <mat-expansion-panel [expanded]="true" *ngIf="isCurrentSystem">
+      <mat-expansion-panel [expanded]="true" *ngIf=showCluster>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <kd-nav-item class="kd-nav-group-item" state="/cluster" i18n>
@@ -36,7 +36,7 @@
     </mat-accordion>
 
     <mat-accordion>
-      <mat-expansion-panel [expanded]="true" *ngIf="isSystem">
+      <mat-expansion-panel [expanded]="true" *ngIf=showTenant i18n>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <kd-nav-item class="kd-nav-group-item" state="/tenantmanagement" i18n>
@@ -64,11 +64,28 @@
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Quota
           </kd-nav-item>
-
         </div>
+        <mat-divider></mat-divider>
       </mat-expansion-panel>
     </mat-accordion>
-    <mat-divider></mat-divider>
+
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true" *ngIf="showUser">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <kd-nav-item class="kd-nav-group-item" state="/cluster" i18n>
+              <img class="menu_icon" src="assets/images/tenant_management_icon.svg" alt="">
+              User Management
+            </kd-nav-item>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <kd-nav-item class="kd-nav-item" state="/tenantuser" i18n>
+          <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+          Users
+        </kd-nav-item>
+        <mat-divider></mat-divider>
+      </mat-expansion-panel>
+    </mat-accordion>
 
     <mat-accordion>
       <mat-expansion-panel [expanded]="true" *ngIf="isSystem">
@@ -109,6 +126,10 @@
           <kd-nav-item class="kd-nav-item" state="/namespace" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
             Namespaces
+          </kd-nav-item>
+          <kd-nav-item class="kd-nav-item" state="/serviceaccount" i18n>
+            <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+            Service Accounts
           </kd-nav-item>
           <kd-nav-item class="kd-nav-item" state="/cronjob" i18n>
             <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
@@ -152,7 +173,7 @@
       <mat-expansion-panel [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <kd-nav-item class="kd-nav-group-item" i18n>
+            <kd-nav-item class="kd-nav-group-item" i18n >
               <img class="menu_icon" src="assets/images/discovery_load_balancing_icon.svg" alt="">
               Virtual Machine
             </kd-nav-item>
