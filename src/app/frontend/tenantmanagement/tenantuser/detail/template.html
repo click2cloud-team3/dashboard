@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <kd-object-meta [initialized]="isInitialized"
-                [objectMeta]="tenant?.objectMeta"></kd-object-meta>
+                [objectMeta]="user?.objectMeta"></kd-object-meta>
 
 <kd-card [initialized]="isInitialized">
   <div title
@@ -23,10 +23,10 @@ limitations under the License.
   <div content
        *ngIf="isInitialized"
        fxLayout="row wrap">
-    <kd-property *ngIf="tenant?.phase">
+    <kd-property *ngIf="user?.phase">
       <div key
            i18n>Status</div>
-      <div value>{{tenant?.phase}}</div>
+      <div value>{{user?.phase}}</div>
     </kd-property>
   </div>
 </kd-card>

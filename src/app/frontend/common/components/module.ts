@@ -90,11 +90,10 @@ import {TextInputComponent} from './textinput/component';
 import {UploadFileComponent} from './uploadfile/component';
 import {WorkloadStatusComponent} from './workloadstatus/component';
 import {ZeroStateComponent} from './zerostate/component';
-import {ServiceAccountListComponent} from "./resourcelist/serviceaccount/component";
 //module added
 import {TenantSelectorComponent} from './tenant/component';
 import {TenantListComponent} from './resourcelist/tenantlist/component';
-import {UserListComponent} from "./resourcelist/user/component";
+import {TenantUserListComponent} from "./resourcelist/user/component";
 import {ResourceQuotasListComponent} from "./resourcelist/resourcequotalist/component";
 import {PartitionListComponent} from "./resourcelist/partitionlist/component";
 import {TenantPartitionListComponent} from "./resourcelist/tenantpartitionlist/component";
@@ -200,10 +199,7 @@ const components = [
   TenantSelectorComponent,
   TenantListComponent,
 
-  UserListComponent,
-  QuotaListComponent,
-  ServiceAccountListComponent
-
+  TenantUserListComponent,
 ];
 
 @NgModule({

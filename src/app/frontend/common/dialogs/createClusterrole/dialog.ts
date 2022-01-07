@@ -120,7 +120,6 @@ export class CreateClusterroleDialog implements OnInit {
     this.verb = this.verbs.value.split(',')
     const clusterroleSpec= {name: this.clusterrole.value,apiGroups: this.apigroup,verbs: this.verb,resources: this.resource};
     const tokenPromise = this.csrfToken_.getTokenForAction('clusterrole');
-    console.log(clusterroleSpec)
     tokenPromise.subscribe(csrfToken => {
       return this.http_
         .post<{valid: boolean}>(

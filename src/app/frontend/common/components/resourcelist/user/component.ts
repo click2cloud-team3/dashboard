@@ -14,7 +14,7 @@
 
 import {HttpParams} from '@angular/common/http';
 import {Component, Input} from '@angular/core';
-import {Tenant, TenantList} from '@api/backendapi';
+import {User, UserList} from '@api/backendapi';
 import {Observable} from 'rxjs/Observable';
 
 import {ResourceListWithStatuses} from '../../../resources/list';
@@ -23,20 +23,29 @@ import {ResourceService} from '../../../services/resource/resource';
 import {NotificationsService} from '../../../services/global/notifications';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 import {MenuComponent} from '../../list/column/menu/component';
+import {UserApi} from "../../../../../frontend/common/services/global/userapi"
+import {VerberService} from "../../../../../frontend/common/services/global/verber"
 
 @Component({
-  selector: 'kd-users-list',
+  selector: 'kd-user-list',
   templateUrl: './template.html',
 })
-export class UserListComponent extends ResourceListWithStatuses<TenantList, Tenant> {
-  @Input() endpoint = EndpointManager.resource(Resource.tenant).list();
+
+export class TenantUserListComponent extends ResourceListWithStatuses<UserList, User> {
+  @Input() endpoint = EndpointManager.resource(Resource.user).list();
+
+  displayName:any;
+  typeMeta:any;
+  objectMeta:any;
 
   constructor(
-    private readonly tenant_: ResourceService<TenantList>,
+    private readonly verber_: VerberService,
+    private readonly user_: ResourceService<UserList>,
+    private userAPI_:UserApi,
     notifications: NotificationsService,
   ) {
-    super('tenant', notifications);
-    this.id = ListIdentifier.tenant;
+    super('user', notifications);
+    this.id = ListIdentifier.user;
     this.groupId = ListGroupIdentifier.cluster;
 
     // Register status icon handlers
@@ -47,27 +56,37 @@ export class UserListComponent extends ResourceListWithStatuses<TenantList, Tena
     this.registerActionColumn<MenuComponent>('menu', MenuComponent);
   }
 
-  getResourceObservable(params?: HttpParams): Observable<TenantList> {
-    return this.tenant_.get(this.endpoint, undefined, params);
+  getResourceObservable(params?: HttpParams): Observable<UserList> {
+    return this.user_.get(this.endpoint, undefined, params);
   }
 
-  map(tenantList: TenantList): Tenant[] {
-    return tenantList.tenants;
+  map(userList: UserList): User[] {
+    return userList.users;
   }
 
-  isInErrorState(resource: Tenant): boolean {
+  isInErrorState(resource: User): boolean {
     return resource.phase === 'Terminating';
   }
 
-  isInSuccessState(resource: Tenant): boolean {
+  isInSuccessState(resource: User): boolean {
     return resource.phase === 'Active';
   }
 
   getDisplayColumns(): string[] {
-    return ['statusicon', 'name', 'phase', 'age'];
+    return ['statusicon', 'username', 'phase', 'type'];
   }
 
   getDisplayColumns2(): string[] {
-    return ['statusicon', 'name', 'phase', 'age'];
+    return ['statusicon', 'username', 'phase', 'type'];
   }
+
+  //added the code
+  onClick(): void {
+    this.verber_.showUserCreateDialog(this.displayName, this.typeMeta, this.objectMeta);  //changes needed
+  }
+
+  deleteUser(userID:string): void {
+    this.userAPI_.deleteUser(userID).subscribe();
+  }
+
 }

@@ -1,0 +1,47 @@
+<form [formGroup]="form1">
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+      <h2 mat-dialog-title>Create a User</h2>
+    </div>
+  </div>
+
+  <div class="tab_content first_tab_content" id="first_tab_content">
+    <div class="content_body">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <mat-form-field appearance="fill">
+            <mat-label>Type of user</mat-label>
+            <mat-select  formControlName="usertype">
+              <mat-option value="cluster-admin">Cluster Admin</mat-option>
+              <mat-option value="tenant-admin">Tenant Admin</mat-option>
+              <mat-option value="tenant-user">Tenant User</mat-option>
+            </mat-select>
+            <input matInput >
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <mat-form-field appearance="fill">
+            <mat-label>Username*</mat-label>
+            <input matInput formControlName="username">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <mat-form-field appearance="fill">
+            <mat-label>Password*</mat-label>
+            <input matInput type="password" formControlName="password">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="content_footer">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button mat-button [mat-dialog-close]="true" [disabled]="isCreateDisabled()" type="submit" (click)="createTenantUser()">Create</button>
+          </mat-dialog-actions>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

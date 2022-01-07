@@ -37,15 +37,35 @@ limitations under the License.
   </button>
   <button mat-menu-item
           *ngIf="isLoggedIn()"
+          i18n
+          (click)="settings()">
+    <span i18n>Settings</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <button mat-menu-item
+          *ngIf="isLoggedIn()"
+          i18n
+          (click)="about()">
+    <span i18n>About</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <button mat-menu-item
+          *ngIf="isLoggedIn()"
           (click)="logout()"
-          i18n>Sign out
+          i18n>
+    <span i18n>Sign out</span>
   </button>
 </mat-menu>
 
 <button mat-icon-button
         color="primary"
         [matMenuTriggerFor]="actions"
-        (click)="$event.stopPropagation()">
+        (click)="$event.stopPropagation()"
+        matTooltip="Account Setting">
   <mat-icon class="kd-user-panel-icon kd-primary-toolbar-icon">account_circle</mat-icon>
   <svg class="kd-cross-style"
        *ngIf="isAuthSkipped()"

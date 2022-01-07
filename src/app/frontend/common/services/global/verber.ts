@@ -25,14 +25,16 @@ import {TriggerResourceDialog} from '../../dialogs/triggerresource/dialog';
 import {RawResource} from '../../resources/rawresource';
 
 // tenat dialog
-import { CreateTenantDialog } from '../../dialogs/createTenant/dialog';
+import { CreateTenantDialog } from './../../dialogs/createTenant/dialog';
+// user dialog
+import {CreateUserDialog} from './../../dialogs/createUser/dialog';
 // namespace dialog
 import {CreateNamespaceDialog} from '../../dialogs/createNamespace/dialog'; // namespace dialog
 // role dialog
 import {CreateRoleDialog} from '../../dialogs/createRole/dialog'; // role dialog
 // clusterrole dialog
 import {CreateClusterroleDialog} from '../../dialogs/createClusterrole/dialog';
-import { assignQuotaDialog } from '../../dialogs/assignQuota/dialog';
+import { assignQuotaDialog } from './../../dialogs/assignQuota/dialog';
 import {ResourceMeta} from './actionbar';
 import {TenantService} from './tenant';
 import {CreateNodeDialog} from "../../dialogs/createNode/dialog";
@@ -48,20 +50,12 @@ export class VerberService {
   onTrigger = new EventEmitter<boolean>();
   onCreateQuota = new EventEmitter<boolean>();
 
-  //variable for success msg
-  public success_tenant: boolean = false;
-  public success_role: boolean = false;
-  public success_clusterrole: boolean = false;
-  public success_quota: boolean = false;
-  public success_namespace: boolean = false;
-  public success_result: any;
-
   constructor(
     private readonly dialog_: MatDialog,
     private readonly http_: HttpClient,
     private tenant_: TenantService,
-
   ) {}
+
 
   // create tenant
   showTenantCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
@@ -71,20 +65,40 @@ export class VerberService {
       .afterClosed()
       .subscribe(result => {
         if (result) {
-          this.success_tenant = true;
-          this.success_result = result
-          setTimeout(()=>{
-            this.success_tenant = false;
-          }, 6000);
           const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
           this.http_
             .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
             .subscribe(() => this.onCreateTenant.emit(true), this.handleErrorResponse_.bind(this));
         }
-        else{
-          this.success_result = result
-          setTimeout(()=>{
-          }, 6000);
+      });
+  }
+    // create user
+    showUserCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
+      const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
+      this.dialog_
+        .open(CreateUserDialog, dialogConfig)
+        .afterClosed()
+        .subscribe(result => {
+          if (result) {
+            const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
+            this.http_
+              .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
+              .subscribe(() => this.onCreateTenant.emit(true), this.handleErrorResponse_.bind(this));
+          }
+        });
+    }
+  //added quota dialog
+  showQuotaCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
+    const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
+    this.dialog_
+      .open(assignQuotaDialog, dialogConfig)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
+          this.http_
+            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
+            .subscribe(() => this.onCreateTenant.emit(true), this.handleErrorResponse_.bind(this));
         }
       });
   }
@@ -97,11 +111,6 @@ export class VerberService {
       .afterClosed()
       .subscribe(result => {
         if (result) {
-          this.success_namespace = true;
-          this.success_result = result
-          setTimeout(()=>{
-            this.success_namespace = false;
-          }, 6000);
           const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
           this.http_
             .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
@@ -119,11 +128,6 @@ export class VerberService {
       .afterClosed()
       .subscribe(result => {
         if (result) {
-          this.success_quota = true;
-          this.success_result = result
-          setTimeout(()=>{
-            this.success_quota = false;
-          }, 6000);
           const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
           this.http_
             .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
@@ -131,7 +135,6 @@ export class VerberService {
         }
       });
   }
-
   // create Role
   showRoleCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
     const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
@@ -140,11 +143,6 @@ export class VerberService {
       .afterClosed()
       .subscribe(result => {
         if (result) {
-          this.success_role = true;
-          this.success_result = result
-          setTimeout(()=>{
-            this.success_role = false;
-          }, 6000);
           const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
           this.http_
             .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
@@ -152,6 +150,7 @@ export class VerberService {
         }
       });
   }
+
   // create Clusterrole
   showClusterroleCreateDialog(displayName: string, typeMeta: TypeMeta, objectMeta: ObjectMeta): void {
     const dialogConfig = this.getDialogConfig_(displayName, typeMeta, objectMeta);
@@ -160,11 +159,6 @@ export class VerberService {
       .afterClosed()
       .subscribe(result => {
         if (result) {
-          this.success_clusterrole = true;
-          this.success_result = result
-          setTimeout(()=>{
-            this.success_clusterrole = false;
-          }, 6000);
           const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
           this.http_
             .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})

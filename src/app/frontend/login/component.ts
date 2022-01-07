@@ -96,14 +96,7 @@ export class LoginComponent implements OnInit {
         }
 
         this.ngZone_.run(() => {
-          const usertype = sessionStorage.getItem('type');
-          if(usertype =='cluster-admin') {
-            this.state_.navigate(['partition']);
-          }else if(usertype =='tenant-admin'){
-            this.state_.navigate(['overview']);
-          }else{
-            this.state_.navigate(['workloadoverview']);
-          }
+          this.state_.navigate(['overview']);
         });
       },
       (err: HttpErrorResponse) => {
@@ -133,8 +126,7 @@ export class LoginComponent implements OnInit {
         if ((event.target as HTMLInputElement).id === 'username') {
           this.username_ = (event.target as HTMLInputElement).value;
           this.setUsername(this.username_);
-        }
-        else {
+        } else {
           this.password_ = (event.target as HTMLInputElement).value;
         }
         break;
@@ -156,13 +148,9 @@ export class LoginComponent implements OnInit {
       case LoginModes.Kubeconfig:
         return {kubeConfig: this.kubeconfig_} as LoginSpec;
       case LoginModes.Token:
-
         return {token: this.token_} as LoginSpec;
       case LoginModes.Basic:
         this.responseData = await this.GetCurrentUserInformation(this.username_)
-        this.setTenantname(this.responseData.objectMeta.tenant);//added
-        this.setTenanttype(this.responseData.objectMeta.type);//added
-
         if (this.responseData.objectMeta.password == this.password_){
           return this.responseData.objectMeta as LoginSpec;
         }
@@ -176,12 +164,6 @@ export class LoginComponent implements OnInit {
 
   private setUsername (username_:string) {
     sessionStorage.setItem('username', username_);
-  }
-  private setTenantname (tenant_:string) {//added
-    sessionStorage.setItem('tenant', tenant_);
-  }
-  private setTenanttype (type_:string) {//added
-    sessionStorage.setItem('type', type_);
   }
 
 }

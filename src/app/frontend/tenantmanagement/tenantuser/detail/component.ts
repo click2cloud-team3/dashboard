@@ -14,46 +14,49 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TenantDetail} from '@api/backendapi';
-
+import {UserDetail} from '@api/backendapi';
 import {ActionbarService, ResourceMeta} from '../../../common/services/global/actionbar';
 import {NotificationsService} from '../../../common/services/global/notifications';
 import {ResourceService} from 'common/services/resource/resource';
 import {EndpointManager, Resource} from 'common/services/resource/endpoint';
-import {Subscription} from 'rxjs/Subscription';
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
-  selector: 'kd-tenant-detail',
+  selector: 'kd-user-detail',
   templateUrl: './template.html',
 })
+
 export class TenantUsersDetailComponent implements OnInit, OnDestroy {
-  private tenantSubscription_: Subscription;
-  private readonly endpoint_ = EndpointManager.resource(Resource.tenant);
-  tenant: TenantDetail;
+  private readonly endpoint_ = EndpointManager.resource(Resource.user);
+  private readonly unsubscribe_ = new Subject<void>();
+
+  user: UserDetail;
   isInitialized = false;
 
   constructor(
-    private readonly tenant_: ResourceService<TenantDetail>,
+    private readonly user_: ResourceService<UserDetail>,
     private readonly actionbar_: ActionbarService,
-    private readonly activatedRoute_: ActivatedRoute,
-    private readonly notifications_: NotificationsService,
+    private readonly route_: ActivatedRoute,
+    private readonly notifications_: NotificationsService
   ) {}
 
   ngOnInit(): void {
-    const resourceName = this.activatedRoute_.snapshot.params.resourceName;
-
-    this.tenantSubscription_ = this.tenant_
+    const resourceName = this.route_.snapshot.params.resourceName;
+    this.user_
       .get(this.endpoint_.detail(), resourceName)
-      .subscribe((d: TenantDetail) => {
-        this.tenant = d;
+      .pipe(takeUntil(this.unsubscribe_))
+      .subscribe((d: UserDetail) => {
+        this.user = d;
         this.notifications_.pushErrors(d.errors);
-        this.actionbar_.onInit.emit(new ResourceMeta('Tenant', d.objectMeta, d.typeMeta));
+        this.actionbar_.onInit.emit(new ResourceMeta('User', d.objectMeta, d.typeMeta));
         this.isInitialized = true;
       });
   }
 
   ngOnDestroy(): void {
-    this.tenantSubscription_.unsubscribe();
+    this.unsubscribe_.next();
+    this.unsubscribe_.complete();
     this.actionbar_.onDetailsLeave.emit();
   }
 }

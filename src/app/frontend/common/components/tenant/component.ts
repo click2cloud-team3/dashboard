@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import {Router, ActivatedRoute, NavigationEnd} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {takeUntil, startWith, switchMap} from 'rxjs/operators';
 import {MatSelect} from '@angular/material';
@@ -45,7 +45,6 @@ export class TenantSelectorComponent implements OnInit {
 
   @ViewChild(MatSelect, {static: true}) private readonly select_: MatSelect;
   @ViewChild('tenantInput', {static: true}) private readonly tenantInputEl_: ElementRef;
-  private responseData: any;
 
   constructor(
     private readonly router_: Router,
@@ -174,13 +173,13 @@ export class TenantSelectorComponent implements OnInit {
   }
 
   getTenant_(): string {
-    const tenantname = sessionStorage.getItem('tenant');
+    const username = sessionStorage.getItem('username');
     // let tenantType = 'cluster-admin'
-    if ( tenantname === 'admin'){
+    if ( username === 'admin'){
       return 'system'
     }
     else{
-      return tenantname
+      return username
     }
   }
 
