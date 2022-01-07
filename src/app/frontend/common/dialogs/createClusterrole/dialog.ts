@@ -39,8 +39,18 @@ export class CreateClusterroleDialog implements OnInit {
 
   private readonly config_ = CONFIG;
 
+  //validations
   ClusterroleMaxLength = 63;
   ClusterrolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+
+  ApigroupsMaxLength = 10;
+  ApigroupsPattern:  RegExp = new RegExp('^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
+
+  ResourceMaxLength = 10;
+  ResourcePattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
+
+  VerbsMaxLength = 10;
+  VerbsPattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
   name: string
   apigroup: string[]
@@ -68,19 +78,22 @@ export class CreateClusterroleDialog implements OnInit {
       apigroups: [
         '',
         Validators.compose([
-          Validators.maxLength(this.ClusterroleMaxLength),
+          Validators.maxLength(this.ApigroupsMaxLength),
+          Validators.pattern(this.ApigroupsPattern),
         ]),
       ],
       resources: [
         '',
         Validators.compose([
-          Validators.maxLength(this.ClusterroleMaxLength),
+          Validators.maxLength(this.ResourceMaxLength),
+          Validators.pattern(this.ResourcePattern),
         ]),
       ],
       verbs: [
         '',
         Validators.compose([
-          Validators.maxLength(this.ClusterroleMaxLength),
+          Validators.maxLength(this.VerbsMaxLength),
+          Validators.pattern(this.VerbsPattern),
         ]),
       ],
     });
@@ -98,6 +111,7 @@ export class CreateClusterroleDialog implements OnInit {
   get resources(): AbstractControl {
     return this.form1.get('resources');
   }
+  
   // function for creating new Clusterrole
   createclusterrole(): void {
     if (!this.form1.valid) return;
@@ -119,13 +133,6 @@ export class CreateClusterroleDialog implements OnInit {
         .subscribe(
           () => {
             this.dialogRef.close(this.clusterrole.value);
-            this.dialogRef.close();
-            const configData: AlertDialogConfig = {
-              title: 'Successfull',
-              message: "Clusterrole created",
-              confirmLabel: 'CREATED',
-            };
-            this.matDialog_.open(AlertDialog, {data: configData});
           },
           error => {
             this.dialogRef.close();

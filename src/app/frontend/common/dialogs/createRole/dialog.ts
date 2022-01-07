@@ -21,6 +21,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import {CONFIG} from "../../../index.config";
 import {CsrfTokenService} from "../../services/global/csrftoken";
 import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
+import {validateProtocol} from "../../../create/from/form/validator/validprotocol.validator";
 
 export interface CreateRoleDialogMeta {
   name: string;
@@ -37,8 +38,23 @@ export interface CreateRoleDialogMeta {
 export class CreateRoleDialog implements OnInit {
   form1: FormGroup;
   private readonly config_ = CONFIG;
-  RoleMaxLength = 63;
+
+  //Validation
+  RoleMaxLength = 10;
   RolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+
+  NamespaceMaxLength = 10;
+  NamespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+
+  ApigroupsMaxLength = 20;
+  ApigroupsPattern: RegExp = new RegExp('^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
+
+  ResourceMaxLength = 10;
+  ResourcePattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
+
+  VerbsMaxLength = 10;
+  VerbsPattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
+
   apigroups1: string[]
   resources1: string[]
   verbs1 : string[]
@@ -63,25 +79,29 @@ export class CreateRoleDialog implements OnInit {
       apigroups: [
         '',
         Validators.compose([
-          Validators.maxLength(this.RoleMaxLength),
+          Validators.maxLength(this.ApigroupsMaxLength),
+          Validators.pattern(this.ApigroupsPattern),
         ]),
       ],
       namespace: [
         '',
         Validators.compose([
-          Validators.maxLength(this.RoleMaxLength),
+          Validators.maxLength(this.NamespaceMaxLength),
+          Validators.pattern(this.NamespacePattern),
         ]),
       ],
       resources: [
         '',
         Validators.compose([
-          Validators.maxLength(this.RoleMaxLength),
+          Validators.maxLength(this.ResourceMaxLength),
+          Validators.pattern(this.ResourcePattern),
         ]),
       ],
       verbs: [
         '',
         Validators.compose([
-          Validators.maxLength(this.RoleMaxLength),
+          Validators.maxLength(this.VerbsMaxLength),
+          Validators.pattern(this.VerbsPattern),
         ]),
       ],
     });

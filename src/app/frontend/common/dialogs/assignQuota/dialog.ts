@@ -10,7 +10,7 @@ import {CsrfTokenService} from "../../services/global/csrftoken";
 import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
 
 export interface assignQuotaDialogMeta {
-  quotanames: string[];
+  quotaname: string[];
   tenants: string[];
   namespaces: string[];
   service: string[];
@@ -31,6 +31,16 @@ export interface assignQuotaDialogMeta {
 export class assignQuotaDialog implements OnInit {
   form1: FormGroup;
 
+  //Validation
+  QuotaMaxLength = 10;
+  QuotaPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+
+  TenatMaxLength = 10;
+  TenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+
+  NamespaceMaxLength = 10;
+  NamespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+
   private readonly config_ = CONFIG;
   constructor(
     public dialogRef: MatDialogRef<assignQuotaDialog>,
@@ -43,9 +53,27 @@ export class assignQuotaDialog implements OnInit {
 
   ngOnInit(): void {
     this.form1 = this.fb_.group({
-      quotaname: '',
-      tenant: '',
-      namespace: '',
+      quotaname: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.QuotaMaxLength),
+          Validators.pattern(this.QuotaPattern),
+        ]),
+      ],
+      tenant: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.TenatMaxLength),
+          Validators.pattern(this.TenantPattern),
+        ]),
+      ],
+      namespace: [
+        '',
+        Validators.compose([
+          Validators.maxLength(this.NamespaceMaxLength),
+          Validators.pattern(this.NamespacePattern),
+        ]),
+      ],
       service: '',
       memory: '',
       cpu: '',
@@ -54,11 +82,10 @@ export class assignQuotaDialog implements OnInit {
       config_maps: '',
       secrets: '',
       ephemeral_storage: '',
-
     });
   }
 
-  get quotanames(): AbstractControl {
+  get quotaname(): AbstractControl {
     return this.form1.get('quotaname');
   }
   get tenants(): AbstractControl {
@@ -93,12 +120,12 @@ get config_maps(): AbstractControl {
     return this.form1.get('ephemeral_storage');
   }
 
-  // function for creating new Clusterrole
+  // function for creating new quota
   createQuota(): void {
    // alert(this.storage.value)
     if (!this.form1.valid) return;
     const quotaSpec= {
-      name: this.quotanames.value ,
+      name: this.quotaname.value ,
       tenant: this.tenants.value,
       name_space: this.namespaces.value,
       cpu: this.cpus.value,
@@ -108,7 +135,6 @@ get config_maps(): AbstractControl {
       pvc: this.pvc.value,
       config_maps: this.config_maps.value,
       secrets: this.secrets.value,
-      // storage: this.storage.value,
       ephemeral_storage: this.ephemeral_storage.value,
     };
     const tokenPromise = this.csrfToken_.getTokenForAction('resourcequota');
@@ -123,6 +149,7 @@ get config_maps(): AbstractControl {
         )
         .subscribe(
           () => {
+            this.dialogRef.close(this.quotaname.value);
           },
           error => {
             this.dialogRef.close();
@@ -138,7 +165,7 @@ get config_maps(): AbstractControl {
   }
 
   isDisabled(): boolean {
-    return this.data.quotanames.indexOf(this.quotanames.value) >= 0;
+    return this.data.quotaname.indexOf(this.quotaname.value) >= 0;
   }
   cancel(): void {
     this.dialogRef.close();

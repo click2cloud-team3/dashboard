@@ -24,6 +24,13 @@ limitations under the License.
       </div>
     </div>
   </div>
+  <div class="col-12 col-sm-12 col-md-12 col-lg-12" *ngIf="verber_.success_tenant">
+    <div class="alert alert-success alert-dismissible fade show custom_alert" role="alert">
+      <strong>{{verber_.success_result}} Tenant</strong> Successfully Created.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
       <kd-card role="table" [hidden]="isHidden()">
@@ -48,7 +55,6 @@ limitations under the License.
           </mat-icon>
         </mat-cell>
       </ng-container>
-
       <ng-container [matColumnDef]="getColumns()[1]">
         <mat-header-cell *matHeaderCellDef
                          mat-sort-header

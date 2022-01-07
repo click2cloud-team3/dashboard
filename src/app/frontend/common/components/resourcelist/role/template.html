@@ -22,6 +22,12 @@ limitations under the License.
       Add Role</button>
   </div>
 </div>
+<div class="col-12 col-sm-12 col-md-12 col-lg-12" *ngIf="verber_.success_role">
+  <div class="alert alert-success alert-dismissible fade show custom_alert" role="alert">
+    <strong>{{verber_.success_result}} Role</strong> Successfully Created.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+</div>
 
 <kd-card role="table"
          [hidden]="isHidden()">
