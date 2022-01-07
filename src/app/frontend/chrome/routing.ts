@@ -76,6 +76,10 @@ const routes: Routes = [
         path: 'overview',
         loadChildren: 'overview/module#OverviewModule',
       },
+      {
+        path: 'usermanagement',
+        loadChildren: 'usermanagement/module#UserManagementModule',
+      },
 
       // Workloads group
       {
@@ -86,6 +90,10 @@ const routes: Routes = [
         path: 'namespace',
         loadChildren: 'resource/workloads/namespace/module#NamespaceModule',
 
+      },
+      {
+        path: 'workloadoverview',
+        loadChildren: 'resource/workloads/workloadoverview/module#WorkloadOverviewModule',
       },
       {
         path: 'cronjob',
