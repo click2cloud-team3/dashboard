@@ -3,48 +3,71 @@
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
       <h2 mat-dialog-title>Create a new Role</h2>
     </div>
-    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-      <p class="note_text">*Use lower case alphanumeric characters or '-'.</p>
-    </div>
 
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Enter Role</mat-label>
-          <input matInput type="text"   formControlName="role" required />
+          <input matInput type="text"   formControlName="role" required autocomplete="off"/>
           <mat-hint align="end"></mat-hint>
         </mat-form-field>
+      <div class="error_sec" *ngIf="role.errors && (role.dirty || role.touched)">
+        <span class="red" *ngIf="role.errors.required">Name is required.</span>
+        <span class="red" *ngIf="role.hasError('pattern')">Name must be in small alphanumeric characters or '-'.</span>
+        <span class="red" *ngIf="role.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+      </div>
       </div>
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Enter Namespace</mat-label>
-          <input matInput type="text"   formControlName="namespace" required />
+          <input matInput type="text"   formControlName="namespace" required autocomplete="off"/>
           <mat-hint align="end"></mat-hint>
         </mat-form-field>
+      <div class="error_sec" *ngIf="namespace.errors && (namespace.dirty || namespace.touched)">
+        <span class="red" *ngIf="namespace.errors.required">Name is required.</span>
+        <span class="red" *ngIf="namespace.hasError('pattern')">Name must be in small alphanumeric characters or '-'.</span>
+        <span class="red" *ngIf="namespace.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+      </div>
       </div>
 
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Apigroups</mat-label>
-          <input matInput formControlName="apigroups" required/>
+          <input matInput formControlName="apigroups" required autocomplete="off"/>
         </mat-form-field>
+      <div class="error_sec" *ngIf="apigroups.errors && (apigroups.dirty || apigroups.touched)">
+        <span class="red" *ngIf="apigroups.errors.required">Name is required.</span>
+        <span class="red" *ngIf="apigroups.hasError('pattern')">Name must be in small alphanumeric characters or '-' or ' * '.</span>
+        <span class="red" *ngIf="apigroups.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+      </div>
       </div>
 
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Resources</mat-label>
-          <input matInput formControlName="resources" required/>
+          <input matInput formControlName="resources" required autocomplete="off"/>
         </mat-form-field>
+      <div class="error_sec" *ngIf="resources.errors && (resources.dirty || resources.touched)">
+        <span class="red" *ngIf="resources.errors.required">Name is required.</span>
+        <span class="red" *ngIf="resources.hasError('pattern')">Name must be in small alphanumeric characters or '-' or ' * '.</span>
+        <span class="red" *ngIf="resources.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+      </div>
       </div>
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-form-field appearance="fill">
           <mat-label>Verbs</mat-label>
-          <input matInput formControlName="verbs" required/>
+          <input matInput formControlName="verbs" required autocomplete="off"/>
         </mat-form-field>
+      <div class="error_sec" *ngIf="verbs.errors && (verbs.dirty || verbs.touched)">
+        <span class="red" *ngIf="verbs.errors.required">Name is required.</span>
+        <span class="red" *ngIf="verbs.hasError('pattern')">Name must be in small alphanumeric characters or '-' or ' * '.</span>
+        <span class="red" *ngIf="verbs.hasError('maxlength')">Name should not be greater than 10 digits.</span>
       </div>
+      </div>
+
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
         <mat-dialog-actions align="end">
           <button mat-button mat-dialog-close>Cancel</button>
-          <button mat-button [mat-dialog-close]="true" type="submit" (click)="createrole()">Create</button>
+          <button mat-button [mat-dialog-close]="true" type="submit" (click)="createrole()" [disabled]="!form1.valid">Create</button>
         </mat-dialog-actions>
       </div>
   </div>

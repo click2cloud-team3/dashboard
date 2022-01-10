@@ -12,48 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component,Input, OnInit,Inject} from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-export interface Elements {
+import {Component, OnInit} from '@angular/core';
 
-  User: string;
-  Tenant: string;
-  Phase: string;
-  Age: string;
-}
-const ELEMENT_DATA: Elements[]=[];
 @Component({
-  selector: 'kd-tenantusers-list',
-  templateUrl: './template.html',
+  selector: 'kd-user-list-view',
+  template: '<kd-user-list></kd-user-list>',
 })
-export class TenantUsersListComponent implements OnInit{
-  tempData:any[]=[];
-  displayedColumns = ['User','Tenant','Phase','Age'];
 
-  public userArray:any[] = [];
-  dataSource:any;
-  constructor(private http: HttpClient){
-  }
-  ngOnInit(): void {
-    this.http.get('../assets/auth.csv', {responseType: 'text'})
-      .subscribe(
-        data => {
-          let csvToRowArray = data.split("\n");
-          for (let index = 1; index < csvToRowArray.length - 1; index++) {
-            let row = csvToRowArray[index].split(",");
-            this.userArray.push(row);
-          }
-          for(var i=0;i<this.userArray.length;i++)
-          {
-            ELEMENT_DATA.push({User:this.userArray[i][1],Tenant:this.userArray[i][4],Phase:this.userArray[i][5],Age:this.userArray[i][6]});
-          }
-          this.dataSource=ELEMENT_DATA
-          console.log(ELEMENT_DATA)
-        },
-        error => {
-          console.log(error);
-        }
-      );
-  }
+export class TenantUsersListComponent implements OnInit {
+  constructor() {}
 
+  ngOnInit() {}
 }

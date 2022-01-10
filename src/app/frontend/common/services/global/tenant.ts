@@ -28,6 +28,7 @@ export class TenantService {
     const tenantCookie = this.cookies_.get(CONFIG.authTenantCookieName) || '';
     this.setAuthTenant(tenantCookie);
   }
+
   setCurrent(tenant: string) {
     if (this.isSystemTenant_) {
       this.currentTenant_ = tenant;

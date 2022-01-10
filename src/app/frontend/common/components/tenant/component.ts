@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
-import {Router, ActivatedRoute, NavigationEnd} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {takeUntil, startWith, switchMap} from 'rxjs/operators';
 import {MatSelect} from '@angular/material';
@@ -24,7 +24,7 @@ import {TenantService} from '../../services/global/tenant';
 import {ResourceService} from 'common/services/resource/resource';
 import {EndpointManager, Resource} from 'common/services/resource/endpoint';
 import {NotificationsService, NotificationSeverity} from 'common/services/global/notifications';
-import {CONFIG} from 'index.config';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'kd-tenant-selector',
@@ -40,7 +40,8 @@ export class TenantSelectorComponent implements OnInit {
   selectedTenant: string;
   resourceNameParam: string;
   selectTenantInput = '';
-  systemTenantName = CONFIG.systemTenantName;
+  systemTenantName = this.getTenant_();
+  tenant = this.getTenant_();
 
   @ViewChild(MatSelect, {static: true}) private readonly select_: MatSelect;
   @ViewChild('tenantInput', {static: true}) private readonly tenantInputEl_: ElementRef;
@@ -51,12 +52,14 @@ export class TenantSelectorComponent implements OnInit {
     private readonly tenant_: ResourceService<TenantList>,
     private readonly notifications_: NotificationsService,
     private readonly _activeRoute: ActivatedRoute,
+    private readonly http_: HttpClient,
   ) {}
 
   ngOnInit(): void {
     this._activeRoute.queryParams.pipe(takeUntil(this.unsubscribe_)).subscribe(params => {
-      const tenant = params.tenant;
-
+      var tenant_ = params
+      const tenant = this.tenant;
+      this.tenant = this.getTenant_()
       if (!tenant) {
         this.setDefaultQueryParams_();
         return;
@@ -168,4 +171,20 @@ export class TenantSelectorComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
+
+  getTenant_(): string {
+    const username = sessionStorage.getItem('username');
+    // let tenantType = 'cluster-admin'
+    if ( username === 'admin'){
+      return 'system'
+    }
+    else{
+      return username
+    }
+  }
+
+  // getType(username:string): string{
+  //   this.responseData = this.http_.get('/api/v1/users/'+username, {responseType: 'json'})
+  //   return this.responseData.objectMeta.type
+  // }
 }

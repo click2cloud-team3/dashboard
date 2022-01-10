@@ -38,20 +38,14 @@ export interface CreateTenantDialogMeta {
 
 export class CreateTenantDialog implements OnInit {
   form1: FormGroup;
-
   private readonly config_ = CONFIG;
 
-  /**
-   * Max-length validation rule for namespace
-   */
-  tenantMaxLength = 63;
-  storageidMaxLength =10;
-  /**
-   * Pattern validation rule for namespace
-   */
+ //validations
+  tenantMaxLength = 10;
   tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
-  storageidPattern: RegExp = new RegExp('^[0-9]$');
 
+  storageidMaxLength =2;
+  storageidPattern: RegExp = new RegExp('^[0-9]*$');
 
   constructor(
     public dialogRef: MatDialogRef<CreateTenantDialog>,
@@ -67,6 +61,7 @@ export class CreateTenantDialog implements OnInit {
         tenant: [
           '',
           Validators.compose([
+            Validators.required,
             Validators.maxLength(this.tenantMaxLength),
             Validators.pattern(this.tenantPattern),
           ]),
@@ -74,6 +69,7 @@ export class CreateTenantDialog implements OnInit {
         StorageClusterId :[
           '',
           Validators.compose([
+            Validators.required,
             Validators.maxLength(this.storageidMaxLength),
             Validators.pattern(this.storageidPattern),
           ]),
@@ -82,7 +78,6 @@ export class CreateTenantDialog implements OnInit {
     );
 
   }
-
   get tenant(): AbstractControl {
     return this.form1.get('tenant');
   }
@@ -117,11 +112,12 @@ export class CreateTenantDialog implements OnInit {
               message: error.data,
               confirmLabel: 'OK',
             };
-            this.matDialog_.open(AlertDialog, {data: configData});
+            //this.matDialog_.open(AlertDialog, {data: configData});
           },
         );
     });
   }
+
   /**
    * Returns true if new namespace name hasn't been filled by the user, i.e, is empty.
    */

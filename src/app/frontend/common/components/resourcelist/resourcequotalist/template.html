@@ -8,6 +8,13 @@
       </div>
     </div>
   </div>
+  <div class="col-12 col-sm-12 col-md-12 col-lg-12" *ngIf="verber_.success_quota">
+    <div class="alert alert-success alert-dismissible fade show custom_alert" role="alert">
+      <strong>{{verber_.success_result}} Resource Quota</strong> Successfully Created.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
       <kd-card role="table" [hidden]="isHidden()">

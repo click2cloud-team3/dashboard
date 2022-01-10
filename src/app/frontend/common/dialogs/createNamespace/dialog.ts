@@ -26,9 +26,6 @@ export interface CreateNamespaceDialogMeta {
   tenants: string[];
 }
 
-/**
- * Displays new namespace creation dialog.
- */
 @Component({
   selector: 'kd-create-namespace-dialog',
   templateUrl: 'template.html',
@@ -38,21 +35,11 @@ export class CreateNamespaceDialog implements OnInit {
 
   private readonly config_ = CONFIG;
 
-  /**
-   * Max-length validation rule for namespace
-   */
+  //validations
   namespaceMaxLength = 63;
-  /**
-   * Max-length validation rule for tenant
-   */
-  tenantMaxLength = 63;
-  /**
-   * Pattern validation rule for namespace
-   */
   namespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
-  /**
-   * Pattern validation rule for tenant
-   */
+
+  tenantMaxLength = 63;
   tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
   constructor(

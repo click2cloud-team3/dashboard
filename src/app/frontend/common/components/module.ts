@@ -94,7 +94,7 @@ import {ServiceAccountListComponent} from "./resourcelist/serviceaccount/compone
 //module added
 import {TenantSelectorComponent} from './tenant/component';
 import {TenantListComponent} from './resourcelist/tenantlist/component';
-import {UserListComponent} from "./resourcelist/user/component";
+import {TenantUserListComponent} from "./resourcelist/user/component";
 import {ResourceQuotasListComponent} from "./resourcelist/resourcequotalist/component";
 import {PartitionListComponent} from "./resourcelist/partitionlist/component";
 import {TenantPartitionListComponent} from "./resourcelist/tenantpartitionlist/component";
@@ -196,14 +196,11 @@ const components = [
   ZeroStateComponent,
   WorkloadStatusComponent,
 
-  //added component
   TenantSelectorComponent,
   TenantListComponent,
 
-  UserListComponent,
-  QuotaListComponent,
-  ServiceAccountListComponent
-
+  ServiceAccountListComponent,
+  TenantUserListComponent,
 ];
 
 @NgModule({

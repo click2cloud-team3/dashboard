@@ -19,6 +19,7 @@ import {TENANTMANAGEMENT_ROUTE} from '../routing';
 
 import {TenantUsersListComponent} from './list/component';
 import {TenantUsersDetailComponent} from './detail/component';
+import {DEFAULT_ACTIONBAR} from "../../common/components/actionbars/routing";
 
 const USERS_LIST_ROUTE: Route = {
   path: '',
@@ -39,7 +40,7 @@ const USERS_DETAIL_ROUTE: Route = {
 };
 
 @NgModule({
-  imports: [RouterModule.forChild([USERS_LIST_ROUTE, USERS_DETAIL_ROUTE])],
+  imports: [RouterModule.forChild([USERS_LIST_ROUTE, USERS_DETAIL_ROUTE, DEFAULT_ACTIONBAR])],
   exports: [RouterModule],
 })
 export class TenantUsersRoutingModule {}

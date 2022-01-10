@@ -3,22 +3,29 @@
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
       <h2 mat-dialog-title>Create a Tenant</h2>
     </div>
-    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-      <p class="note_text">*Use lower case alphanumeric characters or '-'.</p>
-    </div>
   </div>
   <div class="row">
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
       <mat-form-field appearance="fill">
         <mat-label>Enter Tenant</mat-label>
-        <input matInput type="text" formControlName="tenant" required />
+        <input matInput type="text" formControlName="tenant" required autocomplete="off"/>
       </mat-form-field>
+      <div class="error_sec" *ngIf="tenant.errors && (tenant.dirty || tenant.touched)">
+        <span class="red" *ngIf="tenant.errors.required">Name is required.</span>
+        <span class="red" *ngIf="tenant.hasError('pattern')">Name must be in small alphanumeric characters or '-'.</span>
+        <span class="red" *ngIf="tenant.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+      </div>
     </div>
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
       <mat-form-field appearance="fill">
         <mat-label>StorageClusterid</mat-label>
-        <input matInput type="text" formControlName="StorageClusterId" >
+        <input matInput type="text" formControlName="StorageClusterId" autocomplete="off" >
       </mat-form-field>
+      <div class="error_sec" *ngIf="StorageClusterId.errors && (StorageClusterId.dirty || StorageClusterId.touched)">
+        <span class="red" *ngIf="StorageClusterId.errors.required">StorageClusterid is required</span>
+        <span class="red" *ngIf="StorageClusterId.hasError('pattern')">StorageClusterid must be in numbres only.</span><br>
+        <span class="red" *ngIf="StorageClusterId.hasError('maxlength')">StorageClusterid should not be greater than 2 digits.</span>
+      </div>
     </div>
 
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
@@ -49,7 +56,7 @@
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
       <mat-dialog-actions align="end">
         <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button [mat-dialog-close]="true" type="submit" (click)="createTenant()">Create</button>
+        <button mat-button [mat-dialog-close]="true" type="submit" (click)="createTenant()" [disabled]="!form1.valid">Create</button>
       </mat-dialog-actions>
     </div>
   </div>

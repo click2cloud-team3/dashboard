@@ -18,6 +18,7 @@ import {SharedModule} from '../../shared.module';
 import {ComponentsModule} from '../components/module';
 import {AlertDialog} from './alert/dialog';
 import {CreateTenantDialog} from './createTenant/dialog';
+import {CreateUserDialog} from './createUser/dialog';
 import {CreateNamespaceDialog} from './createNamespace/dialog';
 import {CreateRoleDialog} from './createRole/dialog';
 import {CreateClusterroleDialog} from "./createClusterrole/dialog";
@@ -44,6 +45,7 @@ import {assignQuotaDialog} from './assignQuota/dialog';
     TriggerResourceDialog,
     CreateNodeDialog,
     assignQuotaDialog,
+    CreateUserDialog,
   ],
   exports: [
     AlertDialog,
@@ -58,6 +60,7 @@ import {assignQuotaDialog} from './assignQuota/dialog';
     TriggerResourceDialog,
     CreateNodeDialog,
     assignQuotaDialog,
+    CreateUserDialog,
   ],
   entryComponents: [
     AlertDialog,
@@ -72,6 +75,7 @@ import {assignQuotaDialog} from './assignQuota/dialog';
     TriggerResourceDialog,
     CreateNodeDialog,
     assignQuotaDialog,
+    CreateUserDialog,
   ],
 })
 

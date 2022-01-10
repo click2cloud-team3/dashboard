@@ -16,34 +16,22 @@ import {Observable} from 'rxjs/Observable';
 import {ComponentFactoryResolver} from '@angular/core'
 import {Component, OnDestroy, OnInit,Input} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {
-  Deployment,
-  DeploymentList,
-  Event,
-  Namespace,
-  NamespaceList, Pod, PodList, ReplicaSet, ReplicaSetList,
-  TenantDetail
-} from '@api/backendapi';
+import {Deployment, DeploymentList, Event, Namespace, NamespaceList, Pod, PodList, ReplicaSet, ReplicaSetList, TenantDetail} from '@api/backendapi';
 import {ActionbarService, ResourceMeta} from '../../../../common/services/global/actionbar';
 import {NotificationsService} from '../../../../common/services/global/notifications';
 import {EndpointManager, Resource} from 'common/services/resource/endpoint';
 import {Subscription} from 'rxjs/Subscription';
-import {
-  NamespacedResourceService,
-  ResourceService
-} from "../../../../common/services/resource/resource";
+import {NamespacedResourceService, ResourceService} from "../../../../common/services/resource/resource";
 import {ResourceListWithStatuses} from "../../../../common/resources/list";
 import {VerberService} from "../../../../common/services/global/verber";
-import {
-  ListGroupIdentifier,
-  ListIdentifier
-} from "../../../../common/components/resourcelist/groupids";
+import {ListGroupIdentifier,ListIdentifier} from "../../../../common/components/resourcelist/groupids";
 import {MenuComponent} from "../../../../common/components/list/column/menu/component";
 
 @Component({
   selector: 'kd-tenant-detail',
   templateUrl: './template.html',
 })
+
 export class TenantDetailComponent implements OnInit, OnDestroy {
   private tenantSubscription_: Subscription;
   private readonly endpoint_ = EndpointManager.resource(Resource.tenant,false,false);
@@ -58,7 +46,6 @@ export class TenantDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.activatedRoute_)
     const resourceName = this.activatedRoute_.snapshot.params.resourceName;
     const resourceNamespace = this.activatedRoute_.snapshot.params.resourceNamespace;
     this.tenantSubscription_ = this.tenant_
@@ -70,11 +57,13 @@ export class TenantDetailComponent implements OnInit, OnDestroy {
         this.isInitialized = true;
       });
   }
+
   ngOnDestroy(): void {
     this.tenantSubscription_.unsubscribe();
     this.actionbar_.onDetailsLeave.emit();
   }
 }
+
 export class NamespaceListComponent extends ResourceListWithStatuses<NamespaceList, Namespace> {
   @Input() endpoint = EndpointManager.resource(Resource.namespace, false, true).list();
   displayName:any="";
