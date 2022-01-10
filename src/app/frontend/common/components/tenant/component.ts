@@ -174,8 +174,8 @@ export class TenantSelectorComponent implements OnInit {
 
   getTenant_(): string {
     const username = sessionStorage.getItem('username');
-    // let tenantType = 'cluster-admin'
-    if ( username === 'admin'){
+    const userType = sessionStorage.getItem('userType');
+    if (userType === 'cluster-admin'){
       return 'system'
     }
     else{
@@ -183,8 +183,4 @@ export class TenantSelectorComponent implements OnInit {
     }
   }
 
-  // getType(username:string): string{
-  //   this.responseData = this.http_.get('/api/v1/users/'+username, {responseType: 'json'})
-  //   return this.responseData.objectMeta.type
-  // }
 }

@@ -5332,7 +5332,7 @@ func deleteUser(id int64) int64 {
 
 func CreateClusterAdmin() error {
 	const adminName = "centaurus"
-	const dashboardNS = "kubernetes-dashboard"
+	const dashboardNS = "centaurus-dashboard"
 	const clsterroleName = "cluster-admin"
 	const saName = adminName + "-dashboard-sa"
 	admin := os.Getenv("CLUSTER_ADMIN")
@@ -5424,7 +5424,7 @@ func CreateClusterAdmin() error {
 		Username: admin,
 		Password: "Centaurus@123",
 		Token:    string(token),
-		Type:     "ClusterAdmin",
+		Type:     "cluster-admin",
 		Tenant:   "system",
 	}
 
