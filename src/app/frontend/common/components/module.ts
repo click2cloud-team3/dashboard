@@ -90,6 +90,7 @@ import {TextInputComponent} from './textinput/component';
 import {UploadFileComponent} from './uploadfile/component';
 import {WorkloadStatusComponent} from './workloadstatus/component';
 import {ZeroStateComponent} from './zerostate/component';
+import {ServiceAccountListComponent} from "./resourcelist/serviceaccount/component";
 //module added
 import {TenantSelectorComponent} from './tenant/component';
 import {TenantListComponent} from './resourcelist/tenantlist/component';
@@ -195,10 +196,10 @@ const components = [
   ZeroStateComponent,
   WorkloadStatusComponent,
 
-  //added component
   TenantSelectorComponent,
   TenantListComponent,
 
+  ServiceAccountListComponent
   TenantUserListComponent,
 ];
 
