@@ -199,7 +199,7 @@ const components = [
   TenantSelectorComponent,
   TenantListComponent,
 
-  ServiceAccountListComponent
+  ServiceAccountListComponent,
   TenantUserListComponent,
 ];
 
