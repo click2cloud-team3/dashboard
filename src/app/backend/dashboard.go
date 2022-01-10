@@ -20,6 +20,8 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
+	"github.com/kubernetes/dashboard/src/app/backend/iam"
+	"github.com/kubernetes/dashboard/src/app/backend/iam/db"
 	"log"
 	"net"
 	"net/http"
@@ -102,9 +104,10 @@ func main() {
 	if args.Holder.GetNamespace() != "" {
 		log.Printf("Using namespace: %s", args.Holder.GetNamespace())
 	}
+
 	// Create table in Postgres Database
 	CreateTable()
-	err := handler.CreateClusterAdmin()
+	err := iam.CreateClusterAdmin()
 	if err != nil {
 		log.Printf("Failed to create admin user: %s \n", err.Error())
 	}
@@ -293,7 +296,7 @@ func getEnv(key, fallback string) string {
 
 func CreateTable() {
 	// create the postgres db connection
-	db := handler.CreateConnection()
+	db := db.CreateConnection()
 
 	// close the db connection
 	defer db.Close()
