@@ -5347,7 +5347,7 @@ func CreateClusterAdmin() error {
 	// Create namespace
 	namespaceSpec := new(ns.NamespaceSpec)
 	namespaceSpec.Name = dashboardNS
-	if err := ns.CreateNamespace(namespaceSpec, k8sClient); err != nil {
+	if err := ns.CreateNamespace(namespaceSpec, "system", k8sClient); err != nil {
 		log.Printf("Create namespace for admin user failed, err:%s ", err.Error())
 		//return err
 	} else {
