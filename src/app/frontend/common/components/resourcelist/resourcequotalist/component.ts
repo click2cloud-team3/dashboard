@@ -24,7 +24,7 @@ export class ResourceQuotasListComponent extends ResourceListWithStatuses<Resour
   objectMeta:any;
 
   constructor(
-    private readonly verber_: VerberService,
+    public readonly verber_: VerberService,
     private readonly resourcequota_: NamespacedResourceService<ResourceQuotaList>, notifications: NotificationsService,
     private dialog: MatDialog //add the code
   ) {

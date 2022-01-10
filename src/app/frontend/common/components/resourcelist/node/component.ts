@@ -34,7 +34,7 @@ export class NodeListComponent extends ResourceListWithStatuses<NodeList, Node> 
   typeMeta:any="";
   objectMeta:any;
   constructor(
-    private readonly verber_: VerberService,
+    public readonly verber_: VerberService,
     private readonly node_: ResourceService<NodeList>,
     notifications: NotificationsService,
   ) {
