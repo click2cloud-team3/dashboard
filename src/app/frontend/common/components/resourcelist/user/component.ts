@@ -39,7 +39,7 @@ export class TenantUserListComponent extends ResourceListWithStatuses<UserList, 
   objectMeta:any;
 
   constructor(
-    private readonly verber_: VerberService,
+    public readonly verber_: VerberService,
     private readonly user_: ResourceService<UserList>,
     private userAPI_:UserApi,
     notifications: NotificationsService,

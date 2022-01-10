@@ -34,7 +34,7 @@ export class ClusterRoleListComponent extends ResourceListBase<ClusterRoleList, 
   typeMeta:any;
   objectMeta:any;
   constructor(
-    private readonly verber_: VerberService,
+    public readonly verber_: VerberService,
     private readonly clusterRole_: ResourceService<ClusterRoleList>,
     notifications: NotificationsService,
   ) {
