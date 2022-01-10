@@ -48,7 +48,7 @@ export class CreateUserDialog implements OnInit {
   namespaceUsed = "centaurus-dashboard"
   adminroleUsed = "cluster-admin";
   apiGroups : string [] =["*"]
-  resources : string [] =["deployments", "pods", "services", "secrets", "namespaces"]
+  resources : string [] =["*"]
   verbs :string []= ["*"]
   serviceAccountCreated:any[] = [];
   secretDetails:any[] = [];
@@ -168,13 +168,16 @@ export class CreateUserDialog implements OnInit {
 
   // create role
   createRole(): void {
-    const tenantSpec= {name: this.user.value, namespace: this.namespaceUsed, apiGroups: this.apiGroups,verbs: this.verbs,resources: this.resources};
+    if(this.usertype.value == "tenant-user") {
+      this.namespaceUsed = "default"
+    }
+    const roleSpec= {name: this.user.value, namespace: this.namespaceUsed, apiGroups: this.apiGroups,verbs: this.verbs,resources: this.resources};
     const tokenPromise = this.csrfToken_.getTokenForAction('role');
     tokenPromise.subscribe(csrfToken => {
       return this.http_
         .post<{valid: boolean}>(
           'api/v1/role',
-          {...tenantSpec},
+          {...roleSpec},
           {
             headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),
           },
@@ -197,14 +200,14 @@ export class CreateUserDialog implements OnInit {
   }
 
   // create clusterrole
-  createClusteRole(): void {
-    const clusterroleSpec= {name: this.user.value,apiGroups: this.apiGroups,verbs: this.verbs,resources: this.resources};
+  createClusterRole(): void {
+    const clusterRoleSpec = {name:this.user.value, apiGroups:this.apiGroups, verbs:this.verbs, resources:this.resources};
     const tokenPromise = this.csrfToken_.getTokenForAction('clusterrole');
     tokenPromise.subscribe(csrfToken => {
       return this.http_
         .post<{valid: boolean}>(
           'api/v1/clusterrole',
-          {...clusterroleSpec},
+          {...clusterRoleSpec},
           {
             headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),
           },
@@ -228,13 +231,16 @@ export class CreateUserDialog implements OnInit {
 
   // create service account
   createServiceAccount() {
-    const serviseaccountSpec= {name: this.user.value,namespace: this.namespaceUsed};
+    if(this.usertype.value == "tenant-user") {
+      this.namespaceUsed = "default"
+    }
+    const serviceAccountSpec= {name: this.user.value,namespace: this.namespaceUsed};
     const tokenPromise = this.csrfToken_.getTokenForAction('serviceaccount');
     tokenPromise.subscribe(csrfToken => {
       return this.http_
         .post<{valid: boolean}>(
           'api/v1/serviceaccount',
-          {...serviseaccountSpec},
+          {...serviceAccountSpec},
           {
             headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),
           },
@@ -249,13 +255,16 @@ export class CreateUserDialog implements OnInit {
   }
 
   createRoleBinding(): void{
-    const rbSpec= {name: this.user.value,namespace: this.namespaceUsed, subject: { kind: "ServiceAccount", name: this.user.value,  namespace : this.namespaceUsed, apiGroup : ""},role_ref:{kind: "Role",name: this.user.value,apiGroup: "rbac.authorization.k8s.io"}};
+    if(this.usertype.value == "tenant-user") {
+      this.namespaceUsed = "default"
+    }
+    const roleBindingsSpec= {name: this.user.value,namespace: this.namespaceUsed, subject: { kind: "ServiceAccount", name: this.user.value,  namespace : this.namespaceUsed, apiGroup : ""},role_ref:{kind: "Role",name: this.user.value,apiGroup: "rbac.authorization.k8s.io"}};
     const tokenPromise = this.csrfToken_.getTokenForAction('rolebindings');
     tokenPromise.subscribe(csrfToken => {
       return this.http_
         .post<{valid: boolean}>(
           'api/v1/rolebindings',
-          {...rbSpec},
+          {...roleBindingsSpec},
           {
             headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),
           },
@@ -347,20 +356,16 @@ export class CreateUserDialog implements OnInit {
   }
 
   createTenantUser() {
-
     this.createServiceAccount()
-
     this.createTenant()
-
     if(this.usertype.value == "tenant-user"){
       this.createRole()
       this.createRoleBinding()
     } else {
-      this.createClusteRole()
+      this.createClusterRole()
       this.createClusterRoleBinding()
     }
     this.createUser()
-
   }
 
   isCreateDisabled(): boolean {
