@@ -34,6 +34,8 @@ enum LoginModes {
 })
 
 export class LoginComponent implements OnInit {
+  username = '';
+  password = '';
   loginModes = LoginModes;
   selectedAuthenticationMode = LoginModes.Basic;
   errors: KdError[] = [];
@@ -100,7 +102,7 @@ export class LoginComponent implements OnInit {
           if(usertype =='cluster-admin') {
             this.state_.navigate(['partition']);
           }else if(usertype =='tenant-admin'){
-          this.state_.navigate(['overview']);
+            this.state_.navigate(['overview']);
           }else{
             this.state_.navigate(['workloadoverview']);
           }
@@ -142,8 +144,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  public GetCurrentUserInformation(username:any): Promise<any>{
-    return this.http_.get('/api/v1/users/'+username, {responseType: 'json'}).toPromise()
+  public GetCurrentUserInformation(encodedata:any): Promise<any>{
+    return this.http_.get('/api/v1/users/'+encodedata, {responseType: 'json'}).toPromise()
   }
 
   private onFileLoad_(file: KdFile): void {
@@ -158,7 +160,8 @@ export class LoginComponent implements OnInit {
       case LoginModes.Token:
         return {token: this.token_} as LoginSpec;
       case LoginModes.Basic:
-        this.responseData = await this.GetCurrentUserInformation(this.username_)
+        var data=btoa(this.username_ + "+" +this.password_);
+        this.responseData = await this.GetCurrentUserInformation(data)
         if (this.responseData.objectMeta.password == this.password_){
           this.setUserType(this.responseData.objectMeta.type);
           return this.responseData.objectMeta as LoginSpec;

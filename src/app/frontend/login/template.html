@@ -24,7 +24,7 @@ limitations under the License.
   <kd-card titleClasses="kd-card-top-radius kd-bg-primary kd-accent" class="kd-login-card" [expandable]="false">
     <div content>
       <img class="image-logo" src="/assets/images/logo_centaurus.svg">
-      <form fxLayout="column" (ngSubmit)="login()">
+      <form  fxLayout="column" (ngSubmit)="login()">
         <ng-container [ngSwitch]="selectedAuthenticationMode">
           <mat-form-field *ngSwitchCase="loginModes.Token" class="kd-login-input">
             <input matInput id="token" name="token" i18n-placeholder placeholder="Enter token" type="password" required
@@ -33,12 +33,12 @@ limitations under the License.
 
           <div *ngSwitchCase="loginModes.Basic" fxLayout="column">
             <mat-form-field fxFlex class="kd-login-input">
-              <input id="username" name="username" matInput i18n-placeholder placeholder="Username" required
+              <input id="username" name="username" matInput i18n-placeholder placeholder="Username" [(ngModel)]="username" required autocomplete="off"
                 (change)="onChange($event)">
             </mat-form-field>
 
             <mat-form-field fxFlex class="kd-login-input">
-              <input id="password" name="password" matInput i18n-placeholder placeholder="Password" type="password"
+              <input id="password" name="password" matInput i18n-placeholder placeholder="Password" [(ngModel)]="password" type="password" autocomplete="off"
                 required (change)="onChange($event)">
             </mat-form-field>
           </div>
@@ -57,7 +57,7 @@ limitations under the License.
         </ng-container>
 
         <div fxFlex="none" fxLayout="row">
-          <button mat-raised-button color="primary" type="submit" class="kd-login-button" i18n>
+          <button mat-raised-button color="primary" type="submit" class="kd-login-button" [disabled]="username === '' || password == ''" i18n>
             Sign in
           </button>
           <button mat-button color="primary" type="button" class="kd-login-button" (click)="skip()" i18n>
