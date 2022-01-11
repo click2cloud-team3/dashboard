@@ -5102,7 +5102,6 @@ func (apiHandler *APIHandler) handleGetUser(w *restful.Request, r *restful.Respo
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Printf("%s\n", decode)
 	substrings := strings.Split(string(decode), "+")
 	// call the getUser function with user id to retrieve a single user
 	user, err := db.GetUser(substrings[0])
