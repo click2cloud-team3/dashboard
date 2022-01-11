@@ -37,7 +37,7 @@ export class NamespaceListComponent extends ResourceListWithStatuses<NamespaceLi
   typeMeta:any="";
   objectMeta:any;
   constructor(
-    private readonly verber_: VerberService,
+    public readonly verber_: VerberService,
     private readonly namespace_: ResourceService<NamespaceList>,
     notifications: NotificationsService,
   ) {

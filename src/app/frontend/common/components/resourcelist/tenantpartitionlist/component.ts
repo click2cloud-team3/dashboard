@@ -39,7 +39,7 @@ export class TenantPartitionListComponent extends ResourceListWithStatuses<Tenan
   typeMeta:any="";
   objectMeta:any;
   constructor(
-    private readonly verber_: VerberService,
+    public readonly verber_: VerberService,
     private readonly tenant_: ResourceService<TenantList>,
 
     notifications: NotificationsService,

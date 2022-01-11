@@ -37,7 +37,7 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
   typeMeta:any;
   objectMeta:any;
   constructor(
-    private readonly verber_: VerberService,
+    public readonly verber_: VerberService,
     private readonly tenant_: ResourceService<TenantList>,
     notifications: NotificationsService,
     private dialog: MatDialog //add the code
