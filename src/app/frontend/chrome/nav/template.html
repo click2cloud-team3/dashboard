@@ -5,7 +5,7 @@
       <kd-tenant-selector></kd-tenant-selector>
       <mat-divider></mat-divider>
     </div>
-    <div>
+    <div *ngIf=showTenant>
       <kd-namespace-selector></kd-namespace-selector>
       <mat-divider></mat-divider>
     </div>
@@ -104,15 +104,15 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="kd-nav-group">
-            <kd-nav-item class="kd-nav-item" state="/workloadoverview" i18n>
+            <kd-nav-item class="kd-nav-item" state="/workloadoverview" *ngIf=!showTenant i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Overview
             </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/namespace" i18n>
+            <kd-nav-item class="kd-nav-item" state="/namespace" *ngIf=showTenant i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Namespaces
             </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/serviceaccount" i18n>
+            <kd-nav-item class="kd-nav-item" state="/serviceaccount"  *ngIf=!showMenu i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Service Accounts
             </kd-nav-item>

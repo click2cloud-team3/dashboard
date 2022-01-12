@@ -34,8 +34,8 @@ import (
 
 func CreateClusterAdmin() error {
 	const adminName = "centaurus"
-	const dashboardNS = "kubernetes-dashboard"
-	const clsterroleName = "cluster-admin"
+	const dashboardNS = "centaurus-dashboard"
+	const clusterRoleName = "cluster-admin"
 	const saName = adminName + "-dashboard-sa"
 	admin := os.Getenv("CLUSTER_ADMIN")
 	if admin == "" {
@@ -43,7 +43,7 @@ func CreateClusterAdmin() error {
 	}
 	clientManager := client.NewClientManager(args.Holder.GetKubeConfigFile(), args.Holder.GetApiServerHost())
 
-	// TODO Check if kubernetes-dashboard namespace exists or not using GET method
+	// TODO Check if centaurus-dashboard namespace exists or not using GET method
 	k8sClient := clientManager.InsecureClient()
 
 	// Create namespace
@@ -56,11 +56,11 @@ func CreateClusterAdmin() error {
 		log.Printf("Create Namespace successfully")
 	}
 
-	// Create Serviec Account
-	serviceaccountSpec := new(serviceaccount.ServiceAccountSpec)
-	serviceaccountSpec.Name = saName
-	serviceaccountSpec.Namespace = dashboardNS
-	if err := serviceaccount.CreateServiceAccount(serviceaccountSpec, k8sClient); err != nil {
+	// Create Service Account
+	serviceAccountSpec := new(serviceaccount.ServiceAccountSpec)
+	serviceAccountSpec.Name = saName
+	serviceAccountSpec.Namespace = dashboardNS
+	if err := serviceaccount.CreateServiceAccount(serviceAccountSpec, k8sClient); err != nil {
 		log.Printf("Create service account for admin user failed, err:%s ", err.Error())
 		//return err
 	}
@@ -97,7 +97,7 @@ func CreateClusterAdmin() error {
 		RoleRef: rbac.RoleRef{
 			APIGroup: "rbac.authorization.k8s.io",
 			Kind:     "ClusterRole",
-			Name:     clsterroleName,
+			Name:     clusterRoleName,
 		},
 	}
 	if err := clusterrolebinding.CreateClusterRoleBindings(clusterRoleBindingSpec, k8sClient); err != nil {
@@ -126,7 +126,7 @@ func CreateClusterAdmin() error {
 		Username: admin,
 		Password: "Centaurus@123",
 		Token:    string(token),
-		Type:     "ClusterAdmin",
+		Type:     "cluster-admin",
 		Tenant:   "system",
 	}
 

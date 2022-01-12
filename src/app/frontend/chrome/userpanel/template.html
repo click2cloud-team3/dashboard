@@ -27,8 +27,7 @@ limitations under the License.
           (click)="settings()">
     <span i18n>Settings</span>
   </button>
-
-  <mat-divider></mat-divider>
+  <mat-divider *ngIf="isLoggedIn()"></mat-divider>
 
   <button mat-menu-item
           *ngIf="isLoggedIn()"
@@ -37,7 +36,7 @@ limitations under the License.
     <span i18n>About</span>
   </button>
 
-  <mat-divider></mat-divider>
+  <mat-divider *ngIf="isLoggedIn()"></mat-divider>
 
   <button mat-menu-item
           *ngIf="isLoggedIn()"
