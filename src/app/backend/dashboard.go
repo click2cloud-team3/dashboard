@@ -20,13 +20,14 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
-	"github.com/kubernetes/dashboard/src/app/backend/iam"
-	"github.com/kubernetes/dashboard/src/app/backend/iam/db"
 	"log"
 	"net"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/kubernetes/dashboard/src/app/backend/iam"
+	"github.com/kubernetes/dashboard/src/app/backend/iam/db"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/pflag"
@@ -105,12 +106,6 @@ func main() {
 		log.Printf("Using namespace: %s", args.Holder.GetNamespace())
 	}
 
-	// Create table in Postgres Database
-	CreateTable()
-	err := iam.CreateClusterAdmin()
-	if err != nil {
-		log.Printf("Failed to create admin user: %s \n", err.Error())
-	}
 	clientManager := client.NewClientManager(args.Holder.GetKubeConfigFile(), args.Holder.GetApiServerHost())
 	versionInfo, err := clientManager.InsecureClient().Discovery().ServerVersion()
 	if err != nil {
@@ -118,6 +113,13 @@ func main() {
 	}
 
 	log.Printf("Successful initial request to the apiserver, version: %s", versionInfo.String())
+
+	// Create table in Postgres Database
+	CreateTable()
+	error := iam.CreateClusterAdmin()
+	if err != nil {
+		log.Printf("Failed to create admin user: %s \n", error.Error())
+	}
 
 	// Init auth manager
 	authManager := initAuthManager(clientManager)
@@ -307,8 +309,8 @@ func CreateTable() {
 	res, err := db.Exec(sqlStatement)
 
 	if err != nil {
-		fmt.Printf("Unable to execute the query. %s", err)
+		fmt.Printf("Unable to execute the query. %s \n", err)
 		return
 	}
-	fmt.Printf("Table Created in database %v\n", res)
+	fmt.Printf("Table Created in database %v \n", res)
 }
