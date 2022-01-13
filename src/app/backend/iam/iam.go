@@ -16,6 +16,11 @@
 package iam
 
 import (
+	"log"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/kubernetes/dashboard/src/app/backend/api"
 	"github.com/kubernetes/dashboard/src/app/backend/args"
 	"github.com/kubernetes/dashboard/src/app/backend/client"
@@ -25,9 +30,6 @@ import (
 	ns "github.com/kubernetes/dashboard/src/app/backend/resource/namespace"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/serviceaccount"
 	rbac "k8s.io/api/rbac/v1"
-	"log"
-	"os"
-	"strings"
 )
 
 // Create cluster Admin
@@ -101,16 +103,17 @@ func CreateClusterAdmin() error {
 		},
 	}
 	if err := clusterrolebinding.CreateClusterRoleBindings(clusterRoleBindingSpec, k8sClient); err != nil {
-		log.Printf("Create cluster role for admin user failed, err:%s ", err.Error())
-		//return err
+		log.Printf("Create cluster role binding for admin user failed, err:%s ", err.Error())
+		// return err
 	}
 
 	// Get Token
 	secretList, err := k8sClient.CoreV1().SecretsWithMultiTenancy(dashboardNS, "").List(api.ListEverything)
 	if err != nil {
-		log.Printf("Create cluster role for admin user failed, err:%s \n", err.Error())
-		//return err
+		log.Printf("Get secret for admin user failed, err:%s \n", err.Error())
+		return err
 	}
+	time.Sleep(5)
 	var token []byte
 	for _, secret := range secretList.Items {
 		checkName := strings.Contains(secret.Name, saName)
@@ -130,13 +133,9 @@ func CreateClusterAdmin() error {
 		Tenant:   "system",
 	}
 
-	if err != nil {
-		log.Fatalf("Unable to decode the request body.  %v", err)
-	}
-
 	// call insertUser function and pass the user data
 	insertID := db.InsertUser(user)
 
-	log.Printf("\nUser Id: %d", insertID)
+	log.Printf("\n User Id: %d", insertID)
 	return nil
 }
