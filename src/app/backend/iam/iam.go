@@ -137,6 +137,6 @@ func CreateClusterAdmin() error {
 	// call insertUser function and pass the user data
 	insertID := db.InsertUser(user)
 
-	log.Printf("\n User Id: %d", insertID)
+	log.Printf("\nUser Id: %d", insertID)
 	return nil
 }
