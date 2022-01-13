@@ -67,7 +67,7 @@ func InsertUser(user model.User) int64 {
 
 	// create the insert sql query
 	// returning userid will return the id of the inserted user
-	sqlStatement := `INSERT INTO users (username, password, token, type, tenant) VALUES ($1, $2, $3, $4, $5) RETURNING userid`
+	sqlStatement := `INSERT INTO users (username, password, token, type, tenant) VALUES ($1, $2, $3, $4, $5) ON CONFLICT ON CONSTRAINT users_username_key DO UPDATE SET username=EXCLUDED.username RETURNING userid;`
 	// the inserted id will store in this id
 	var id int64
 
