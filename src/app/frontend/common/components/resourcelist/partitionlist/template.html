@@ -30,7 +30,7 @@ limitations under the License.
          [hidden]="isHidden()">
   <div title
        fxLayout="row"
-       i18n>Resource Partition</div>
+       i18n>Resource</div>
   <div description><span class="kd-muted-light"
                          i18n>Items:&nbsp;</span>{{totalItems}}</div>
   <div actions>
@@ -83,7 +83,7 @@ limitations under the License.
                          disableClear="true"
                          i18n>CPU limits (cores)</mat-header-cell>
         <mat-cell *matCellDef="let node">
-          2000.00m (60.00%)
+          60.00%
         </mat-cell>
       </ng-container>
 
@@ -93,7 +93,7 @@ limitations under the License.
                          disableClear="true"
                          i18n>Memory limits (bytes)</mat-header-cell>
         <mat-cell *matCellDef="let node">
-          170.00Mi (0.71%)
+          0.71%
         </mat-cell>
       </ng-container>
 
@@ -147,7 +147,7 @@ limitations under the License.
              [hidden]="isHidden()">
       <div title
            fxLayout="row"
-           i18n>Tenant Partition</div>
+           i18n>Tenant</div>
       <div description><span class="kd-muted-light"
                              i18n>Items:&nbsp;</span>{{totalItems}}</div>
       <div actions>
@@ -187,11 +187,9 @@ limitations under the License.
 
           <ng-container [matColumnDef]="getColumns2()[2]">
             <mat-header-cell *matHeaderCellDef
-                             mat-sort-header
                              disableClear="true"
-                             i18n>Node Count</mat-header-cell>
+                             i18n></mat-header-cell>
             <mat-cell *matCellDef="let node">
-             10
             </mat-cell>
           </ng-container>
 
@@ -211,7 +209,7 @@ limitations under the License.
                              disableClear="true"
                              i18n>CPU limits (cores)</mat-header-cell>
             <mat-cell *matCellDef="let node">
-              2000.00m (60.00%)
+              60.00%
             </mat-cell>
           </ng-container>
 
@@ -221,7 +219,7 @@ limitations under the License.
                              disableClear="true"
                              i18n>Memory limits (bytes)</mat-header-cell>
             <mat-cell *matCellDef="let node">
-              170.00Mi (0.71%)</mat-cell>
+              0.71%</mat-cell>
           </ng-container>
 
 

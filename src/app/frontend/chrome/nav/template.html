@@ -26,7 +26,10 @@
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Cluster Monitoring
             </kd-nav-item>
-
+            <kd-nav-item class="kd-nav-item" state="/clusterrole" i18n>
+              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+              Cluster roles
+            </kd-nav-item>
             <kd-nav-item  class="kd-nav-item" state="/tenant" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Tenants
@@ -52,16 +55,11 @@
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Tenant Monitoring
             </kd-nav-item>
-
             <kd-nav-item class="kd-nav-item" state="/role" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Roles
             </kd-nav-item>
 
-            <kd-nav-item class="kd-nav-item" state="/clusterrole" i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Cluster roles
-            </kd-nav-item>
             <kd-nav-item class="kd-nav-item" state="/resourcequota" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Quota
@@ -108,29 +106,33 @@
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Overview
             </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/namespace" *ngIf=showTenant i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Namespaces
-            </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/serviceaccount"  *ngIf=!showMenu i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Service Accounts
-            </kd-nav-item>
             <kd-nav-item class="kd-nav-item" state="/cronjob" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Cron Jobs
-            </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/daemonset" i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Daemon Sets
             </kd-nav-item>
             <kd-nav-item class="kd-nav-item" state="/deployment" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Deployments
             </kd-nav-item>
+            <kd-nav-item class="kd-nav-item" state="/image" i18n>
+              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+              Images
+            </kd-nav-item>
+            <kd-nav-item class="kd-nav-item" state="/instance" i18n>
+              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+              Instances
+            </kd-nav-item>
             <kd-nav-item class="kd-nav-item" state="/job" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Jobs
+            </kd-nav-item>
+            <kd-nav-item class="kd-nav-item" state="/keypair" i18n>
+              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+              Key Pairs
+            </kd-nav-item>
+            <kd-nav-item class="kd-nav-item" state="/namespace" *ngIf=showTenant i18n>
+              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+              Namespaces
             </kd-nav-item>
             <kd-nav-item class="kd-nav-item" state="/pod" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
@@ -140,42 +142,11 @@
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Replica Sets
             </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/replicationcontroller" i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Replication Controllers
-            </kd-nav-item>
             <kd-nav-item class="kd-nav-item" state="/statefulset" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Stateful Sets
             </kd-nav-item>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-      <mat-divider></mat-divider>
 
-      <mat-accordion>
-        <mat-expansion-panel [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <kd-nav-item class="kd-nav-group-item" i18n >
-                <img class="menu_icon" src="assets/images/discovery_load_balancing_icon.svg" alt="">
-                Virtual Machine
-              </kd-nav-item>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="kd-nav-group">
-            <kd-nav-item class="kd-nav-item" state="/instance" i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Instances
-            </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/image" i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Images
-            </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/keypair" i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Key Pairs
-            </kd-nav-item>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
