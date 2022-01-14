@@ -143,7 +143,6 @@ export class LoginComponent implements OnInit {
       default:
     }
   }
-
   public GetCurrentUserInformation(encodedata:any): Promise<any>{
     return this.http_.get('/api/v1/users/'+encodedata, {responseType: 'json'}).toPromise()
   }

@@ -5062,48 +5062,44 @@ func parseDataSelectPathParameter(request *restful.Request) *dataselect.DataSele
 }
 
 // IAM Service related functions
-
-// response format
 type response struct {
 	ID      int64  `json:"id,omitempty"`
 	Message string `json:"message,omitempty"`
 }
 
-// CreateUser create a user in the database
 func (apiHandler *APIHandler) handleCreateUser(w *restful.Request, r *restful.Response) {
+	_, error := apiHandler.cManager.Client(w)
+	if error != nil {
+		ErrMsg := ErrorMsg{Msg: error.Error()}
+		r.WriteHeaderAndEntity(http.StatusUnauthorized, ErrMsg)
+		return
+	}
 
-	// create an empty user of type model.User
 	var user model.User
-
-	// decode the json request to user
 	err := w.ReadEntity(&user)
 	if err != nil {
 		log.Fatalf("Unable to decode the request body.  %v", err)
 	}
 
-	// call insert user function and pass the user
 	insertID := db.InsertUser(user)
-
-	// format a response object
 	res := response{
 		ID:      insertID,
 		Message: "User created successfully",
 	}
 
-	// send the response
 	r.WriteHeaderAndEntity(http.StatusCreated, res)
 }
 
-// GertUser will return a user from the database
 func (apiHandler *APIHandler) handleGetUser(w *restful.Request, r *restful.Response) {
-	// get the userid from the request params, key is "id"
 	username := w.PathParameter("username")
 	decode, err := base64.StdEncoding.DecodeString(username)
 	if err != nil {
-		fmt.Println(err)
+		ErrMsg := ErrorMsg{Msg: err.Error()}
+		r.WriteHeaderAndEntity(http.StatusUnauthorized, ErrMsg)
+		return
 	}
+
 	substrings := strings.Split(string(decode), "+")
-	// call the getUser function with user id to retrieve a single user
 	user, err := db.GetUser(substrings[0])
 
 	if err != nil {
@@ -5124,43 +5120,39 @@ type ErrorMsg struct {
 	Msg string `json:"msg"`
 }
 
-// GetAllUser will return all the users
 func (apiHandler *APIHandler) handleGetAllUser(w *restful.Request, r *restful.Response) {
-	// get all the users in the db
+	_, err := apiHandler.cManager.Client(w)
+	if err != nil {
+		errors.HandleInternalError(r, err)
+		return
+	}
+
 	users, err := db.GetAllUsers()
 
 	if err != nil {
 		log.Fatalf("Unable to get all user. %v", err)
 	}
-
-	// send all the users as response
 	r.WriteHeaderAndEntity(http.StatusOK, users)
 }
 
-// DeleteUser will delete a user from the database
 func (apiHandler *APIHandler) handleDeleteUser(w *restful.Request, r *restful.Response) {
-
-	// get the userid from the request params, key is "userid"
-
+	_, err := apiHandler.cManager.Client(w)
+	if err != nil {
+		errors.HandleInternalError(r, err)
+		return
+	}
 	userid := w.PathParameter("userid")
-
-	// call the deleteUser, convert the int to int64
 	id, err := strconv.Atoi(userid)
 	deletedRows := db.DeleteUser(int64(id))
 
 	if err != nil {
 		log.Fatalf("Unable to get user. %v", err)
 	}
-
-	// format the message string
 	msg := fmt.Sprintf("User deleted successfully. Total rows/record affected %v", deletedRows)
 
-	// format the response message
 	res := response{
 		ID:      int64(id),
 		Message: msg,
 	}
-
-	// send the response
 	r.WriteHeaderAndEntity(http.StatusOK, res)
 }
