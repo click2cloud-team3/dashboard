@@ -18,15 +18,17 @@ package main
 import (
 	"crypto/elliptic"
 	"crypto/tls"
+	"encoding/base64"
 	"flag"
 	"fmt"
+	"github.com/kubernetes/dashboard/src/app/backend/iam"
 	"log"
 	"net"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
-	"github.com/kubernetes/dashboard/src/app/backend/iam"
 	"github.com/kubernetes/dashboard/src/app/backend/iam/db"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -95,7 +97,8 @@ func main() {
 
 	// Initializes dashboard arguments holder so we can read them in other packages
 	initArgHolder()
-
+	configs := make(map[string][]byte)
+	var Tp1Config, Tp2Config, Rp1Config, Rp2Config []byte
 	if args.Holder.GetApiServerHost() != "" {
 		log.Printf("Using apiserver-host location: %s", args.Holder.GetApiServerHost())
 	}
@@ -105,11 +108,55 @@ func main() {
 	if args.Holder.GetNamespace() != "" {
 		log.Printf("Using namespace: %s", args.Holder.GetNamespace())
 	}
+	if tp1config := os.Getenv("TP1_CONFIG"); tp1config != "" {
+		Tp1Config, _ = base64.StdEncoding.DecodeString(tp1config)
+		configs["tp1config"] = Tp1Config
+		log.Printf("Using tp1config: %s", Tp1Config)
+	}
+	if tp2config := os.Getenv("TP2_CONFIG"); tp2config != "" {
+		Tp2Config, _ = base64.StdEncoding.DecodeString(tp2config)
+		configs["tp2config"] = Tp2Config
+		log.Printf("Using tp2config: %s", Tp2Config)
+	}
+	if rp1config := os.Getenv("RP1_CONFIG"); rp1config != "" {
+		Rp1Config, _ = base64.StdEncoding.DecodeString(rp1config)
+		configs["rp1config"] = Rp1Config
+		log.Printf("Using rp1config: %s", Rp1Config)
+	}
+	if rp2config := os.Getenv("RP2_CONFIG"); rp2config != "" {
+		Rp2Config, _ = base64.StdEncoding.DecodeString(rp2config)
+		configs["rp2config"] = Rp2Config
+		log.Printf("Using rp2config: %s", Rp2Config)
+	}
 
+	for name, config := range configs {
+		configfile, err := os.Create(name)
+		if err != nil {
+			handleFatalInitError(err)
+		}
+		_, err = configfile.Write(config)
+		if err != nil {
+			handleFatalInitError(err)
+		}
+		configfile.Close()
+	}
+
+	var clients []clientapi.ClientManager
+	var rpclients []clientapi.ClientManager
 	clientManager := client.NewClientManager(args.Holder.GetKubeConfigFile(), args.Holder.GetApiServerHost())
 	versionInfo, err := clientManager.InsecureClient().Discovery().ServerVersion()
 	if err != nil {
 		handleFatalInitError(err)
+	}
+	clients = append(clients, clientManager)
+	for name, _ := range configs {
+		newclientmanager := client.NewClientManager("./"+name, args.Holder.GetApiServerHost())
+		if strings.HasPrefix(name, "rp") {
+			//For rpconfigs
+			rpclients = append(rpclients, newclientmanager)
+		} else {
+			clients = append(clients, newclientmanager)
+		}
 	}
 
 	log.Printf("Successful initial request to the apiserver, version: %s", versionInfo.String())
@@ -153,6 +200,8 @@ func main() {
 	apiHandler, err := handler.CreateHTTPAPIHandler(
 		integrationManager,
 		clientManager,
+		clients,
+		rpclients,
 		authManager,
 		settingsManager,
 		systemBannerManager)
