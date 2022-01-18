@@ -568,7 +568,7 @@ func NewClientManager(kubeConfigPath, apiserverHost string) clientapi.ClientMana
 }
 
 func GetClusternName(config string) (cName string, err error) {
-	filename, _ := filepath.Abs("tp1config")
+	filename, _ := filepath.Abs(config)
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)

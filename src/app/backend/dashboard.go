@@ -148,9 +148,13 @@ func main() {
 	if err != nil {
 		handleFatalInitError(err)
 	}
-	clients = append(clients, clientManager)
+	rpclients = append(rpclients, clientManager)
 	for name, _ := range configs {
+
 		newclientmanager := client.NewClientManager("./"+name, args.Holder.GetApiServerHost())
+		if clientManager.GetClusterName() == newclientmanager.GetClusterName() {
+			continue
+		}
 		if strings.HasPrefix(name, "rp") {
 			//For rpconfigs
 			rpclients = append(rpclients, newclientmanager)
