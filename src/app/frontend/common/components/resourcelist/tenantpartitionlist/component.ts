@@ -14,75 +14,84 @@
 
 import {HttpParams} from '@angular/common/http';
 import {Component, Input} from '@angular/core';
-import { Tenant, TenantList} from '@api/backendapi';
+import {Node, NodeList} from '@api/backendapi';
 import {Observable} from 'rxjs/Observable';
 
 
 import {ResourceListWithStatuses} from '../../../resources/list';
+import {NotificationsService} from '../../../services/global/notifications';
 import {EndpointManager, Resource} from '../../../services/resource/endpoint';
 import {ResourceService} from '../../../services/resource/resource';
-import {NotificationsService} from '../../../services/global/notifications';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 import {MenuComponent} from '../../list/column/menu/component';
-import {MatDialog, MatDialogConfig,MatExpansionModule} from '@angular/material/';
 import {VerberService} from '../../../services/global/verber';
 
 @Component({
   selector: 'kd-tenant-partition-list',
   templateUrl: './template.html',
 })
-export class TenantPartitionListComponent extends ResourceListWithStatuses<TenantList, Tenant > {
-  @Input() endpoint = EndpointManager.resource(Resource.tenant).list();
-  // @Input() endpoint = EndpointManager.resource(Resource.tenant, true, true).list();
-
-  displayName:any="";
-  typeMeta:any="";
+export class TenantPartitionListComponent extends ResourceListWithStatuses<NodeList, Node> {
+  @Input() endpoint = EndpointManager.resource(Resource.node).list();
+  displayName:any;
+  typeMeta:any;
   objectMeta:any;
+  tpCount: number;
   constructor(
     public readonly verber_: VerberService,
-    private readonly tenant_: ResourceService<TenantList>,
-
+    private readonly node_: ResourceService<NodeList>,
     notifications: NotificationsService,
-    private dialog: MatDialog //add the code
   ) {
-    super('tenant', notifications);
-    this.id = ListIdentifier.tenant;
+    super('node', notifications);
+    this.id = ListIdentifier.node;
     this.groupId = ListGroupIdentifier.cluster;
-
-    // Register status icon handlers
-    this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
-    this.registerBinding(this.icon.error, 'kd-error', this.isInErrorState);
 
     // Register action columns.
     this.registerActionColumn<MenuComponent>('menu', MenuComponent);
+
+    // Register status icon handlers
+    this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
+    this.registerBinding(this.icon.help, 'kd-muted', this.isInUnknownState);
+    this.registerBinding(this.icon.error, 'kd-error', this.isInErrorState);
   }
 
-  getResourceObservable(params?: HttpParams): Observable<TenantList> {
-    return this.tenant_.get(this.endpoint, undefined, params);
+  getResourceObservable(params?: HttpParams): Observable<NodeList> {
+    return this.node_.get(this.endpoint, undefined, params);
   }
 
-  map(tenantList: TenantList): Tenant[] {
-    return tenantList.tenants ;
+  map(nodeList: NodeList): Node[] {
+    const tenantPartitionList: any = [];
+    nodeList.nodes.map((node)=>{
+      if(node['objectMeta']['name'].includes("tp"))
+      {
+        tenantPartitionList.push(node);
+      }
+    })
+    this.tpCount = tenantPartitionList.length
+    return tenantPartitionList;
   }
 
-  isInErrorState(resource: Tenant): boolean {
-    return resource.phase === 'Terminating';
+  isInErrorState(resource: Node): boolean {
+    return resource.ready === 'False';
   }
 
-  isInSuccessState(resource: Tenant): boolean {
-    return resource.phase === 'Active';
+  isInUnknownState(resource: Node): boolean {
+    return resource.ready === 'Unknown';
+  }
+
+  isInSuccessState(resource: Node): boolean {
+    return resource.ready === 'True';
   }
 
   getDisplayColumns(): string[] {
-    return ['statusicon', 'name', 'phase', 'age'];
+    return ['statusicon', 'name', 'labels', 'ready', 'cpureq', 'cpulim', 'memreq', 'memlim', 'age'];
   }
 
   getDisplayColumns2(): string[] {
-    return ['statusicon', 'name', 'nodecount','cpulim','memlim','tentcount','health','etcd'];
+    return ['statusicon', 'name', 'labels', 'ready', 'cpureq', 'cpulim', 'memreq', 'memlim', 'age'];
   }
 
   //added the code
   onClick(): void {
-    this.verber_.showTenantCreateDialog(this.displayName, this.typeMeta, this.objectMeta);  //changes needed
+    this.verber_.showNodeCreateDialog(this.displayName, this.typeMeta, this.objectMeta); //added
   }
 }

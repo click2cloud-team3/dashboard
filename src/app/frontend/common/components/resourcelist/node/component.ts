@@ -30,9 +30,10 @@ import {VerberService} from "../../../services/global/verber";
 })
 export class NodeListComponent extends ResourceListWithStatuses<NodeList, Node> {
   @Input() endpoint = EndpointManager.resource(Resource.node).list();
-  displayName:any="";
-  typeMeta:any="";
+  displayName:any;
+  typeMeta:any;
   objectMeta:any;
+  rpCount: number;
   constructor(
     public readonly verber_: VerberService,
     private readonly node_: ResourceService<NodeList>,
@@ -56,7 +57,15 @@ export class NodeListComponent extends ResourceListWithStatuses<NodeList, Node> 
   }
 
   map(nodeList: NodeList): Node[] {
-    return nodeList.nodes;
+    const resourcePartitionList: any = [];
+    nodeList.nodes.map((node)=>{
+      if(node['objectMeta']['name'].includes("rp"))
+      {
+        resourcePartitionList.push(node);
+      }
+    })
+    this.rpCount = resourcePartitionList.length
+    return resourcePartitionList;
   }
 
   isInErrorState(resource: Node): boolean {
