@@ -18,6 +18,7 @@ package handler
 import (
 	"encoding/base64"
 	"fmt"
+	"github.com/kubernetes/dashboard/src/app/backend/resourcepartition"
 	"log"
 	"net/http"
 	"strconv"
@@ -135,7 +136,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	wsContainer.EnableContentEncoding(true)
 
 	apiV1Ws := new(restful.WebService)
-	InstallFilters(apiV1Ws, cManager)
+	//InstallFilters(apiV1Ws, cManager)
 
 	apiV1Ws.Path("/api/v1").
 		Consumes(restful.MIME_JSON).
@@ -157,6 +158,10 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	systemBannerHandler := systembanner.NewSystemBannerHandler(sbManager)
 	systemBannerHandler.Install(apiV1Ws)
 
+	apiV1Ws.Route(
+		apiV1Ws.GET("/resourcepartition").
+			To(apiHandler1.handleGetResourcePartitionDetail).
+			Writes(tenant.TenantList{}))
 	//apiV1Ws.Route(
 	//	apiV1Ws.GET("/tenant").
 	//		To(apiHandler.handleGetTenantList).
@@ -1269,6 +1274,7 @@ func (apiHandler *APIHandler1) handleCreateTenant(request *restful.Request, resp
 		errors.HandleInternalError(response, err)
 		return
 	}
+	client.GetClusterName()
 
 	if err := tenant.CreateTenant(tenantSpec, k8sClient, client.GetClusterName()); err != nil {
 		errors.HandleInternalError(response, err)
@@ -1889,6 +1895,30 @@ func (apiHandler *APIHandler1) handleGetNodeLists(request *restful.Request, resp
 		}
 	}
 	response.WriteHeaderAndEntity(http.StatusOK, nodeLists)
+
+}
+func (apiHandler *APIHandler1) handleGetResourcePartitionDetail(request *restful.Request, response *restful.Response) {
+	//var nodeLists node.NodeList
+	//For tpclients
+	result := new(resourcepartition.ResourcePartitionList)
+	for _, rpManager := range apiHandler.rpManager {
+		k8sClient := rpManager.InsecureClient()
+		//if err != nil {
+		//	errors.HandleInternalError(response, err)
+		//	return
+		//}
+		dataSelect := parseDataSelectPathParameter(request)
+		dataSelect.MetricQuery = dataselect.StandardMetrics
+		partionDetail, err := resourcepartition.GetPartitionDetail(k8sClient, rpManager.GetClusterName())
+		if err != nil {
+			errors.HandleInternalError(response, err)
+			return
+		}
+		result.Partitions = append(result.Partitions, partionDetail)
+	}
+	result.ListMeta.TotalItems = len(result.Partitions)
+
+	response.WriteHeaderAndEntity(http.StatusOK, result)
 
 }
 
