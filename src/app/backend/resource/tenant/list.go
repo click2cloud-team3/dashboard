@@ -43,7 +43,7 @@ type TenantList struct {
 	Errors []error `json:"errors"`
 }
 
-func GetTenantList(client client.Interface, dsQuery *dataselect.DataSelectQuery) (*TenantList, error) {
+func GetTenantList(client client.Interface, dsQuery *dataselect.DataSelectQuery, clusterName string) (*TenantList, error) {
 	log.Println("Getting list of tenants")
 	tenants, err := client.CoreV1().Tenants().List(api.ListEverything)
 
@@ -52,10 +52,10 @@ func GetTenantList(client client.Interface, dsQuery *dataselect.DataSelectQuery)
 		return nil, criticalError
 	}
 
-	return toTenantList(tenants.Items, nonCriticalErrors, dsQuery), nil
+	return toTenantList(tenants.Items, nonCriticalErrors, dsQuery, clusterName), nil
 }
 
-func toTenantList(tenants []v1.Tenant, nonCriticalErrors []error, dsQuery *dataselect.DataSelectQuery) *TenantList {
+func toTenantList(tenants []v1.Tenant, nonCriticalErrors []error, dsQuery *dataselect.DataSelectQuery, clusterName string) *TenantList {
 	tenantList := &TenantList{
 		ListMeta: api.ListMeta{TotalItems: len(tenants)},
 		Tenants:  make([]Tenant, 0),
@@ -67,7 +67,8 @@ func toTenantList(tenants []v1.Tenant, nonCriticalErrors []error, dsQuery *datas
 	tenantList.Errors = nonCriticalErrors
 
 	for _, tenant := range tenants {
-		tenant.ClusterName = tenant.Labels["clusterName"]
+
+		tenant.ClusterName = clusterName
 		tenantList.Tenants = append(tenantList.Tenants, toTenant(tenant))
 	}
 

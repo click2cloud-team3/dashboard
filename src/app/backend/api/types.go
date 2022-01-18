@@ -141,6 +141,7 @@ const (
 	ResourceKindEndpoint                 = "endpoint"
 	ResourceKindTenant                   = "tenant"
 	ResourceKindUser                     = "user"
+	ResourceKindClusterPartition         = "partition"
 )
 
 // ClientType represents type of client that is used to perform generic operations on resources.
@@ -204,6 +205,7 @@ var KindToAPIMapping = map[string]APIMapping{
 	ResourceKindClusterRoleBinding:       {"clusterrolebindings", ClientTypeRbacClient, false},
 	ResourceKindTenant:                   {"tenants", ClientTypeDefault, false},
 	ResourceKindUser:                     {"users", ClientTypeDefault, false},
+	ResourceKindClusterPartition:         {"partition", ClientTypeDefault, false},
 }
 
 // IsSelectorMatching returns true when an object with the given selector targets the same

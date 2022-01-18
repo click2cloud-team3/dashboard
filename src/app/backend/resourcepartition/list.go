@@ -17,9 +17,25 @@ type ResourcePartitionList struct {
 	Errors []error `json:"errors"`
 }
 
+type TenantPartitionList struct {
+	ListMeta          api.ListMeta       `json:"listMeta"`
+	Partitions        []*TenantPartition `json:"tenantPartitions"`
+	CumulativeMetrics []metricapi.Metric `json:"cumulativeMetrics"`
+
+	// List of non-critical errors, that occurred during resource retrieval.
+	Errors []error `json:"errors"`
+}
 type Partition struct {
 	Name             string `json:"name"`
 	NodeCount        int    `json:"nodeCount"`
+	CPULimit         int64  `json:"cpuLimit"`
+	MemoryLimit      int64  `json:"memoryLimit"`
+	HealthyNodeCount int64  `json:"healthyNodeCount"`
+}
+
+type TenantPartition struct {
+	Name             string `json:"name"`
+	TenantCount      int    `json:"tenantCount"`
 	CPULimit         int64  `json:"cpuLimit"`
 	MemoryLimit      int64  `json:"memoryLimit"`
 	HealthyNodeCount int64  `json:"healthyNodeCount"`
@@ -43,6 +59,36 @@ func GetPartitionDetail(client client.Interface, cLusterName string) (*Partition
 	}
 	partitionDetail := new(Partition)
 	partitionDetail.NodeCount = len(nodes.Items)
+	partitionDetail.CPULimit = cpuLimit
+	partitionDetail.MemoryLimit = memoryLimit
+	partitionDetail.HealthyNodeCount = healthyNodeCount
+	partitionDetail.Name = cLusterName
+
+	return partitionDetail, nil
+}
+
+func GetTenantPartitionDetail(client client.Interface, cLusterName string) (*TenantPartition, error) {
+	nodes, err := client.CoreV1().Nodes().List(api.ListEverything)
+	if err != nil {
+		return nil, err
+	}
+	var cpuLimit int64 = 0
+	var memoryLimit int64 = 0
+	var healthyNodeCount int64 = 0
+	for _, node := range nodes.Items {
+		cpuLimit += node.Status.Allocatable.Cpu().MilliValue()
+		memoryLimit += node.Status.Allocatable.Memory().Value()
+
+		if node.Status.Conditions[0].Type == v1.NodeReady && node.Status.Conditions[0].Status == v1.ConditionTrue {
+			healthyNodeCount++
+		}
+	}
+	tenants, err := client.CoreV1().Tenants().List(api.ListEverything)
+	if err != nil {
+		return nil, err
+	}
+	partitionDetail := new(TenantPartition)
+	partitionDetail.TenantCount = len(tenants.Items)
 	partitionDetail.CPULimit = cpuLimit
 	partitionDetail.MemoryLimit = memoryLimit
 	partitionDetail.HealthyNodeCount = healthyNodeCount

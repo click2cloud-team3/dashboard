@@ -161,6 +161,10 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	apiV1Ws.Route(
 		apiV1Ws.GET("/resourcepartition").
 			To(apiHandler1.handleGetResourcePartitionDetail).
+			Writes(resourcepartition.ResourcePartitionList{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("/tenantpartition").
+			To(apiHandler1.handleGetTenantPartitionDetail).
 			Writes(tenant.TenantList{}))
 	//apiV1Ws.Route(
 	//	apiV1Ws.GET("/tenant").
@@ -1327,7 +1331,7 @@ func (apiHandler *APIHandler1) handleGetTenantList(request *restful.Request, res
 		//}
 
 		dataSelect := parseDataSelectPathParameter(request)
-		result, err := tenant.GetTenantList(k8sClient, dataSelect)
+		result, err := tenant.GetTenantList(k8sClient, dataSelect, cManager.GetClusterName())
 		if err != nil {
 			errors.HandleInternalError(response, err)
 			return
@@ -1922,6 +1926,30 @@ func (apiHandler *APIHandler1) handleGetResourcePartitionDetail(request *restful
 
 }
 
+func (apiHandler *APIHandler1) handleGetTenantPartitionDetail(request *restful.Request, response *restful.Response) {
+	//var nodeLists node.NodeList
+	//For tpclients
+	result := new(resourcepartition.TenantPartitionList)
+	for _, cManager := range apiHandler.cManager {
+		k8sClient := cManager.InsecureClient()
+		//if err != nil {
+		//	errors.HandleInternalError(response, err)
+		//	return
+		//}
+		dataSelect := parseDataSelectPathParameter(request)
+		dataSelect.MetricQuery = dataselect.StandardMetrics
+		partionDetail, err := resourcepartition.GetTenantPartitionDetail(k8sClient, cManager.GetClusterName())
+		if err != nil {
+			errors.HandleInternalError(response, err)
+			return
+		}
+		result.Partitions = append(result.Partitions, partionDetail)
+	}
+	result.ListMeta.TotalItems = len(result.Partitions)
+
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+
+}
 func (apiHandler *APIHandler) handleGetNodeDetail(request *restful.Request, response *restful.Response) {
 	k8sClient, err := apiHandler.cManager.Client(request)
 	if err != nil {
@@ -3762,7 +3790,7 @@ func (apiHandler *APIHandler1) handleGetNamespaceDetailWithMultiTenancy(request 
 		}
 
 		dataSelect := parseDataSelectPathParameter(request)
-		tenantList, err := tenant.GetTenantList(k8sClient, dataSelect)
+		tenantList, err := tenant.GetTenantList(k8sClient, dataSelect, cManager.GetClusterName())
 		if err != nil {
 			errors.HandleInternalError(response, err)
 			return
