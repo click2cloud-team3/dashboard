@@ -67,6 +67,7 @@ func toTenantList(tenants []v1.Tenant, nonCriticalErrors []error, dsQuery *datas
 	tenantList.Errors = nonCriticalErrors
 
 	for _, tenant := range tenants {
+		tenant.ClusterName = tenant.Labels["clusterName"]
 		tenantList.Tenants = append(tenantList.Tenants, toTenant(tenant))
 	}
 

@@ -32,19 +32,22 @@ type TenantSpec struct {
 }
 
 // CreateTenant creates tenant based on given specification.
-func CreateTenant(spec *TenantSpec, client kubernetes.Interface) error {
+func CreateTenant(spec *TenantSpec, client kubernetes.Interface, clusterName string) error {
 	log.Printf("Creating tenant %s", spec.Name)
 
 	// setting default values if no values passed
 	if spec.StorageClusterId == "" {
 		spec.StorageClusterId = "0"
 	}
-
+	clusterLabel := make(map[string]string)
+	clusterLabel["clusterName"] = clusterName
 	tenant := &v1.Tenant{
 		ObjectMeta: metaV1.ObjectMeta{
-			Name: spec.Name,
+			Name:   spec.Name,
+			Labels: clusterLabel,
 		},
 		Spec: v1.TenantSpec{
+
 			StorageClusterId: spec.StorageClusterId,
 		},
 	}

@@ -1270,7 +1270,7 @@ func (apiHandler *APIHandler1) handleCreateTenant(request *restful.Request, resp
 		return
 	}
 
-	if err := tenant.CreateTenant(tenantSpec, k8sClient); err != nil {
+	if err := tenant.CreateTenant(tenantSpec, k8sClient, client.GetClusterName()); err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
