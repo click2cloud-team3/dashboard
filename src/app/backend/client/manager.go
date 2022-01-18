@@ -16,7 +16,11 @@
 package client
 
 import (
+	"fmt"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
+	"path/filepath"
 	"strings"
 
 	restful "github.com/emicklei/go-restful"
@@ -86,6 +90,11 @@ type clientManager struct {
 	// to service account used by dashboard or kubeconfig file if it was passed during dashboard
 	// init.
 	insecureConfig *rest.Config
+	clustername    string
+}
+
+func (self *clientManager) GetClusterName() string {
+	return self.clustername
 }
 
 // Client returns a kubernetes client. In case dashboard login is enabled and option to skip
@@ -534,6 +543,8 @@ func (self *clientManager) initInsecureConfig() {
 	if err != nil {
 		panic(err)
 	}
+	clusterName, err := GetClusternName(self.kubeConfigPath)
+	self.clustername = clusterName
 
 	self.initConfig(cfg)
 	self.insecureConfig = cfg
@@ -554,4 +565,29 @@ func NewClientManager(kubeConfigPath, apiserverHost string) clientapi.ClientMana
 
 	result.init()
 	return result
+}
+
+func GetClusternName(config string) (cName string, err error) {
+	filename, _ := filepath.Abs("tp1config")
+	yamlFile, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+
+	var clusterDetail ClusterDetail
+
+	err = yaml.Unmarshal(yamlFile, &clusterDetail)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Value: %s \n", clusterDetail.Clusters[0].Name)
+	return clusterDetail.Clusters[0].Name, nil
+}
+
+type ClusterDetail struct {
+	APIVersion string `yaml:"apiVersion"`
+	Clusters   []struct {
+		Name string `yaml:"name"`
+	} `yaml:"clusters"`
 }

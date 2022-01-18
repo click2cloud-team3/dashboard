@@ -52,6 +52,7 @@ type ClientManager interface {
 	VerberClient(req *restful.Request, config *rest.Config) (ResourceVerber, error)
 	SetTokenManager(manager authApi.TokenManager)
 	GetTenant(authInfo api.AuthInfo) (string, error)
+	GetClusterName() string
 }
 
 // ResourceVerber is responsible for performing generic CRUD operations on all supported resources.

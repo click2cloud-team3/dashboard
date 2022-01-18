@@ -43,10 +43,11 @@ type Node struct {
 	TypeMeta           api.TypeMeta           `json:"typeMeta"`
 	Ready              v1.ConditionStatus     `json:"ready"`
 	AllocatedResources NodeAllocatedResources `json:"allocatedResources"`
+	ClusterName        string                 `json:"clusterName"`
 }
 
 // GetNodeList returns a list of all Nodes in the cluster.
-func GetNodeList(client client.Interface, dsQuery *dataselect.DataSelectQuery, metricClient metricapi.MetricClient) (*NodeList, error) {
+func GetNodeList(client client.Interface, dsQuery *dataselect.DataSelectQuery, metricClient metricapi.MetricClient, cLusterName string) (*NodeList, error) {
 	nodes, err := client.CoreV1().Nodes().List(api.ListEverything)
 
 	nonCriticalErrors, criticalError := errors.HandleError(err)
@@ -54,11 +55,11 @@ func GetNodeList(client client.Interface, dsQuery *dataselect.DataSelectQuery, m
 		return nil, criticalError
 	}
 
-	return toNodeList(client, nodes.Items, nonCriticalErrors, dsQuery, metricClient), nil
+	return toNodeList(client, nodes.Items, nonCriticalErrors, dsQuery, metricClient, cLusterName), nil
 }
 
 func toNodeList(client client.Interface, nodes []v1.Node, nonCriticalErrors []error, dsQuery *dataselect.DataSelectQuery,
-	metricClient metricapi.MetricClient) *NodeList {
+	metricClient metricapi.MetricClient, clusterName string) *NodeList {
 	nodeList := &NodeList{
 		Nodes:    make([]Node, 0),
 		ListMeta: api.ListMeta{TotalItems: len(nodes)},
@@ -75,8 +76,9 @@ func toNodeList(client client.Interface, nodes []v1.Node, nonCriticalErrors []er
 		if err != nil {
 			log.Printf("Couldn't get pods of %s node: %s\n", node.Name, err)
 		}
-
+		node.ClusterName = clusterName
 		nodeList.Nodes = append(nodeList.Nodes, toNode(node, pods))
+
 	}
 
 	cumulativeMetrics, err := metricPromises.GetMetrics()
@@ -99,6 +101,7 @@ func toNode(node v1.Node, pods *v1.PodList) Node {
 		TypeMeta:           api.NewTypeMeta(api.ResourceKindNode),
 		Ready:              getNodeConditionStatus(node, v1.NodeReady),
 		AllocatedResources: allocatedResources,
+		ClusterName:        node.ClusterName,
 	}
 }
 

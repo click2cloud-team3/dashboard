@@ -1312,11 +1312,13 @@ func (apiHandler *APIHandler) handleDeleteTenant(request *restful.Request, respo
 func (apiHandler *APIHandler1) handleGetTenantList(request *restful.Request, response *restful.Response) {
 	var tenantsList tenant.TenantList
 	for _, cManager := range apiHandler.cManager {
-		k8sClient, err := cManager.Client(request)
-		if err != nil {
-			errors.HandleInternalError(response, err)
-			return
-		}
+		k8sClient := cManager.InsecureClient()
+
+		//k8sClient, err := cManager.Client(request)
+		//if err != nil {
+		//	errors.HandleInternalError(response, err)
+		//	return
+		//}
 
 		dataSelect := parseDataSelectPathParameter(request)
 		result, err := tenant.GetTenantList(k8sClient, dataSelect)
@@ -1847,15 +1849,16 @@ func (apiHandler *APIHandler) handleGetServicePodsWithMultiTenancy(request *rest
 func (apiHandler *APIHandler1) handleGetNodeLists(request *restful.Request, response *restful.Response) {
 	var nodeLists node.NodeList
 	//For tpclients
+
 	for _, cManager := range apiHandler.cManager {
-		k8sClient, err := cManager.Client(request)
-		if err != nil {
-			errors.HandleInternalError(response, err)
-			return
-		}
+		k8sClient := cManager.InsecureClient()
+		//if err != nil {
+		//	errors.HandleInternalError(response, err)
+		//	return
+		//}
 		dataSelect := parseDataSelectPathParameter(request)
 		dataSelect.MetricQuery = dataselect.StandardMetrics
-		result, err := node.GetNodeList(k8sClient, dataSelect, apiHandler.iManager.Metric().Client())
+		result, err := node.GetNodeList(k8sClient, dataSelect, apiHandler.iManager.Metric().Client(), cManager.GetClusterName())
 		if err != nil {
 			errors.HandleInternalError(response, err)
 			return
@@ -1867,14 +1870,15 @@ func (apiHandler *APIHandler1) handleGetNodeLists(request *restful.Request, resp
 	}
 	//For rpclients
 	for _, rpManager := range apiHandler.rpManager {
-		k8sClient, err := rpManager.Client(request)
-		if err != nil {
-			errors.HandleInternalError(response, err)
-			return
-		}
+		//k8sClient, err := rpManager.Client(request)
+		//if err != nil {
+		//	errors.HandleInternalError(response, err)
+		//	return
+		//}
+		k8sClient := rpManager.InsecureClient()
 		dataSelect := parseDataSelectPathParameter(request)
 		dataSelect.MetricQuery = dataselect.StandardMetrics
-		result, err := node.GetNodeList(k8sClient, dataSelect, apiHandler.iManager.Metric().Client())
+		result, err := node.GetNodeList(k8sClient, dataSelect, apiHandler.iManager.Metric().Client(), rpManager.GetClusterName())
 		if err != nil {
 			errors.HandleInternalError(response, err)
 			return
