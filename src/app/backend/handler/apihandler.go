@@ -19,6 +19,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/kubernetes/dashboard/src/app/backend/resourcepartition"
+	"k8s.io/client-go/kubernetes"
 	"log"
 	"net/http"
 	"strconv"
@@ -94,7 +95,7 @@ type APIHandler struct {
 	cManager clientapi.ClientManager
 	sManager settingsApi.SettingsManager
 }
-type APIHandler1 struct {
+type APIHandlerV2 struct {
 	iManager  integration.IntegrationManager
 	cManager  []clientapi.ClientManager
 	rpManager []clientapi.ClientManager
@@ -131,7 +132,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	http.Handler, error) {
 
 	apiHandler := APIHandler{iManager: iManager, cManager: cManager, sManager: sManager}
-	apiHandler1 := APIHandler1{iManager: iManager, cManager: cManagers, rpManager: rpManagers, sManager: sManager}
+	apiHandler1 := APIHandlerV2{iManager: iManager, cManager: cManagers, rpManager: rpManagers, sManager: sManager}
 	wsContainer := restful.NewContainer()
 	wsContainer.EnableContentEncoding(true)
 
@@ -166,18 +167,10 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 		apiV1Ws.GET("/tenantpartition").
 			To(apiHandler1.handleGetTenantPartitionDetail).
 			Writes(tenant.TenantList{}))
-	//apiV1Ws.Route(
-	//	apiV1Ws.GET("/tenant").
-	//		To(apiHandler.handleGetTenantList).
-	//		Writes(tenant.TenantList{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/tenant").
 			To(apiHandler1.handleGetTenantList).
 			Writes(tenant.TenantList{}))
-	//apiV1Ws.Route(
-	//	apiV1Ws.GET("/tenant/{name}").
-	//		To(apiHandler.handleGetTenantDetail).
-	//		Writes(tenant.TenantDetail{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/tenant/{name}").
 			To(apiHandler1.handleGetTenantDetail).
@@ -875,7 +868,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Writes(node.NodeDetail{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/node/{name}/event").
-			To(apiHandler.handleGetNodeEvents).
+			To(apiHandler1.handleGetNodeEvents).
 			Writes(common.EventList{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/node/{name}/pod").
@@ -1266,7 +1259,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 //}
 
 //for tenant handlerCreateTenant method
-func (apiHandler *APIHandler1) handleCreateTenant(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandlerV2) handleCreateTenant(request *restful.Request, response *restful.Response) {
 	tenantSpec := new(tenant.TenantSpec)
 	if err := request.ReadEntity(tenantSpec); err != nil {
 		errors.HandleInternalError(response, err)
@@ -1278,8 +1271,6 @@ func (apiHandler *APIHandler1) handleCreateTenant(request *restful.Request, resp
 		errors.HandleInternalError(response, err)
 		return
 	}
-	client.GetClusterName()
-
 	if err := tenant.CreateTenant(tenantSpec, k8sClient, client.GetClusterName()); err != nil {
 		errors.HandleInternalError(response, err)
 		return
@@ -1319,7 +1310,7 @@ func (apiHandler *APIHandler) handleDeleteTenant(request *restful.Request, respo
 //	response.WriteHeaderAndEntity(http.StatusOK, result)
 //}
 
-func (apiHandler *APIHandler1) handleGetTenantList(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandlerV2) handleGetTenantList(request *restful.Request, response *restful.Response) {
 	var tenantsList tenant.TenantList
 	for _, cManager := range apiHandler.cManager {
 		k8sClient := cManager.InsecureClient()
@@ -1362,7 +1353,7 @@ func (apiHandler *APIHandler1) handleGetTenantList(request *restful.Request, res
 //	response.WriteHeaderAndEntity(http.StatusOK, result)
 //}
 
-func (apiHandler *APIHandler1) handleGetTenantDetail(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandlerV2) handleGetTenantDetail(request *restful.Request, response *restful.Response) {
 	name := request.PathParameter("name")
 
 	client := ResourceAllocator(name, apiHandler.cManager)
@@ -1856,7 +1847,7 @@ func (apiHandler *APIHandler) handleGetServicePodsWithMultiTenancy(request *rest
 //	response.WriteHeaderAndEntity(http.StatusOK, result)
 //}
 
-func (apiHandler *APIHandler1) handleGetNodeLists(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandlerV2) handleGetNodeLists(request *restful.Request, response *restful.Response) {
 	var nodeLists node.NodeList
 	//For tpclients
 
@@ -1901,7 +1892,7 @@ func (apiHandler *APIHandler1) handleGetNodeLists(request *restful.Request, resp
 	response.WriteHeaderAndEntity(http.StatusOK, nodeLists)
 
 }
-func (apiHandler *APIHandler1) handleGetResourcePartitionDetail(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandlerV2) handleGetResourcePartitionDetail(request *restful.Request, response *restful.Response) {
 	//var nodeLists node.NodeList
 	//For tpclients
 	result := new(resourcepartition.ResourcePartitionList)
@@ -1926,7 +1917,7 @@ func (apiHandler *APIHandler1) handleGetResourcePartitionDetail(request *restful
 
 }
 
-func (apiHandler *APIHandler1) handleGetTenantPartitionDetail(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandlerV2) handleGetTenantPartitionDetail(request *restful.Request, response *restful.Response) {
 	//var nodeLists node.NodeList
 	//For tpclients
 	result := new(resourcepartition.TenantPartitionList)
@@ -1968,14 +1959,31 @@ func (apiHandler *APIHandler) handleGetNodeDetail(request *restful.Request, resp
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
-func (apiHandler *APIHandler) handleGetNodeEvents(request *restful.Request, response *restful.Response) {
-	k8sClient, err := apiHandler.cManager.Client(request)
+func (apiHandler *APIHandlerV2) handleGetNodeEvents(request *restful.Request, response *restful.Response) {
+	//k8sClient, err := apiHandler.cManager.Client(request)
+	//if err != nil {
+	//	errors.HandleInternalError(response, err)
+	//	return
+	//}
+	name := request.PathParameter("name")
+	var k8sClient kubernetes.Interface
+	var err error
+	for _, rpManager := range apiHandler.rpManager {
+		k8sClient = rpManager.InsecureClient()
+		dataSelect := parseDataSelectPathParameter(request)
+		dataSelect.MetricQuery = dataselect.StandardMetrics
+		_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+		if err != nil {
+			log.Printf("Invalid Client or Internal Error %s", err.Error())
+			//errors.HandleInternalError(response, err)
+		} else {
+			break
+		}
+	}
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
-
-	name := request.PathParameter("name")
 	dataSelect := parseDataSelectPathParameter(request)
 	dataSelect.MetricQuery = dataselect.StandardMetrics
 	result, err := event.GetNodeEvents(k8sClient, dataSelect, name)
@@ -3516,7 +3524,7 @@ func (apiHandler *APIHandler) handleDeleteResourceQuota(request *restful.Request
 //	}
 //	response.WriteHeaderAndEntity(http.StatusCreated, namespaceSpec)
 //}
-func (apiHandler *APIHandler1) handleCreateNamespace(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandlerV2) handleCreateNamespace(request *restful.Request, response *restful.Response) {
 	namespaceSpec := new(ns.NamespaceSpec)
 	if err := request.ReadEntity(namespaceSpec); err != nil {
 		errors.HandleInternalError(response, err)
@@ -3703,7 +3711,7 @@ func (apiHandler *APIHandler) handleDeleteServiceAccountsWithMultiTenancy(reques
 //	}
 //	response.WriteHeaderAndEntity(http.StatusOK, result)
 //}
-func (apiHandler *APIHandler1) handleGetNamespaces(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandlerV2) handleGetNamespaces(request *restful.Request, response *restful.Response) {
 	var namespacesList ns.NamespaceList
 	for _, cManager := range apiHandler.cManager {
 
@@ -3778,7 +3786,7 @@ func (apiHandler *APIHandler) handleGetNamespaceDetail(request *restful.Request,
 //	response.WriteHeaderAndEntity(http.StatusOK, result)
 //}
 
-func (apiHandler *APIHandler1) handleGetNamespaceDetailWithMultiTenancy(request *restful.Request, response *restful.Response) {
+func (apiHandler *APIHandlerV2) handleGetNamespaceDetailWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	tnt := request.PathParameter("tenant")
 	var result *ns.NamespaceDetail
 	for _, cManager := range apiHandler.cManager {
