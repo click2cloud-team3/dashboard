@@ -16,6 +16,7 @@
         <span class="red" *ngIf="tenant.hasError('maxlength')">Name should not be greater than 10 digits.</span>
       </div>
     </div>
+
     <div class="col-10 col-sm-10 col-md-10 col-lg-10">
       <mat-form-field appearance="fill">
         <mat-label>StorageClusterid</mat-label>
@@ -26,30 +27,6 @@
         <span class="red" *ngIf="StorageClusterId.hasError('pattern')">StorageClusterid must be in numbres only.</span><br>
         <span class="red" *ngIf="StorageClusterId.hasError('maxlength')">StorageClusterid should not be greater than 2 digits.</span>
       </div>
-    </div>
-
-    <div class="col-10 col-sm-10 col-md-10 col-lg-10">
-      <mat-form-field appearance="fill">
-        <mat-label>Select Role</mat-label>
-        <mat-select>
-          <mat-option value="Role">Role1</mat-option>
-          <mat-option value="Role">Role2</mat-option>
-          <mat-option value="Role">Role3</mat-option>
-          <mat-option value="Role">Role4</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-10 col-sm-10 col-md-10 col-lg-10">
-      <mat-form-field appearance="fill">
-        <mat-label>Username</mat-label>
-        <input matInput>
-      </mat-form-field>
-    </div>
-    <div class="col-10 col-sm-10 col-md-10 col-lg-10">
-      <mat-form-field appearance="fill">
-        <mat-label>Password</mat-label>
-        <input matInput>
-      </mat-form-field>
     </div>
   </div>
   <div class="row">

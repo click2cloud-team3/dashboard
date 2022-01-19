@@ -101,6 +101,7 @@
               </kd-nav-item>
             </mat-panel-title>
           </mat-expansion-panel-header>
+
           <div class="kd-nav-group">
             <kd-nav-item class="kd-nav-item" state="/workloadoverview" *ngIf=!showTenant i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
@@ -114,21 +115,9 @@
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Deployments
             </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/image" i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Images
-            </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/instance" i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Instances
-            </kd-nav-item>
             <kd-nav-item class="kd-nav-item" state="/job" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Jobs
-            </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/keypair" i18n>
-              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
-              Key Pairs
             </kd-nav-item>
             <kd-nav-item class="kd-nav-item" state="/namespace" *ngIf=showTenant i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
@@ -147,6 +136,29 @@
               Stateful Sets
             </kd-nav-item>
 
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <kd-nav-item class="kd-nav-item" state="/virtualmachine" i18n>
+                    <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+                    Virtual Machine
+                  </kd-nav-item>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+            <kd-nav-item class="kd-nav-sub-item" state="/image" i18n>
+              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+              Images
+            </kd-nav-item>
+            <kd-nav-item class="kd-nav-sub-item" state="/instance" i18n>
+              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+              Instances
+            </kd-nav-item>
+            <kd-nav-item class="kd-nav-sub-item" state="/keypair" i18n>
+              <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
+              Key Pairs
+            </kd-nav-item>
+            </mat-expansion-panel>
           </div>
         </mat-expansion-panel>
       </mat-accordion>

@@ -403,6 +403,9 @@ router-outlet::after {
 .kd-nav-item {
   margin-left: 32px !important;
 }
+.kd-nav-sub-item {
+  margin-left: 42px !important;
+}
 .mat-header-cell {
   font-size: 11px !important;
   color: #2c2b2b !important;
@@ -416,8 +419,19 @@ router-outlet::after {
 .mat-drawer .kd-nav-item .kd-nav-item-button{
   font-size: 12px !important;
 }
+.mat-drawer .kd-nav-sub-item .kd-nav-item-button{
+  font-size: 12px !important;
+}
 .mat-drawer .kd-nav-group-item .kd-nav-item-button,
 .mat-drawer .kd-nav-item .kd-nav-item-button{
+  line-height: 28px !important;
+  max-height: 28px !important;
+  min-height: 28px !important;
+  color: #484848 !important;
+}
+
+.mat-drawer .kd-nav-group-item .kd-nav-item-button,
+.mat-drawer .kd-nav-sub-item .kd-nav-item-button{
   line-height: 28px !important;
   max-height: 28px !important;
   min-height: 28px !important;
@@ -428,7 +442,11 @@ router-outlet::after {
   background-color: #fff !important;
   color: #316EE6 !important;
 }
-
+.mat-drawer .kd-nav-group-item .kd-nav-item-button-active,
+.mat-drawer .kd-nav-sub-item .kd-nav-item-button-active{
+  background-color: #fff !important;
+  color: #316EE6 !important;
+}
 .kd-nav {
   background-color: #fff !important;
 }
@@ -522,6 +540,10 @@ router-outlet::after {
 }
 
 .mat-drawer-container .mat-expansion-panel .kd-nav-item {
+  margin-left: 8px !important;
+}
+
+.mat-drawer-container .mat-expansion-panel .kd-nav-sub-item {
   margin-left: 8px !important;
 }
 
@@ -1477,6 +1499,10 @@ box-shadow: none !important;
 .kd-nav-group .mat-accordion .kd-nav-item{
   margin-left: 0px !important;
 }
+
+.kd-nav-group .mat-accordion .kd-nav-sub-item{
+  margin-left: 0px !important;
+}
 .kd-nav-group .mat-expansion-panel-header::after {
   right: 0px !important;
 }
@@ -1503,6 +1529,7 @@ box-shadow: none !important;
 .kd-nav-group .kd-nav-group-item .kd-nav-item-button{
   font-weight: normal !important;
 }
+
 .note_text{
     font-size: 12px;
     padding: 0;
