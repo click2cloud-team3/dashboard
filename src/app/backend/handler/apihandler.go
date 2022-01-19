@@ -138,7 +138,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	wsContainer.EnableContentEncoding(true)
 
 	apiV1Ws := new(restful.WebService)
-	//InstallFilters(apiV1Ws, cManager)
+	InstallFilters(apiV1Ws, cManager)
 
 	apiV1Ws.Path("/api/v1").
 		Consumes(restful.MIME_JSON).
@@ -1230,6 +1230,10 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	apiV1Ws.Route(
 		apiV1Ws.GET("/users/{username}").
 			To(apiHandler.handleGetUser).
+			Writes(model.User{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("/users/{username}/detail").
+			To(apiHandler.handleGetUserDetail).
 			Writes(model.User{}))
 	apiV1Ws.Route(
 		apiV1Ws.DELETE("/users/{userid}").
@@ -5440,6 +5444,20 @@ func (apiHandler *APIHandler) handleGetUser(w *restful.Request, r *restful.Respo
 		r.WriteHeaderAndEntity(http.StatusUnauthorized, ErrMsg)
 		return
 	}
+	r.WriteHeaderAndEntity(http.StatusOK, user)
+}
+
+func (apiHandler *APIHandler) handleGetUserDetail(w *restful.Request, r *restful.Response) {
+	username := w.PathParameter("username")
+	user, err := db.GetUser(username)
+
+	if err != nil {
+		log.Printf("Unable to get user. %v", err)
+		r.WriteHeaderAndEntity(http.StatusUnauthorized, err.Error())
+		return
+	}
+	user.ObjectMeta.Password = "***********"
+	user.ObjectMeta.Token = "***********"
 	r.WriteHeaderAndEntity(http.StatusOK, user)
 }
 
