@@ -132,6 +132,10 @@ export interface NamespaceList extends ResourceList {
   namespaces: Namespace[];
 
 }
+export interface TenantList extends ResourceList {
+  tenants: Tenant[];
+
+}
 
 export interface NodeList extends ResourceList {
   nodes: Node[];
@@ -306,7 +310,9 @@ export interface Job extends Resource {
 export interface Namespace extends Resource {
   phase: string;
 }
-
+export interface Tenant extends Resource {
+  phase: string;
+}
 export interface Node extends Resource {
   ready: string;
 }

@@ -17,18 +17,22 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {ActivatedRoute} from '@angular/router';
 
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
 
 import {FormGroup} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {CONFIG} from "../../../index.config";
 import {CsrfTokenService} from "../../services/global/csrftoken";
 import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
 
 import {NamespacedResourceService} from '../../services/resource/resource';
-import {SecretDetail} from '@api/backendapi';
 import {TenantService} from "../../services/global/tenant";
+import {CreateSecretDialog} from "../../../create/from/form/createsecret/dialog";
+import {SecretDetail, Tenant, TenantList,Role,RoleList} from '../../../typings/backendapi';
+import {validateUniqueName} from "../../../create/from/form/validator/uniquename.validator";
 
 export interface UserToken {
   token: string;
@@ -45,24 +49,24 @@ export interface CreateUserDialogMeta {
 
 export class CreateUserDialog implements OnInit {
   form1: FormGroup;
+  tenants: string[];
+  secrets: string[];
+  roles:string[];
   namespaceUsed = "centaurus-dashboard"
-  adminroleUsed = "cluster-admin";
-  apiGroups : string [] =["*"]
-  resources : string [] =["*"]
+  adminroleUsed = "admin-role";
+  apiGroups : string [] =["", "extensions", "apps"]
+  resources : string [] =["deployments", "pods", "services", "secrets", "namespaces"]
   verbs :string []= ["*"]
   serviceAccountCreated:any[] = [];
   secretDetails:any[] = [];
+  selected = '';
+
 
   private readonly config_ = CONFIG;
 
-  /**
-   * Max-length validation rule for tenant
-   */
   tenantMaxLength = 24;
   storageidMaxLength =10;
-  /**
-   * Pattern validation rule for tenant
-   */
+
   tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
   storageidPattern: RegExp = new RegExp('^[0-9]$');
 
@@ -77,19 +81,16 @@ export class CreateUserDialog implements OnInit {
     private readonly csrfToken_: CsrfTokenService,
     private readonly matDialog_: MatDialog,
     private readonly fb_: FormBuilder,
-    private readonly tenantService_ : TenantService
+    private readonly tenantService_ : TenantService,
+    private readonly dialog_: MatDialog,
+    private readonly route_: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.form1 = this.fb_.group({
+      tenant: [this.route_.snapshot.params.tenant || '', Validators.required],
+      role: [this.route_.snapshot.params.role || '', Validators.required],
         usertype: [
-          '',
-          Validators.compose([
-            Validators.maxLength(this.tenantMaxLength),
-            Validators.pattern(this.tenantPattern),
-          ]),
-        ],
-        tenant: [
           '',
           Validators.compose([
             Validators.maxLength(this.tenantMaxLength),
@@ -120,11 +121,53 @@ export class CreateUserDialog implements OnInit {
 
       },
     );
+    this.tenant.valueChanges.subscribe((tenant: string) => {
+      this.name.clearAsyncValidators();
+      this.name.setAsyncValidators(validateUniqueName(this.http_, tenant));
+      this.name.updateValueAndValidity();
+    });
+    this.http_.get('api/v1/tenant').subscribe((result: TenantList) => {
+      this.tenants = result.tenants.map((tenant: Tenant) => tenant.objectMeta.name);
+      this.tenant.patchValue(
+        !this.tenantService_.isCurrentSystem()
+          ? this.route_.snapshot.params.tenant || this.tenants[0]
+          : this.tenants[0],
+      );
+    });
+    this.role.valueChanges.subscribe((role: string) => {
+      this.name.clearAsyncValidators();
+      this.name.setAsyncValidators(validateUniqueName(this.http_, role));
+      this.name.updateValueAndValidity();
+    });
+    this.http_.get('api/v1/role').subscribe((result: RoleList) => {
+      this.roles = result.items.map((role: Role) => role.objectMeta.name);
+      this.role.patchValue(
+        !this.tenantService_.isCurrentSystem()
+          ? this.route_.snapshot.params.role || this.roles[0]
+          : this.roles[0],
+      );
+    });
+
 
   }
-
-  get tenant(): any {
-    return this.tenantService_.current()
+  selectUserType(event:any)
+  {
+    this.selected=event;
+  }
+  get name(): AbstractControl {
+    return this.form1.get('name');
+  }
+  get imagePullSecret(): AbstractControl {
+    return this.form1.get('imagePullSecret');
+  }
+  resetImagePullSecret(): void {
+    this.imagePullSecret.patchValue('');
+  }
+  get tenant(): AbstractControl {
+    return this.form1.get('tenant');
+  }
+  get role(): AbstractControl {
+    return this.form1.get('role');
   }
   get user(): AbstractControl {
     return this.form1.get('username');
@@ -140,11 +183,14 @@ export class CreateUserDialog implements OnInit {
   get storageclusterid(): AbstractControl {
     return this.form1.get('storageclusterid');
   }
+  get namespace(): AbstractControl {
+    return this.form1.get('namespace');
+  }
 
   createUser() {
     let response = this.http_.get('api/v1/tenant/'+this.user.value)
     this.getToken(async (token_:any)=>{
-      const userSpec= {username: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant};
+      const userSpec= {username: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant.value};
       const userTokenPromise = await this.csrfToken_.getTokenForAction('users');
       userTokenPromise.subscribe(csrfToken => {
         return this.http_
@@ -258,7 +304,7 @@ export class CreateUserDialog implements OnInit {
     if(this.usertype.value == "tenant-user") {
       this.namespaceUsed = "default"
     }
-    const roleBindingsSpec= {name: this.user.value,namespace: this.namespaceUsed, subject: { kind: "ServiceAccount", name: this.user.value,  namespace : this.namespaceUsed, apiGroup : ""},role_ref:{kind: "Role",name: this.user.value,apiGroup: "rbac.authorization.k8s.io"}};
+    const roleBindingsSpec= {name: this.user.value,namespace: this.namespaceUsed, subject: { kind: "ServiceAccount", name: this.user.value,  namespace : this.namespaceUsed, apiGroup : ""},role_ref:{kind: "Role",name: this.role.value,apiGroup: "rbac.authorization.k8s.io"}};
     const tokenPromise = this.csrfToken_.getTokenForAction('rolebindings');
     tokenPromise.subscribe(csrfToken => {
       return this.http_
@@ -306,37 +352,6 @@ export class CreateUserDialog implements OnInit {
   decode(s: string): string {
     return atob(s);
   }
-
-  //  Creates new tenant based on the state of the controller.
-  createTenant(): void {
-    const tenantSpec= {name: this.user.value,storageclusterid: this.storageclusterid.value};
-    const tokenPromise = this.csrfToken_.getTokenForAction('tenant');
-    tokenPromise.subscribe(csrfToken => {
-      return this.http_
-        .post<{valid: boolean}>(
-          'api/v1/tenant',
-          {...tenantSpec},
-          {
-            headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),
-          },
-        )
-        .subscribe(
-          () => {
-            this.dialogRef.close(this.tenant.value);
-          },
-          error => {
-            this.dialogRef.close();
-            const configData: AlertDialogConfig = {
-              title: 'Tenant Already Exists',
-              message: error.data,
-              confirmLabel: 'OK',
-            };
-            this.matDialog_.open(AlertDialog, {data: configData});
-          },
-        );
-    });
-  }
-
   // Get Secret name
   getToken(callback: any): any {
     let interval = setInterval(() => {
@@ -354,15 +369,18 @@ export class CreateUserDialog implements OnInit {
 
 
   }
-
   createTenantUser() {
     this.createServiceAccount()
-    this.createTenant()
     if(this.usertype.value == "tenant-user"){
-      this.createRole()
-      this.createRoleBinding()
+       this.createRoleBinding()
+
     } else {
-      this.createClusterRole()
+      if(this.usertype.value == "cluster-admin") {
+        this.adminroleUsed = "admin-role"
+      }
+      else{
+        this.createClusterRole()
+      }
       this.createClusterRoleBinding()
     }
     this.createUser()
