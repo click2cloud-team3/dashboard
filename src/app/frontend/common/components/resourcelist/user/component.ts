@@ -13,9 +13,10 @@
 // limitations under the License.
 
 import {HttpParams} from '@angular/common/http';
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {User, UserList} from '@api/backendapi';
 import {Observable} from 'rxjs/Observable';
+import {MatDrawer} from '@angular/material';
 
 import {ResourceListWithStatuses} from '../../../resources/list';
 import {EndpointManager, Resource} from '../../../services/resource/endpoint';
@@ -29,14 +30,20 @@ import {VerberService} from "../../../../../frontend/common/services/global/verb
 @Component({
   selector: 'kd-user-list',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 
-export class TenantUserListComponent extends ResourceListWithStatuses<UserList, User> {
+export class UserListComponent extends ResourceListWithStatuses<UserList, User> {
   @Input() endpoint = EndpointManager.resource(Resource.user).list();
+  @ViewChild(MatDrawer, {static: true}) private readonly nav_: MatDrawer;
+   // visible: boolean = true;
+
 
   displayName:any;
   typeMeta:any;
   objectMeta:any;
+  // changeState: () => any;
+  // isAllowed:any;
 
   constructor(
     public readonly verber_: VerberService,
@@ -48,12 +55,32 @@ export class TenantUserListComponent extends ResourceListWithStatuses<UserList, 
     this.id = ListIdentifier.user;
     this.groupId = ListGroupIdentifier.cluster;
 
+    // const usertype = sessionStorage.getItem('userType');//added
+
     // Register status icon handlers
     this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
     this.registerBinding(this.icon.error, 'kd-error', this.isInErrorState);
 
     // Register action columns.
     this.registerActionColumn<MenuComponent>('menu', MenuComponent);
+
+
+    // this.isAllowed = (optional: number) => {
+    //   return optional === 0 ? true : this.state;
+    // }
+
+    // this.changeState = () => {
+    //   this.state = !this.state;
+    // }
+    // if(usertype=='cluster-admin'){
+    //   this.visible=this.visible;
+    // }
+    // else{
+    //   this.visible=!this.visible;
+    // }
+
+
+
   }
 
   getResourceObservable(params?: HttpParams): Observable<UserList> {
@@ -61,7 +88,23 @@ export class TenantUserListComponent extends ResourceListWithStatuses<UserList, 
   }
 
   map(userList: UserList): User[] {
-    return userList.users;
+    let userdata:any=[];
+    let userType=sessionStorage.getItem('userType');
+
+    console.log('userType', userType.split("-")[0])
+    let data=userList.users
+    data.map((elem)=>{
+        if(userType.split("-")[0]==='tenant')
+        {
+          if (elem.objectMeta.type.includes('tenant')) {
+            return userdata.push(elem)
+          }
+        }
+        else {
+          return userdata.push(elem)
+        }
+    })
+    return userdata
   }
 
   isInErrorState(resource: User): boolean {

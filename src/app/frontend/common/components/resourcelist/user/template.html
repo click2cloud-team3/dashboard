@@ -32,6 +32,7 @@ limitations under the License.
         <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{totalItems}}
         </div>
 
+
         <div content [hidden]="showZeroState()">
           <div kdLoadingSpinner [isLoading]="isLoading"></div>
 
@@ -56,10 +57,13 @@ limitations under the License.
                                matSortDirection="asc"
                                i18n>Name</mat-header-cell>
               <mat-cell *matCellDef="let user">
-                {{user.objectMeta.username}}
+                <a [routerLink]="getDetailsHref(user.objectMeta.username)"
+                   queryParamsHandling="preserve">
+
+                  {{user.objectMeta.username}}
+                  </a>
               </mat-cell>
             </ng-container>
-
 
             <ng-container [matColumnDef]="getColumns()[2]">
               <mat-header-cell *matHeaderCellDef
@@ -70,7 +74,11 @@ limitations under the License.
             <ng-container [matColumnDef]="getColumns()[3]">
               <mat-header-cell *matHeaderCellDef
                                i18n>Type</mat-header-cell>
-              <mat-cell *matCellDef="let user">{{user.objectMeta.type}}</mat-cell>
+              <mat-cell *matCellDef="let user">
+
+                {{user.objectMeta.type}}
+
+              </mat-cell>
             </ng-container>
 
             <ng-container *ngFor="let col of getActionColumns()"

@@ -26,6 +26,7 @@ export interface ListMeta {
 }
 
 export interface ObjectMeta {
+  type: any;
   name?: string;
   namespace?: string;
   labels?: StringMap;
