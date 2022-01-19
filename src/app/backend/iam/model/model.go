@@ -17,16 +17,19 @@ package model
 
 import (
 	"github.com/kubernetes/dashboard/src/app/backend/api"
+	"time"
 )
 
 // User schema of the user table
 type User struct {
-	ID       int64  `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Token    string `json:"token"`
-	Type     string `json:"type"`
-	Tenant   string `json:"tenant"`
+	ID           int64     `json:"id"`
+	Username     string    `json:"username"`
+	Password     string    `json:"password"`
+	Token        string    `json:"token"`
+	Type         string    `json:"type"`
+	Tenant       string    `json:"tenant"`
+	Role         string    `json:"role"`
+	CreationTime time.Time `json:"creationTime"`
 }
 
 type UserDetails struct {

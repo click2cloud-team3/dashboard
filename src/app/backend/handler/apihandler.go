@@ -24,6 +24,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/kubernetes/dashboard/src/app/backend/iam/db"
 	"github.com/kubernetes/dashboard/src/app/backend/iam/model"
@@ -864,7 +865,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Writes(node.NodeList{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/node/{name}").
-			To(apiHandler.handleGetNodeDetail).
+			To(apiHandler1.handleGetNodeDetail).
 			Writes(node.NodeDetail{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/node/{name}/event").
@@ -1941,14 +1942,28 @@ func (apiHandler *APIHandlerV2) handleGetTenantPartitionDetail(request *restful.
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 
 }
-func (apiHandler *APIHandler) handleGetNodeDetail(request *restful.Request, response *restful.Response) {
-	k8sClient, err := apiHandler.cManager.Client(request)
-	if err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
+func (apiHandler *APIHandlerV2) handleGetNodeDetail(request *restful.Request, response *restful.Response) {
+	//k8sClient, err := apiHandler.cManager.Client(request)
+	//if err != nil {
+	//	errors.HandleInternalError(response, err)
+	//	return
+	//}
 
 	name := request.PathParameter("name")
+	var k8sClient kubernetes.Interface
+	var err error
+	for _, rpManager := range apiHandler.rpManager {
+		k8sClient = rpManager.InsecureClient()
+		dataSelect := parseDataSelectPathParameter(request)
+		dataSelect.MetricQuery = dataselect.StandardMetrics
+		_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+		if err != nil {
+			log.Printf("Invalid Client or Internal Error %s", err.Error())
+			//errors.HandleInternalError(response, err)
+		} else {
+			break
+		}
+	}
 	dataSelect := parseDataSelectPathParameter(request)
 	dataSelect.MetricQuery = dataselect.StandardMetrics
 	result, err := node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
@@ -5392,7 +5407,7 @@ func (apiHandler *APIHandler) handleCreateUser(w *restful.Request, r *restful.Re
 	if err != nil {
 		log.Fatalf("Unable to decode the request body.  %v", err)
 	}
-
+	user.CreationTime = time.Now().Truncate(time.Second)
 	insertID := db.InsertUser(user)
 	res := response{
 		ID:      insertID,

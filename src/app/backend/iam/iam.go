@@ -125,12 +125,14 @@ func CreateClusterAdmin() error {
 
 	// Create User and enter data into DB
 	user := model.User{
-		ID:       0,
-		Username: admin,
-		Password: "Centaurus@123",
-		Token:    string(token),
-		Type:     "cluster-admin",
-		Tenant:   "system",
+		ID:           0,
+		Username:     admin,
+		Password:     "Centaurus@123",
+		Token:        string(token),
+		Type:         "cluster-admin",
+		Tenant:       "system",
+		Role:         "admin",
+		CreationTime: time.Now(),
 	}
 
 	// call insertUser function and pass the user data
