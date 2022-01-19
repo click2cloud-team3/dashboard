@@ -10,7 +10,7 @@ import (
 
 type ResourcePartitionList struct {
 	ListMeta          api.ListMeta       `json:"listMeta"`
-	Partitions        []*Partition       `json:"partitions"`
+	Partitions        []*PartitionDetail `json:"resourcePartitions"`
 	CumulativeMetrics []metricapi.Metric `json:"cumulativeMetrics"`
 
 	// List of non-critical errors, that occurred during resource retrieval.
@@ -18,13 +18,23 @@ type ResourcePartitionList struct {
 }
 
 type TenantPartitionList struct {
-	ListMeta          api.ListMeta       `json:"listMeta"`
-	Partitions        []*TenantPartition `json:"tenantPartitions"`
-	CumulativeMetrics []metricapi.Metric `json:"cumulativeMetrics"`
+	ListMeta          api.ListMeta             `json:"listMeta"`
+	Partitions        []*TenantPartitionDetail `json:"tenantPartitions"`
+	CumulativeMetrics []metricapi.Metric       `json:"cumulativeMetrics"`
 
 	// List of non-critical errors, that occurred during resource retrieval.
 	Errors []error `json:"errors"`
 }
+type PartitionDetail struct {
+	ObjectMeta Partition    `json:"objectMeta"`
+	TypeMeta   api.TypeMeta `json:"typeMeta"`
+}
+
+type TenantPartitionDetail struct {
+	ObjectMeta TenantPartition `json:"objectMeta"`
+	TypeMeta   api.TypeMeta    `json:"typeMeta"`
+}
+
 type Partition struct {
 	Name             string `json:"name"`
 	NodeCount        int    `json:"nodeCount"`
@@ -41,7 +51,7 @@ type TenantPartition struct {
 	HealthyNodeCount int64  `json:"healthyNodeCount"`
 }
 
-func GetPartitionDetail(client client.Interface, cLusterName string) (*Partition, error) {
+func GetPartitionDetail(client client.Interface, cLusterName string) (*PartitionDetail, error) {
 	nodes, err := client.CoreV1().Nodes().List(api.ListEverything)
 	if err != nil {
 		return nil, err
@@ -57,17 +67,17 @@ func GetPartitionDetail(client client.Interface, cLusterName string) (*Partition
 			healthyNodeCount++
 		}
 	}
-	partitionDetail := new(Partition)
-	partitionDetail.NodeCount = len(nodes.Items)
-	partitionDetail.CPULimit = cpuLimit
-	partitionDetail.MemoryLimit = memoryLimit
-	partitionDetail.HealthyNodeCount = healthyNodeCount
-	partitionDetail.Name = cLusterName
-
+	partitionDetail := new(PartitionDetail)
+	partitionDetail.ObjectMeta.NodeCount = len(nodes.Items)
+	partitionDetail.ObjectMeta.CPULimit = cpuLimit
+	partitionDetail.ObjectMeta.MemoryLimit = memoryLimit
+	partitionDetail.ObjectMeta.HealthyNodeCount = healthyNodeCount
+	partitionDetail.ObjectMeta.Name = cLusterName
+	partitionDetail.TypeMeta.Kind = "ResourcePartition"
 	return partitionDetail, nil
 }
 
-func GetTenantPartitionDetail(client client.Interface, cLusterName string) (*TenantPartition, error) {
+func GetTenantPartitionDetail(client client.Interface, cLusterName string) (*TenantPartitionDetail, error) {
 	nodes, err := client.CoreV1().Nodes().List(api.ListEverything)
 	if err != nil {
 		return nil, err
@@ -87,12 +97,13 @@ func GetTenantPartitionDetail(client client.Interface, cLusterName string) (*Ten
 	if err != nil {
 		return nil, err
 	}
-	partitionDetail := new(TenantPartition)
-	partitionDetail.TenantCount = len(tenants.Items)
-	partitionDetail.CPULimit = cpuLimit
-	partitionDetail.MemoryLimit = memoryLimit
-	partitionDetail.HealthyNodeCount = healthyNodeCount
-	partitionDetail.Name = cLusterName
+	partitionDetail := new(TenantPartitionDetail)
+	partitionDetail.ObjectMeta.TenantCount = len(tenants.Items)
+	partitionDetail.ObjectMeta.CPULimit = cpuLimit
+	partitionDetail.ObjectMeta.MemoryLimit = memoryLimit
+	partitionDetail.ObjectMeta.HealthyNodeCount = healthyNodeCount
+	partitionDetail.ObjectMeta.Name = cLusterName
+	partitionDetail.TypeMeta.Kind = "TenantPartition"
 
 	return partitionDetail, nil
 }
