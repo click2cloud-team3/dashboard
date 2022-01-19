@@ -1,0 +1,135 @@
+<!--
+Copyright 2020 Authors of Arktos.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="main_container">
+  <div class="row">
+    <kd-card role="table"
+             [hidden]="isHidden()">
+      <div title
+           fxLayout="row"
+           i18n>Tenant Partitions</div>
+      <div description><span class="kd-muted-light"
+                             i18n>Items:&nbsp;</span>{{totalItems}}</div>
+      <div actions>
+        <kd-card-list-filter></kd-card-list-filter>
+      </div>
+
+      <div content
+           [hidden]="showZeroState()">
+        <div kdLoadingSpinner
+             [isLoading]="isLoading"></div>
+
+        <mat-table [dataSource]="getData()"
+                   matSort
+                   [matSortActive]="getColumns()[2]"
+                   matSortDisableClear
+                   matSortDirection="asc">
+          <ng-container [matColumnDef]="getColumns()[0]">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let tenantPartition">
+              <mat-icon [ngClass]="getStatus(tenantPartition).iconClass">
+                {{getStatus(tenantPartition).iconName}}
+              </mat-icon>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container [matColumnDef]="getColumns()[1]">
+            <mat-header-cell *matHeaderCellDef
+                             mat-sort-header
+                             disableClear="true"
+                             i18n>Name</mat-header-cell>
+            <mat-cell *matCellDef="let tenantPartition" >
+              <a routerLink="/node" [queryParams]="{clusterName : tenantPartition.objectMeta.name }" skipLocationChange="true" queryParamsHandling="merge" routerLinkActive="active">
+                {{tenantPartition.objectMeta.name}}
+              </a>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container [matColumnDef]="getColumns()[2]">
+            <mat-header-cell *matHeaderCellDef
+                             mat-sort-header
+                             disableClear="true"
+                             i18n>Tenant Count</mat-header-cell>
+            <mat-cell *matCellDef="let tenantPartition">
+              {{tenantPartition.objectMeta.tenantCount}}
+            </mat-cell>
+          </ng-container>
+          <ng-container [matColumnDef]="getColumns()[3]">
+            <mat-header-cell *matHeaderCellDef
+                             mat-sort-header
+                             disableClear="true"
+                             i18n>CPU limits (cores)</mat-header-cell>
+            <mat-cell *matCellDef="let tenantPartition">
+              {{tenantPartition.objectMeta.cpuLimit | number:"1.2-2"}}%
+            </mat-cell>
+          </ng-container>
+
+          <ng-container [matColumnDef]="getColumns()[4]">
+            <mat-header-cell *matHeaderCellDef
+                             mat-sort-header
+                             disableClear="true"
+                             i18n>Memory limits (bytes)</mat-header-cell>
+            <mat-cell *matCellDef="let tenantPartition">
+              {{tenantPartition.objectMeta.memoryLimit | number:"1.2-2"}}%
+            </mat-cell>
+          </ng-container>
+
+          <ng-container [matColumnDef]="getColumns()[5]">
+            <mat-header-cell *matHeaderCellDef
+                             mat-sort-header
+                             disableClear="true"
+                             i18n>Health Status</mat-header-cell>
+            <mat-cell *matCellDef="let tenantPartition">
+              {{tenantPartition.objectMeta.healthyNodeCount}}/1
+            </mat-cell>
+          </ng-container>
+
+          <ng-container [matColumnDef]="getColumns()[6]">
+            <mat-header-cell *matHeaderCellDef
+                             mat-sort-header
+                             disableClear="true"
+                             i18n>Etcd size</mat-header-cell>
+            <mat-cell *matCellDef="let tenantPartition">
+              5GB/10GB
+            </mat-cell>
+          </ng-container>
+
+          <ng-container *ngFor="let col of getActionColumns()"
+                        [matColumnDef]="col.name">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let tenantPartition">
+              <kd-dynamic-cell [component]="col.component"
+                               [resource]="tenantPartition"></kd-dynamic-cell>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="getColumns()"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: getColumns();"></mat-row>
+        </mat-table>
+
+        <mat-paginator [length]="totalItems"
+                       [pageSize]="itemsPerPage"
+                       [hidePageSize]="true"
+                       [showFirstLastButtons]="true"></mat-paginator>
+      </div>
+
+      <div content
+           [hidden]="!showZeroState()">
+        <kd-list-zero-state></kd-list-zero-state>
+      </div>
+    </kd-card>
+  </div>
+</div>

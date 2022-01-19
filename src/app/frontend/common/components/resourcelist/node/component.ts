@@ -23,6 +23,8 @@ import {ResourceService} from '../../../services/resource/resource';
 import {MenuComponent} from '../../list/column/menu/component';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 import {VerberService} from "../../../services/global/verber";
+import {ActivatedRoute} from "@angular/router";
+
 
 @Component({
   selector: 'kd-node-list',
@@ -33,10 +35,14 @@ export class NodeListComponent extends ResourceListWithStatuses<NodeList, Node> 
   displayName:any;
   typeMeta:any;
   objectMeta:any;
-  rpCount: number;
+  nodeCount: number;
+  clusterName: string;
+  partitions: [];
+
   constructor(
-    public readonly verber_: VerberService,
+    readonly verber_: VerberService,
     private readonly node_: ResourceService<NodeList>,
+    private readonly activatedRoute_: ActivatedRoute,
     notifications: NotificationsService,
   ) {
     super('node', notifications);
@@ -50,6 +56,10 @@ export class NodeListComponent extends ResourceListWithStatuses<NodeList, Node> 
     this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
     this.registerBinding(this.icon.help, 'kd-muted', this.isInUnknownState);
     this.registerBinding(this.icon.error, 'kd-error', this.isInErrorState);
+
+    this.activatedRoute_.queryParamMap.subscribe((paramMap => {
+      this.clusterName = paramMap.get('clusterName')}))
+
   }
 
   getResourceObservable(params?: HttpParams): Observable<NodeList> {
@@ -57,15 +67,41 @@ export class NodeListComponent extends ResourceListWithStatuses<NodeList, Node> 
   }
 
   map(nodeList: NodeList): Node[] {
+
     const resourcePartitionList: any = [];
+    const tenantPartitionList: any = [];
+
     nodeList.nodes.map((node)=>{
       if(node['objectMeta']['name'].includes("rp"))
       {
         resourcePartitionList.push(node);
+      } else {
+        tenantPartitionList.push(node);
       }
     })
-    this.rpCount = resourcePartitionList.length
-    return resourcePartitionList;
+
+    const resourcePartitions = resourcePartitionList.reduce((acc:any, item:any) => {
+      acc[`${item.clusterName}`] = (acc[`${item.clusterName}`] || []);
+      acc[`${item.clusterName}`].push(item);
+      return acc;
+    }, {});
+
+    const tenantPartitions = tenantPartitionList.reduce((acc:any, item:any) => {
+      acc[`${item.clusterName}`] = (acc[`${item.clusterName}`] || []);
+      acc[`${item.clusterName}`].push(item);
+      return acc;
+    }, {});
+
+    if (this.clusterName.includes("rp")){
+      this.partitions = resourcePartitions[this.clusterName];
+      this.nodeCount = resourcePartitions[this.clusterName].length
+    }else{
+      this.partitions = tenantPartitions[this.clusterName]
+      this.nodeCount = tenantPartitions[this.clusterName].length
+
+    }
+
+    return this.partitions;
   }
 
   isInErrorState(resource: Node): boolean {

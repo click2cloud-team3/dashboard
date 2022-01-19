@@ -94,9 +94,11 @@ export class TenantSelectorComponent implements OnInit {
             .map(t => t.objectMeta.name)
             .filter(t => t !== this.systemTenantName);
 
-          if (tenantList.errors.length > 0) {
-            for (const err of tenantList.errors) {
-              this.notifications_.push(err.ErrStatus.message, NotificationSeverity.error);
+          if (tenantList.errors !== null){
+            if (tenantList.errors.length > 0) {
+              for (const err of tenantList.errors) {
+                this.notifications_.push(err.ErrStatus.message, NotificationSeverity.error);
+              }
             }
           }
         },

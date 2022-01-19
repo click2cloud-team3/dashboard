@@ -80,7 +80,8 @@ import {TenantListComponent} from './resourcelist/tenantlist/component';
 import {UserListComponent} from "./resourcelist/user/component";
 import {ResourceQuotasListComponent} from "./resourcelist/resourcequotalist/component";
 import {PartitionListComponent} from "./resourcelist/partitionlist/component";
-import {TenantPartitionListComponent} from "./resourcelist/tenantpartitionlist/component";
+import {ResourcePartitionListComponent} from "./resourcelist/resourcepartition/component";
+import {TenantPartitionListComponent} from "./resourcelist/tenantpartition/component";
 import {RoleListComponent} from "./resourcelist/role/component";
 import {ResourceQuotaListComponent} from "./quotas/component";
 
@@ -96,6 +97,7 @@ const components = [
   AllocationChartComponent,
   ActionbarDetailTriggerComponent,
   BreadcrumbsComponent,
+  ResourcePartitionListComponent,
   TenantPartitionListComponent,
 
   CardComponent,

@@ -14,9 +14,8 @@
 
 import {HttpParams} from '@angular/common/http';
 import {Component, Input} from '@angular/core';
-import {Node, NodeList} from '@api/backendapi';
+import {TenantPartitionList, TenantPartition} from '@api/backendapi';
 import {Observable} from 'rxjs/Observable';
-
 
 import {ResourceListWithStatuses} from '../../../resources/list';
 import {NotificationsService} from '../../../services/global/notifications';
@@ -30,19 +29,19 @@ import {VerberService} from '../../../services/global/verber';
   selector: 'kd-tenant-partition-list',
   templateUrl: './template.html',
 })
-export class TenantPartitionListComponent extends ResourceListWithStatuses<NodeList, Node> {
-  @Input() endpoint = EndpointManager.resource(Resource.node).list();
+export class TenantPartitionListComponent extends ResourceListWithStatuses<TenantPartitionList, TenantPartition> {
+  @Input() endpointTp = EndpointManager.resource(Resource.tenantPartition).list();
   displayName:any;
   typeMeta:any;
   objectMeta:any;
-  tpCount: number;
+
   constructor(
-    public readonly verber_: VerberService,
-    private readonly node_: ResourceService<NodeList>,
+    readonly verber_: VerberService,
+    private readonly tenantPartition_: ResourceService<TenantPartitionList>,
     notifications: NotificationsService,
   ) {
-    super('node', notifications);
-    this.id = ListIdentifier.node;
+    super('resourcePartition', notifications);
+    this.id = ListIdentifier.tenantPartition;
     this.groupId = ListGroupIdentifier.cluster;
 
     // Register action columns.
@@ -50,44 +49,26 @@ export class TenantPartitionListComponent extends ResourceListWithStatuses<NodeL
 
     // Register status icon handlers
     this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
-    this.registerBinding(this.icon.help, 'kd-muted', this.isInUnknownState);
-    this.registerBinding(this.icon.error, 'kd-error', this.isInErrorState);
   }
 
-  getResourceObservable(params?: HttpParams): Observable<NodeList> {
-    return this.node_.get(this.endpoint, undefined, params);
+  getResourceObservable(params?: HttpParams): Observable<TenantPartitionList> {
+    return this.tenantPartition_.get(this.endpointTp, undefined, params);
   }
 
-  map(nodeList: NodeList): Node[] {
-    const tenantPartitionList: any = [];
-    nodeList.nodes.map((node)=>{
-      if(node['objectMeta']['name'].includes("tp"))
-      {
-        tenantPartitionList.push(node);
-      }
-    })
-    this.tpCount = tenantPartitionList.length
-    return tenantPartitionList;
+  map(tenantPartitionList: TenantPartitionList): TenantPartition[] {
+    return tenantPartitionList.tenantPartitions
   }
 
-  isInErrorState(resource: Node): boolean {
-    return resource.ready === 'False';
-  }
-
-  isInUnknownState(resource: Node): boolean {
-    return resource.ready === 'Unknown';
-  }
-
-  isInSuccessState(resource: Node): boolean {
-    return resource.ready === 'True';
+  isInSuccessState(): boolean {
+    return true;
   }
 
   getDisplayColumns(): string[] {
-    return ['statusicon', 'name', 'labels', 'ready', 'cpureq', 'cpulim', 'memreq', 'memlim', 'age'];
+    return ['statusicon', 'name', 'tenantcount','cpulim','memlim','health','etcd'];
   }
 
   getDisplayColumns2(): string[] {
-    return ['statusicon', 'name', 'labels', 'ready', 'cpureq', 'cpulim', 'memreq', 'memlim', 'age'];
+    return ['statusicon', 'name', 'tenantcount','cpulim','memlim','health','etcd'];
   }
 
   //added the code
