@@ -873,7 +873,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Writes(common.EventList{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/node/{name}/pod").
-			To(apiHandler.handleGetNodePods).
+			To(apiHandler1.handleGetNodePods).
 			Writes(pod.PodList{}))
 
 	apiV1Ws.Route(
@@ -1333,6 +1333,7 @@ func (apiHandler *APIHandlerV2) handleGetTenantList(request *restful.Request, re
 			return
 		}
 		for _, tenants := range result.Tenants {
+			tenants.ClusterName = cManager.GetClusterName()
 			tenantsList.Tenants = append(tenantsList.Tenants, tenants)
 			tenantsList.ListMeta.TotalItems++
 		}
@@ -1968,6 +1969,20 @@ func (apiHandler *APIHandlerV2) handleGetNodeDetail(request *restful.Request, re
 			break
 		}
 	}
+	if err != nil {
+		for _, cManager := range apiHandler.cManager {
+			k8sClient = cManager.InsecureClient()
+			dataSelect := parseDataSelectPathParameter(request)
+			dataSelect.MetricQuery = dataselect.StandardMetrics
+			_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+			if err != nil {
+				log.Printf("Invalid Client or Internal Error %s", err.Error())
+				//errors.HandleInternalError(response, err)
+			} else {
+				break
+			}
+		}
+	}
 	dataSelect := parseDataSelectPathParameter(request)
 	dataSelect.MetricQuery = dataselect.StandardMetrics
 	result, err := node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
@@ -2000,6 +2015,20 @@ func (apiHandler *APIHandlerV2) handleGetNodeEvents(request *restful.Request, re
 		}
 	}
 	if err != nil {
+		for _, cManager := range apiHandler.cManager {
+			k8sClient = cManager.InsecureClient()
+			dataSelect := parseDataSelectPathParameter(request)
+			dataSelect.MetricQuery = dataselect.StandardMetrics
+			_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+			if err != nil {
+				log.Printf("Invalid Client or Internal Error %s", err.Error())
+				//errors.HandleInternalError(response, err)
+			} else {
+				break
+			}
+		}
+	}
+	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
 	}
@@ -2013,14 +2042,42 @@ func (apiHandler *APIHandlerV2) handleGetNodeEvents(request *restful.Request, re
 	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
-func (apiHandler *APIHandler) handleGetNodePods(request *restful.Request, response *restful.Response) {
-	k8sClient, err := apiHandler.cManager.Client(request)
-	if err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
+func (apiHandler *APIHandlerV2) handleGetNodePods(request *restful.Request, response *restful.Response) {
+	//k8sClient, err := apiHandler.cManager.Client(request)
+	//if err != nil {
+	//	errors.HandleInternalError(response, err)
+	//	return
+	//}
 
 	name := request.PathParameter("name")
+	var k8sClient kubernetes.Interface
+	var err error
+	for _, rpManager := range apiHandler.rpManager {
+		k8sClient = rpManager.InsecureClient()
+		dataSelect := parseDataSelectPathParameter(request)
+		dataSelect.MetricQuery = dataselect.StandardMetrics
+		_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+		if err != nil {
+			log.Printf("Invalid Client or Internal Error %s", err.Error())
+			//errors.HandleInternalError(response, err)
+		} else {
+			break
+		}
+	}
+	if err != nil {
+		for _, cManager := range apiHandler.cManager {
+			k8sClient = cManager.InsecureClient()
+			dataSelect := parseDataSelectPathParameter(request)
+			dataSelect.MetricQuery = dataselect.StandardMetrics
+			_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+			if err != nil {
+				log.Printf("Invalid Client or Internal Error %s", err.Error())
+				//errors.HandleInternalError(response, err)
+			} else {
+				break
+			}
+		}
+	}
 	dataSelect := parseDataSelectPathParameter(request)
 	dataSelect.MetricQuery = dataselect.StandardMetrics
 	result, err := node.GetNodePods(k8sClient, apiHandler.iManager.Metric().Client(), dataSelect, name)
@@ -3824,6 +3881,7 @@ func (apiHandler *APIHandlerV2) handleGetNamespaceDetailWithMultiTenancy(request
 		}
 		for _, tnts := range tenantList.Tenants {
 			if tnt == tnts.ObjectMeta.Name {
+				tnts.ClusterName = cManager.GetClusterName()
 				name := request.PathParameter("name")
 				result, err = ns.GetNamespaceDetailWithMultiTenancy(k8sClient, tnt, name)
 				if err != nil {

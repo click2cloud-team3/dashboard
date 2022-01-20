@@ -31,7 +31,8 @@ type Tenant struct {
 	TypeMeta   api.TypeMeta   `json:"typeMeta"`
 
 	// Phase is the current lifecycle phase of the tenant
-	Phase v1.TenantPhase `json:"phase"`
+	Phase       v1.TenantPhase `json:"phase"`
+	ClusterName string         `json:"clusterName"`
 }
 
 // TenantList contains a list of tenants in the cluster.
