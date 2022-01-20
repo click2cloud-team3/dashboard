@@ -35,7 +35,7 @@ limitations under the License.
       <kd-card role="table" [hidden]="isHidden()">
         <div title fxLayout="row" i18n></div>
         <div title fxLayout="row" i18n>Tenants</div>
-        <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{totalItems}}
+        <div description><span class="kd-muted-light" i18n>Items:&nbsp;</span>{{tenantCount}}
         </div>
 
         <div content [hidden]="showZeroState()">
@@ -56,6 +56,12 @@ limitations under the License.
       </ng-container>
       <ng-container [matColumnDef]="getColumns()[1]">
         <mat-header-cell *matHeaderCellDef
+                         i18n>Tenant Partition Name</mat-header-cell>
+        <mat-cell *matCellDef="let tenant">{{tenant.clusterName}}</mat-cell>
+      </ng-container>
+
+      <ng-container [matColumnDef]="getColumns()[2]">
+        <mat-header-cell *matHeaderCellDef
                          mat-sort-header
                          disableClear="true"
                          i18n>Name</mat-header-cell>
@@ -67,13 +73,13 @@ limitations under the License.
         </mat-cell>
       </ng-container>
 
-      <ng-container [matColumnDef]="getColumns()[2]">
+      <ng-container [matColumnDef]="getColumns()[3]">
         <mat-header-cell *matHeaderCellDef
                          i18n>Phase</mat-header-cell>
         <mat-cell *matCellDef="let tenant">{{tenant.phase}}</mat-cell>
       </ng-container>
 
-      <ng-container [matColumnDef]="getColumns()[3]">
+      <ng-container [matColumnDef]="getColumns()[4]">
         <mat-header-cell *matHeaderCellDef
                          mat-sort-header
                          disableClear="true"
@@ -97,7 +103,7 @@ limitations under the License.
       <mat-row *matRowDef="let row; columns: getColumns();"></mat-row>
     </mat-table>
 
-    <mat-paginator [length]="totalItems"
+    <mat-paginator [length]="tenantCount"
                    [pageSize]="itemsPerPage"
                    [hidePageSize]="true"
                      [showFirstLastButtons]="true"></mat-paginator>
