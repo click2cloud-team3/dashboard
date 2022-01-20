@@ -75,6 +75,11 @@ const routes: Routes = [
         path: 'usermanagement',
         loadChildren: 'usermanagement/module#UserManagementModule',
       },
+      {
+        path: 'user',
+        loadChildren: 'usermanagement/user/module#UsersModule',
+
+      },
 
       // Workloads group
       {
@@ -198,11 +203,7 @@ const routes: Routes = [
         loadChildren: 'tenantmanagement/tenantmonitoring/module#TenantMonitoringModule',
 
       },
-      {
-        path: 'tenantuser',
-        loadChildren: 'tenantmanagement/tenantuser/module#TenantUsersModule',
 
-      },
       //here
       {
         path: 'create',
