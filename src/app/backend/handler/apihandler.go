@@ -18,7 +18,7 @@ package handler
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/kubernetes/dashboard/src/app/backend/resourcepartition"
+	"github.com/kubernetes/dashboard/src/app/backend/resource/partition"
 	"k8s.io/client-go/kubernetes"
 	"log"
 	"net/http"
@@ -163,7 +163,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	apiV1Ws.Route(
 		apiV1Ws.GET("/resourcepartition").
 			To(apiHandler1.handleGetResourcePartitionDetail).
-			Writes(resourcepartition.ResourcePartitionList{}))
+			Writes(partition.ResourcePartitionList{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/tenantpartition").
 			To(apiHandler1.handleGetTenantPartitionDetail).
@@ -1901,7 +1901,7 @@ func (apiHandler *APIHandlerV2) handleGetNodeLists(request *restful.Request, res
 func (apiHandler *APIHandlerV2) handleGetResourcePartitionDetail(request *restful.Request, response *restful.Response) {
 	//var nodeLists node.NodeList
 	//For tpclients
-	result := new(resourcepartition.ResourcePartitionList)
+	result := new(partition.ResourcePartitionList)
 	for _, rpManager := range apiHandler.rpManager {
 		k8sClient := rpManager.InsecureClient()
 		//if err != nil {
@@ -1910,12 +1910,12 @@ func (apiHandler *APIHandlerV2) handleGetResourcePartitionDetail(request *restfu
 		//}
 		dataSelect := parseDataSelectPathParameter(request)
 		dataSelect.MetricQuery = dataselect.StandardMetrics
-		partionDetail, err := resourcepartition.GetPartitionDetail(k8sClient, rpManager.GetClusterName())
+		partitionDetail, err := partition.GetResourcePartitionDetail(k8sClient, rpManager.GetClusterName())
 		if err != nil {
 			errors.HandleInternalError(response, err)
 			return
 		}
-		result.Partitions = append(result.Partitions, partionDetail)
+		result.Partitions = append(result.Partitions, partitionDetail)
 	}
 	result.ListMeta.TotalItems = len(result.Partitions)
 
@@ -1926,7 +1926,7 @@ func (apiHandler *APIHandlerV2) handleGetResourcePartitionDetail(request *restfu
 func (apiHandler *APIHandlerV2) handleGetTenantPartitionDetail(request *restful.Request, response *restful.Response) {
 	//var nodeLists node.NodeList
 	//For tpclients
-	result := new(resourcepartition.TenantPartitionList)
+	result := new(partition.TenantPartitionList)
 	for _, cManager := range apiHandler.cManager {
 		k8sClient := cManager.InsecureClient()
 		//if err != nil {
@@ -1935,12 +1935,12 @@ func (apiHandler *APIHandlerV2) handleGetTenantPartitionDetail(request *restful.
 		//}
 		dataSelect := parseDataSelectPathParameter(request)
 		dataSelect.MetricQuery = dataselect.StandardMetrics
-		partionDetail, err := resourcepartition.GetTenantPartitionDetail(k8sClient, cManager.GetClusterName())
+		partitionDetail, err := partition.GetTenantPartitionDetail(k8sClient, cManager.GetClusterName())
 		if err != nil {
 			errors.HandleInternalError(response, err)
 			return
 		}
-		result.Partitions = append(result.Partitions, partionDetail)
+		result.Partitions = append(result.Partitions, partitionDetail)
 	}
 	result.ListMeta.TotalItems = len(result.Partitions)
 
