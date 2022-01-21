@@ -52,7 +52,7 @@ limitations under the License.
                              disableClear="true"
                              i18n>Name</mat-header-cell>
             <mat-cell *matCellDef="let resourcePartition" >
-              <a routerLink="/node" [queryParams]="{clusterName : resourcePartition.objectMeta.name }" skipLocationChange="true" queryParamsHandling="merge" routerLinkActive="active">
+              <a routerLink="/node" [queryParams]="{ clusterName: resourcePartition.objectMeta.name }" [skipLocationChange]="true" queryParamsHandling="merge" routerLinkActive="active">
               {{resourcePartition.objectMeta.name}}
               </a>
             </mat-cell>
@@ -73,7 +73,7 @@ limitations under the License.
                              disableClear="true"
                              i18n>CPU limits (cores)</mat-header-cell>
             <mat-cell *matCellDef="let resourcePartition">
-              {{resourcePartition.objectMeta.cpuLimit | number:"1.2-2"}}%
+              {{resourcePartition.objectMeta.cpuLimit  | kdCores}}
             </mat-cell>
           </ng-container>
 
@@ -83,7 +83,7 @@ limitations under the License.
                              disableClear="true"
                              i18n>Memory limits (bytes)</mat-header-cell>
             <mat-cell *matCellDef="let resourcePartition">
-              {{resourcePartition.objectMeta.memoryLimit | number:"1.2-2"}}%
+              {{resourcePartition.objectMeta.memoryLimit  | kdMemory}}
             </mat-cell>
           </ng-container>
 
