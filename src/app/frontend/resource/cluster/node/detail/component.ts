@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute,Router} from '@angular/router';
 import {NodeAddress, NodeDetail, NodeTaint, Tenant, TenantList} from '@api/backendapi';
 import {Subscription} from 'rxjs/Subscription';
 
@@ -47,6 +47,7 @@ export class NodeDetailComponent implements OnInit, OnDestroy {
     private readonly node_: ResourceService<NodeDetail>,
     private readonly actionbar_: ActionbarService,
     private readonly activatedRoute_: ActivatedRoute,
+    private readonly router_: Router,
     private readonly notifications_: NotificationsService,
   ) {}
 
@@ -65,13 +66,10 @@ export class NodeDetailComponent implements OnInit, OnDestroy {
         this.notifications_.pushErrors(d.errors);
         this.actionbar_.onInit.emit(new ResourceMeta('Node', d.objectMeta, d.typeMeta));
         this.isInitialized = true;
+        if (d.clusterName.includes('-tp')) {
+          this.showTenant = true;
+        }
       });
-
-    this.activatedRoute_.queryParamMap.subscribe((paramMap => {
-      this.clusterName = paramMap.get('clusterName')}))
-      if (this.clusterName.includes('tp')){
-        this.showTenant = true
-      }
   }
 
   ngOnDestroy(): void {

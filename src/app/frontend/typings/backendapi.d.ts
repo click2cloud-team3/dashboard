@@ -22,6 +22,7 @@ export interface ResourceDetail {
   objectMeta: ObjectMeta;
   typeMeta: TypeMeta;
   errors: K8sError[];
+  clusterName: string;
 }
 
 export interface ResourceList {

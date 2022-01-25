@@ -24,7 +24,6 @@ import {TenantService} from '../../services/global/tenant';
 import {ResourceService} from 'common/services/resource/resource';
 import {EndpointManager, Resource} from 'common/services/resource/endpoint';
 import {NotificationsService, NotificationSeverity} from 'common/services/global/notifications';
-import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'kd-tenant-selector',
@@ -52,12 +51,11 @@ export class TenantSelectorComponent implements OnInit {
     private readonly tenant_: ResourceService<TenantList>,
     private readonly notifications_: NotificationsService,
     private readonly _activeRoute: ActivatedRoute,
-    private readonly http_: HttpClient,
   ) {}
 
   ngOnInit(): void {
     this._activeRoute.queryParams.pipe(takeUntil(this.unsubscribe_)).subscribe(params => {
-      var tenant_ = params
+      const tenant_ = params
       const tenant = this.tenant;
       this.tenant = this.getTenant_()
       if (!tenant) {
@@ -90,10 +88,13 @@ export class TenantSelectorComponent implements OnInit {
       .pipe(switchMap(() => this.tenant_.get(this.endpoint_.list())))
       .subscribe(
         tenantList => {
-          this.tenants = tenantList.tenants
-            .map(t => t.objectMeta.name)
-            .filter(t => t !== this.systemTenantName);
-
+          if (tenantList.tenants == null ) {
+            this.tenants = []
+          }else {
+            this.tenants = tenantList.tenants
+              .map(t => t.objectMeta.name)
+              .filter(t => t !== this.systemTenantName);
+          }
           if (tenantList.errors !== null){
             if (tenantList.errors.length > 0) {
               for (const err of tenantList.errors) {

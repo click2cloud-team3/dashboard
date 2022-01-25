@@ -52,7 +52,7 @@ limitations under the License.
                              disableClear="true"
                              i18n>Name</mat-header-cell>
             <mat-cell *matCellDef="let tenantPartition" >
-              <a routerLink="/node" [queryParams]="{ clusterName: tenantPartition.objectMeta.name }" [skipLocationChange]="true" queryParamsHandling="merge" routerLinkActive="active">
+              <a routerLink="" queryParamsHandling="preserve" routerLinkActive="active" (click) = setClusterName($event)>
                 {{tenantPartition.objectMeta.name}}
               </a>
             </mat-cell>

@@ -69,9 +69,12 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
   }
 
   map(tenantList: TenantList): Tenant[] {
-    if (isNil(this.nodeName)){
+    this.tenantList = []
+    this.tenantCount = 0
+    if (isNil(this.nodeName) && tenantList.tenants != null){
       this.tenantList = tenantList.tenants
-    } else {
+      this.tenantCount = this.tenantList.length
+    } else if (tenantList.tenants != null) {
       const tenantsList: any = [];
       tenantList.tenants.map((tenant)=>{
         // @ts-ignore
@@ -81,9 +84,9 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
         }
       })
       this.tenantList = tenantsList
+      this.tenantCount = this.tenantList.length
     }
-    this.tenantCount = this.tenantList.length
-    return this.tenantList ;
+    return this.tenantList;
   }
 
   isInErrorState(resource: Tenant): boolean {

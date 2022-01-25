@@ -24,11 +24,13 @@ import {ResourceService} from '../../../services/resource/resource';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 import {MenuComponent} from '../../list/column/menu/component';
 import {VerberService} from '../../../services/global/verber';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'kd-tenant-partition-list',
   templateUrl: './template.html',
 })
+// @ts-ignore
 export class TenantPartitionListComponent extends ResourceListWithStatuses<TenantPartitionList, TenantPartition> {
   @Input() endpointTp = EndpointManager.resource(Resource.tenantPartition).list();
   displayName:any;
@@ -37,10 +39,11 @@ export class TenantPartitionListComponent extends ResourceListWithStatuses<Tenan
 
   constructor(
     readonly verber_: VerberService,
+    private readonly router_: Router,
     private readonly tenantPartition_: ResourceService<TenantPartitionList>,
     notifications: NotificationsService,
   ) {
-    super('resourcePartition', notifications);
+    super('tenantPartition', notifications);
     this.id = ListIdentifier.tenantPartition;
     this.groupId = ListGroupIdentifier.cluster;
 
@@ -49,6 +52,11 @@ export class TenantPartitionListComponent extends ResourceListWithStatuses<Tenan
 
     // Register status icon handlers
     this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
+  }
+
+  setClusterName($event:any) {
+    const clusterName = $event.target.innerHTML.replace(/^\s+|\s+$/gm,'');
+    this.router_.navigateByUrl('/node', {state: {clusterName}});
   }
 
   getResourceObservable(params?: HttpParams): Observable<TenantPartitionList> {

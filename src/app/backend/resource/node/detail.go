@@ -119,11 +119,14 @@ type NodeDetail struct {
 
 	// List of non-critical errors, that occurred during resource retrieval.
 	Errors []error `json:"errors"`
+
+	// Cluster Name of Node
+	ClusterName string `json:"clusterName"`
 }
 
 // GetNodeDetail gets node details.
 func GetNodeDetail(client k8sClient.Interface, metricClient metricapi.MetricClient, name string,
-	dsQuery *dataselect.DataSelectQuery) (*NodeDetail, error) {
+	dsQuery *dataselect.DataSelectQuery, clusterName string) (*NodeDetail, error) {
 	log.Printf("Getting details of %s node", name)
 
 	node, err := client.CoreV1().Nodes().Get(name, metaV1.GetOptions{})
@@ -162,7 +165,7 @@ func GetNodeDetail(client k8sClient.Interface, metricClient metricapi.MetricClie
 	}
 
 	metrics, _ := metricPromises.GetMetrics()
-	nodeDetails := toNodeDetail(*node, podList, eventList, allocatedResources, metrics, nonCriticalErrors)
+	nodeDetails := toNodeDetail(*node, podList, eventList, allocatedResources, metrics, nonCriticalErrors, clusterName)
 	return &nodeDetails, nil
 }
 
@@ -321,13 +324,14 @@ func getNodePods(client k8sClient.Interface, node v1.Node) (*v1.PodList, error) 
 }
 
 func toNodeDetail(node v1.Node, pods *pod.PodList, eventList *common.EventList,
-	allocatedResources NodeAllocatedResources, metrics []metricapi.Metric, nonCriticalErrors []error) NodeDetail {
+	allocatedResources NodeAllocatedResources, metrics []metricapi.Metric, nonCriticalErrors []error, clusterName string) NodeDetail {
 	return NodeDetail{
 		Node: Node{
 			ObjectMeta:         api.NewObjectMeta(node.ObjectMeta),
 			TypeMeta:           api.NewTypeMeta(api.ResourceKindNode),
 			AllocatedResources: allocatedResources,
 		},
+		ClusterName:     clusterName,
 		Phase:           node.Status.Phase,
 		ProviderID:      node.Spec.ProviderID,
 		PodCIDR:         node.Spec.PodCIDR,

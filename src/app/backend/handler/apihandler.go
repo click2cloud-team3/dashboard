@@ -1957,11 +1957,13 @@ func (apiHandler *APIHandlerV2) handleGetNodeDetail(request *restful.Request, re
 	name := request.PathParameter("name")
 	var k8sClient kubernetes.Interface
 	var err error
+	var clusterName string
 	for _, rpManager := range apiHandler.rpManager {
 		k8sClient = rpManager.InsecureClient()
 		dataSelect := parseDataSelectPathParameter(request)
 		dataSelect.MetricQuery = dataselect.StandardMetrics
-		_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+		clusterName = rpManager.GetClusterName()
+		_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect, clusterName)
 		if err != nil {
 			log.Printf("Invalid Client or Internal Error %s", err.Error())
 			//errors.HandleInternalError(response, err)
@@ -1973,8 +1975,9 @@ func (apiHandler *APIHandlerV2) handleGetNodeDetail(request *restful.Request, re
 		for _, cManager := range apiHandler.cManager {
 			k8sClient = cManager.InsecureClient()
 			dataSelect := parseDataSelectPathParameter(request)
+			clusterName = cManager.GetClusterName()
 			dataSelect.MetricQuery = dataselect.StandardMetrics
-			_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+			_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect, clusterName)
 			if err != nil {
 				log.Printf("Invalid Client or Internal Error %s", err.Error())
 				//errors.HandleInternalError(response, err)
@@ -1985,7 +1988,7 @@ func (apiHandler *APIHandlerV2) handleGetNodeDetail(request *restful.Request, re
 	}
 	dataSelect := parseDataSelectPathParameter(request)
 	dataSelect.MetricQuery = dataselect.StandardMetrics
-	result, err := node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+	result, err := node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect, clusterName)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
@@ -2002,11 +2005,13 @@ func (apiHandler *APIHandlerV2) handleGetNodeEvents(request *restful.Request, re
 	name := request.PathParameter("name")
 	var k8sClient kubernetes.Interface
 	var err error
+	var clusterName string
 	for _, rpManager := range apiHandler.rpManager {
 		k8sClient = rpManager.InsecureClient()
 		dataSelect := parseDataSelectPathParameter(request)
 		dataSelect.MetricQuery = dataselect.StandardMetrics
-		_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+		clusterName = rpManager.GetClusterName()
+		_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect, clusterName)
 		if err != nil {
 			log.Printf("Invalid Client or Internal Error %s", err.Error())
 			//errors.HandleInternalError(response, err)
@@ -2019,7 +2024,8 @@ func (apiHandler *APIHandlerV2) handleGetNodeEvents(request *restful.Request, re
 			k8sClient = cManager.InsecureClient()
 			dataSelect := parseDataSelectPathParameter(request)
 			dataSelect.MetricQuery = dataselect.StandardMetrics
-			_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+			clusterName = cManager.GetClusterName()
+			_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect, clusterName)
 			if err != nil {
 				log.Printf("Invalid Client or Internal Error %s", err.Error())
 				//errors.HandleInternalError(response, err)
@@ -2052,11 +2058,13 @@ func (apiHandler *APIHandlerV2) handleGetNodePods(request *restful.Request, resp
 	name := request.PathParameter("name")
 	var k8sClient kubernetes.Interface
 	var err error
+	var clusterName string
 	for _, rpManager := range apiHandler.rpManager {
 		k8sClient = rpManager.InsecureClient()
 		dataSelect := parseDataSelectPathParameter(request)
 		dataSelect.MetricQuery = dataselect.StandardMetrics
-		_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+		clusterName = rpManager.GetClusterName()
+		_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect, clusterName)
 		if err != nil {
 			log.Printf("Invalid Client or Internal Error %s", err.Error())
 			//errors.HandleInternalError(response, err)
@@ -2069,7 +2077,8 @@ func (apiHandler *APIHandlerV2) handleGetNodePods(request *restful.Request, resp
 			k8sClient = cManager.InsecureClient()
 			dataSelect := parseDataSelectPathParameter(request)
 			dataSelect.MetricQuery = dataselect.StandardMetrics
-			_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect)
+			clusterName = cManager.GetClusterName()
+			_, err = node.GetNodeDetail(k8sClient, apiHandler.iManager.Metric().Client(), name, dataSelect, clusterName)
 			if err != nil {
 				log.Printf("Invalid Client or Internal Error %s", err.Error())
 				//errors.HandleInternalError(response, err)

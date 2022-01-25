@@ -14,14 +14,9 @@
 // limitations under the License.
 
 import {Component} from '@angular/core';
-import {GroupedResourceList} from '../../common/resources/groupedlist';
-
-import {CONFIG} from '../../index.config';
-import {TenantService} from '../../common/services/global/tenant';
 
 @Component({
   selector: 'kd-cluster',
   templateUrl: './template.html',
 })
-export class ClusterComponent {
-}
+export class ClusterComponent {}

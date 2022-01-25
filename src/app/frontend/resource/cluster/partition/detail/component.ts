@@ -12,66 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {PartitionAddress, PartitionDetail, PartitionTaint} from '@api/backendapi';
-import {Subscription} from 'rxjs/Subscription';
-
-import {ActionbarService, ResourceMeta} from '../../../../common/services/global/actionbar';
-import {NotificationsService} from '../../../../common/services/global/notifications';
-import {EndpointManager, Resource} from '../../../../common/services/resource/endpoint';
-import {ResourceService} from '../../../../common/services/resource/resource';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'kd-partition-detail',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class PartitionDetailComponent implements OnInit, OnDestroy {
-  private nodeSubscription_: Subscription;
-  private readonly endpoint_ = EndpointManager.resource(Resource.partition);
-  partition: PartitionDetail;
-  isInitialized = false;
-  podListEndpoint: string;
-  eventListEndpoint: string;
-
-  constructor(
-    private readonly partition_: ResourceService<PartitionDetail>,
-    private readonly actionbar_: ActionbarService,
-    private readonly activatedRoute_: ActivatedRoute,
-    private readonly notifications_: NotificationsService,
-  ) {}
-
-  ngOnInit(): void {
-    const resourceName = this.activatedRoute_.snapshot.params.resourceName;
-
-    this.podListEndpoint = this.endpoint_.child(resourceName, Resource.pod);
-    this.eventListEndpoint = this.endpoint_.child(resourceName, Resource.event);
-
-    this.nodeSubscription_ = this.partition_
-      .get(this.endpoint_.detail(), resourceName)
-      .subscribe((d: PartitionDetail) => {
-        this.partition = d;
-        this.notifications_.pushErrors(d.errors);
-        this.actionbar_.onInit.emit(new ResourceMeta('Partition', d.objectMeta, d.typeMeta));
-        this.isInitialized = true;
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.nodeSubscription_.unsubscribe();
-    this.actionbar_.onDetailsLeave.emit();
-  }
-
-  getAddresses(): string[] {
-    return this.partition.addresses.map((address: PartitionAddress) => `${address.type}: ${address.address}`);
-  }
-
-  getTaints(): string[] {
-    return this.partition.taints.map((taint: PartitionTaint) => {
-      return taint.value
-        ? `${taint.key}=${taint.value}:${taint.effect}`
-        : `${taint.key}=${taint.effect}`;
-    });
-  }
-}
+export class PartitionDetailComponent {}
