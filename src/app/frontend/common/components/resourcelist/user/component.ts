@@ -1,21 +1,8 @@
-// Copyright 2020 Authors of Arktos.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 import {HttpParams} from '@angular/common/http';
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {User, UserList} from '@api/backendapi';
 import {Observable} from 'rxjs/Observable';
+import {MatDrawer} from '@angular/material';
 
 import {ResourceListWithStatuses} from '../../../resources/list';
 import {EndpointManager, Resource} from '../../../services/resource/endpoint';
@@ -29,10 +16,12 @@ import {VerberService} from "../../../../../frontend/common/services/global/verb
 @Component({
   selector: 'kd-user-list',
   templateUrl: './template.html',
+
 })
 
-export class TenantUserListComponent extends ResourceListWithStatuses<UserList, User> {
+export class UserListComponent extends ResourceListWithStatuses<UserList, User> {
   @Input() endpoint = EndpointManager.resource(Resource.user).list();
+  @ViewChild(MatDrawer, {static: true}) private readonly nav_: MatDrawer;
 
   displayName:any;
   typeMeta:any;
@@ -61,7 +50,21 @@ export class TenantUserListComponent extends ResourceListWithStatuses<UserList, 
   }
 
   map(userList: UserList): User[] {
-    return userList.users;
+    const userType=sessionStorage.getItem('userType');
+    const data=userList.users
+    const userdata:any=[];
+    data.map((elem)=>{
+      if(userType.split("-")[0]==='tenant')
+      {
+        if (elem.objectMeta.type.includes('tenant')) {
+          return userdata.push(elem)
+        }
+      }
+      else {
+        return userdata.push(elem)
+      }
+    })
+    return userdata
   }
 
   isInErrorState(resource: User): boolean {
@@ -80,9 +83,8 @@ export class TenantUserListComponent extends ResourceListWithStatuses<UserList, 
     return ['statusicon', 'username', 'phase', 'type'];
   }
 
-  //added the code
   onClick(): void {
-    this.verber_.showUserCreateDialog(this.displayName, this.typeMeta, this.objectMeta);  //changes needed
+    this.verber_.showUserCreateDialog(this.displayName, this.typeMeta, this.objectMeta);
   }
 
   deleteUser(userID:string): void {

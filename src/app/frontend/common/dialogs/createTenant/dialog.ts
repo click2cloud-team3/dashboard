@@ -13,17 +13,15 @@
 // limitations under the License.
 
 
-
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import {CONFIG} from "../../../index.config";
 import {CsrfTokenService} from "../../services/global/csrftoken";
-import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
+import {AlertDialogConfig} from "../alert/dialog";
 
 
 export interface CreateTenantDialogMeta {
@@ -40,7 +38,7 @@ export class CreateTenantDialog implements OnInit {
   form1: FormGroup;
   private readonly config_ = CONFIG;
 
- //validations
+  //validations
   tenantMaxLength = 10;
   tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
@@ -76,7 +74,6 @@ export class CreateTenantDialog implements OnInit {
         ],
       }
     );
-
   }
   get tenant(): AbstractControl {
     return this.form1.get('tenant');
@@ -105,7 +102,6 @@ export class CreateTenantDialog implements OnInit {
             this.dialogRef.close(this.tenant.value);
           },
           error => {
-            // this.log_.info('Error creating namespace:', err);
             this.dialogRef.close();
             const configData: AlertDialogConfig = {
               title: 'Error creating tenant',
@@ -118,16 +114,10 @@ export class CreateTenantDialog implements OnInit {
     });
   }
 
-  /**
-   * Returns true if new namespace name hasn't been filled by the user, i.e, is empty.
-   */
   isDisabled(): boolean {
     return this.data.tenants.indexOf(this.tenant.value) >= 0;
   }
 
-  /**
-   * Cancels the new namespace form.
-   */
   cancel(): void {
     this.dialogRef.close();
   }
