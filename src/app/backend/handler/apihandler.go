@@ -97,10 +97,11 @@ type APIHandler struct {
 	sManager settingsApi.SettingsManager
 }
 type APIHandlerV2 struct {
-	iManager  integration.IntegrationManager
-	cManager  []clientapi.ClientManager
-	rpManager []clientapi.ClientManager
-	sManager  settingsApi.SettingsManager
+	iManager             integration.IntegrationManager
+	defaultClientmanager clientapi.ClientManager
+	cManager             []clientapi.ClientManager
+	rpManager            []clientapi.ClientManager
+	sManager             settingsApi.SettingsManager
 }
 
 // TerminalResponse is sent by handleExecShell. The Id is a random session id that binds the original REST request and the SockJS connection.
@@ -133,7 +134,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 	http.Handler, error) {
 
 	apiHandler := APIHandler{iManager: iManager, cManager: cManager, sManager: sManager}
-	apiHandler1 := APIHandlerV2{iManager: iManager, cManager: cManagers, rpManager: rpManagers, sManager: sManager}
+	apiHandler1 := APIHandlerV2{iManager: iManager, defaultClientmanager: cManager, cManager: cManagers, rpManager: rpManagers, sManager: sManager}
 	wsContainer := restful.NewContainer()
 	wsContainer.EnableContentEncoding(true)
 
@@ -1270,6 +1271,9 @@ func (apiHandler *APIHandlerV2) handleCreateTenant(request *restful.Request, res
 		errors.HandleInternalError(response, err)
 		return
 	}
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
 	client := ResourceAllocator(tenantSpec.Name, apiHandler.cManager)
 	k8sClient, err := client.Client(request)
 	if err != nil {
@@ -1317,6 +1321,9 @@ func (apiHandler *APIHandler) handleDeleteTenant(request *restful.Request, respo
 
 func (apiHandler *APIHandlerV2) handleGetTenantList(request *restful.Request, response *restful.Response) {
 	var tenantsList tenant.TenantList
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
 	for _, cManager := range apiHandler.cManager {
 		k8sClient := cManager.InsecureClient()
 
@@ -1361,7 +1368,9 @@ func (apiHandler *APIHandlerV2) handleGetTenantList(request *restful.Request, re
 
 func (apiHandler *APIHandlerV2) handleGetTenantDetail(request *restful.Request, response *restful.Response) {
 	name := request.PathParameter("name")
-
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
 	client := ResourceAllocator(name, apiHandler.cManager)
 
 	k8sClient, err := client.Client(request)
@@ -1856,7 +1865,9 @@ func (apiHandler *APIHandler) handleGetServicePodsWithMultiTenancy(request *rest
 func (apiHandler *APIHandlerV2) handleGetNodeLists(request *restful.Request, response *restful.Response) {
 	var nodeLists node.NodeList
 	//For tpclients
-
+	if len(apiHandler.cManager) == 0 && len(apiHandler.rpManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
 	for _, cManager := range apiHandler.cManager {
 		k8sClient := cManager.InsecureClient()
 		//if err != nil {
@@ -1901,6 +1912,9 @@ func (apiHandler *APIHandlerV2) handleGetNodeLists(request *restful.Request, res
 func (apiHandler *APIHandlerV2) handleGetResourcePartitionDetail(request *restful.Request, response *restful.Response) {
 	//var nodeLists node.NodeList
 	//For tpclients
+	if len(apiHandler.rpManager) == 0 {
+		apiHandler.rpManager = append(apiHandler.rpManager, apiHandler.defaultClientmanager)
+	}
 	result := new(partition.ResourcePartitionList)
 	for _, rpManager := range apiHandler.rpManager {
 		k8sClient := rpManager.InsecureClient()
@@ -1927,6 +1941,9 @@ func (apiHandler *APIHandlerV2) handleGetTenantPartitionDetail(request *restful.
 	//var nodeLists node.NodeList
 	//For tpclients
 	result := new(partition.TenantPartitionList)
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
 	for _, cManager := range apiHandler.cManager {
 		k8sClient := cManager.InsecureClient()
 		//if err != nil {
@@ -1953,7 +1970,12 @@ func (apiHandler *APIHandlerV2) handleGetNodeDetail(request *restful.Request, re
 	//	errors.HandleInternalError(response, err)
 	//	return
 	//}
-
+	if len(apiHandler.rpManager) == 0 {
+		apiHandler.rpManager = append(apiHandler.rpManager, apiHandler.defaultClientmanager)
+	}
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
 	name := request.PathParameter("name")
 	var k8sClient kubernetes.Interface
 	var err error
@@ -2006,6 +2028,12 @@ func (apiHandler *APIHandlerV2) handleGetNodeEvents(request *restful.Request, re
 	var k8sClient kubernetes.Interface
 	var err error
 	var clusterName string
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
+	if len(apiHandler.rpManager) == 0 {
+		apiHandler.rpManager = append(apiHandler.rpManager, apiHandler.defaultClientmanager)
+	}
 	for _, rpManager := range apiHandler.rpManager {
 		k8sClient = rpManager.InsecureClient()
 		dataSelect := parseDataSelectPathParameter(request)
@@ -2054,7 +2082,12 @@ func (apiHandler *APIHandlerV2) handleGetNodePods(request *restful.Request, resp
 	//	errors.HandleInternalError(response, err)
 	//	return
 	//}
-
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
+	if len(apiHandler.rpManager) == 0 {
+		apiHandler.rpManager = append(apiHandler.rpManager, apiHandler.defaultClientmanager)
+	}
 	name := request.PathParameter("name")
 	var k8sClient kubernetes.Interface
 	var err error
@@ -3615,6 +3648,9 @@ func (apiHandler *APIHandlerV2) handleCreateNamespace(request *restful.Request, 
 		errors.HandleInternalError(response, err)
 		return
 	}
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
 	client := ResourceAllocator(namespaceSpec.Tenant, apiHandler.cManager)
 
 	k8sClient, err := client.Client(request)
@@ -3798,6 +3834,9 @@ func (apiHandler *APIHandler) handleDeleteServiceAccountsWithMultiTenancy(reques
 //}
 func (apiHandler *APIHandlerV2) handleGetNamespaces(request *restful.Request, response *restful.Response) {
 	var namespacesList ns.NamespaceList
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
 	for _, cManager := range apiHandler.cManager {
 
 		k8sClient, err := cManager.Client(request)
@@ -3874,6 +3913,9 @@ func (apiHandler *APIHandler) handleGetNamespaceDetail(request *restful.Request,
 func (apiHandler *APIHandlerV2) handleGetNamespaceDetailWithMultiTenancy(request *restful.Request, response *restful.Response) {
 	tnt := request.PathParameter("tenant")
 	var result *ns.NamespaceDetail
+	if len(apiHandler.cManager) == 0 {
+		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+	}
 	for _, cManager := range apiHandler.cManager {
 
 		k8sClient, err := cManager.Client(request)

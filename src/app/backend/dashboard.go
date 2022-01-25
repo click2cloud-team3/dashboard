@@ -148,7 +148,8 @@ func main() {
 	if err != nil {
 		handleFatalInitError(err)
 	}
-	rpclients = append(rpclients, clientManager)
+	//rpclients = append(rpclients, clientManager)
+
 	for name, _ := range configs {
 
 		newclientmanager := client.NewClientManager("./"+name, args.Holder.GetApiServerHost())
