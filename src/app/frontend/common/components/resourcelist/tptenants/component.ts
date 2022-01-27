@@ -100,11 +100,11 @@ export class TpTenantListComponent extends ResourceListWithStatuses<TenantList, 
   }
 
   getDisplayColumns(): string[] {
-    return ['statusicon', 'clusterName', 'name', 'phase', 'age'];
+    return ['statusicon', 'name', 'phase', 'age'];
   }
 
   getDisplayColumns2(): string[] {
-    return ['statusicon', 'clusterName', 'name', 'phase', 'age'];
+    return ['statusicon', 'name', 'phase', 'age'];
   }
 
   //added the code

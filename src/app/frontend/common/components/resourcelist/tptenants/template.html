@@ -69,17 +69,11 @@ limitations under the License.
 
             <ng-container [matColumnDef]="getColumns()[2]">
               <mat-header-cell *matHeaderCellDef
-                               i18n>Tenant Partition Name</mat-header-cell>
-              <mat-cell *matCellDef="let tenant">{{tenant.clusterName}}</mat-cell>
-            </ng-container>
-
-            <ng-container [matColumnDef]="getColumns()[3]">
-              <mat-header-cell *matHeaderCellDef
                                i18n>Phase</mat-header-cell>
               <mat-cell *matCellDef="let tenant">{{tenant.phase}}</mat-cell>
             </ng-container>
 
-            <ng-container [matColumnDef]="getColumns()[4]">
+            <ng-container [matColumnDef]="getColumns()[3]">
               <mat-header-cell *matHeaderCellDef
                                mat-sort-header
                                disableClear="true"
