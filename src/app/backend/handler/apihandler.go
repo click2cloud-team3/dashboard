@@ -1275,11 +1275,12 @@ func (apiHandler *APIHandlerV2) handleCreateTenant(request *restful.Request, res
 		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
 	}
 	client := ResourceAllocator(tenantSpec.Name, apiHandler.cManager)
-	k8sClient, err := client.Client(request)
-	if err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
+	k8sClient := client.InsecureClient()
+	//k8sClient, err := client.Client(request)
+	//if err != nil {
+	//	errors.HandleInternalError(response, err)
+	//	return
+	//}
 	if err := tenant.CreateTenant(tenantSpec, k8sClient, client.GetClusterName()); err != nil {
 		errors.HandleInternalError(response, err)
 		return
@@ -1372,12 +1373,12 @@ func (apiHandler *APIHandlerV2) handleGetTenantDetail(request *restful.Request, 
 		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
 	}
 	client := ResourceAllocator(name, apiHandler.cManager)
-
-	k8sClient, err := client.Client(request)
-	if err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
+	k8sClient := client.InsecureClient()
+	//k8sClient, err := client.Client(request)
+	//if err != nil {
+	//	errors.HandleInternalError(response, err)
+	//	return
+	//}
 
 	result, err := tenant.GetTenantDetail(k8sClient, name)
 	if err != nil {
@@ -1865,8 +1866,10 @@ func (apiHandler *APIHandler) handleGetServicePodsWithMultiTenancy(request *rest
 func (apiHandler *APIHandlerV2) handleGetNodeLists(request *restful.Request, response *restful.Response) {
 	var nodeLists node.NodeList
 	//For tpclients
+	var clients []clientapi.ClientManager
+
 	if len(apiHandler.cManager) == 0 && len(apiHandler.rpManager) == 0 {
-		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
+		clients = append(clients, apiHandler.defaultClientmanager)
 	}
 	for _, cManager := range apiHandler.cManager {
 		k8sClient := cManager.InsecureClient()
@@ -3652,12 +3655,12 @@ func (apiHandler *APIHandlerV2) handleCreateNamespace(request *restful.Request, 
 		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
 	}
 	client := ResourceAllocator(namespaceSpec.Tenant, apiHandler.cManager)
-
-	k8sClient, err := client.Client(request)
-	if err != nil {
-		errors.HandleInternalError(response, err)
-		return
-	}
+	k8sClient := client.InsecureClient()
+	//k8sClient, err := client.Client(request)
+	//if err != nil {
+	//	errors.HandleInternalError(response, err)
+	//	return
+	//}
 
 	if err := ns.CreateNamespace(namespaceSpec, namespaceSpec.Tenant, k8sClient); err != nil {
 		errors.HandleInternalError(response, err)
@@ -3839,11 +3842,7 @@ func (apiHandler *APIHandlerV2) handleGetNamespaces(request *restful.Request, re
 	}
 	for _, cManager := range apiHandler.cManager {
 
-		k8sClient, err := cManager.Client(request)
-		if err != nil {
-			errors.HandleInternalError(response, err)
-			return
-		}
+		k8sClient := cManager.InsecureClient()
 
 		dataSelect := parseDataSelectPathParameter(request)
 		result, err := ns.GetNamespaceList(k8sClient, dataSelect)
@@ -3917,12 +3916,13 @@ func (apiHandler *APIHandlerV2) handleGetNamespaceDetailWithMultiTenancy(request
 		apiHandler.cManager = append(apiHandler.cManager, apiHandler.defaultClientmanager)
 	}
 	for _, cManager := range apiHandler.cManager {
+		k8sClient := cManager.InsecureClient()
 
-		k8sClient, err := cManager.Client(request)
-		if err != nil {
-			errors.HandleInternalError(response, err)
-			return
-		}
+		//k8sClient, err := cManager.Client(request)
+		//if err != nil {
+		//	errors.HandleInternalError(response, err)
+		//	return
+		//}
 
 		dataSelect := parseDataSelectPathParameter(request)
 		tenantList, err := tenant.GetTenantList(k8sClient, dataSelect, cManager.GetClusterName())
