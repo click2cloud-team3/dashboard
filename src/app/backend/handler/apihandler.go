@@ -1896,6 +1896,9 @@ func (apiHandler *APIHandlerV2) handleGetNodeLists(request *restful.Request, res
 		//	errors.HandleInternalError(response, err)
 		//	return
 		//}
+		if apiHandler.cManager[0].GetClusterName() == rpManager.GetClusterName() {
+			continue
+		}
 		k8sClient := rpManager.InsecureClient()
 		dataSelect := parseDataSelectPathParameter(request)
 		dataSelect.MetricQuery = dataselect.StandardMetrics

@@ -16,6 +16,7 @@
 package iam
 
 import (
+	"errors"
 	"log"
 	"os"
 	"strings"
@@ -108,19 +109,35 @@ func CreateClusterAdmin() error {
 	}
 
 	// Get Token
-	secretList, err := k8sClient.CoreV1().SecretsWithMultiTenancy(dashboardNS, "").List(api.ListEverything)
-	if err != nil {
-		log.Printf("Get secret for admin user failed, err:%s \n", err.Error())
-		return err
-	}
-	time.Sleep(5)
+	var found = false
+	var retrial = 0
 	var token []byte
-	for _, secret := range secretList.Items {
-		checkName := strings.Contains(secret.Name, saName)
-		if secret.Namespace == dashboardNS && checkName {
-			token = secret.Data["token"]
+	for {
+		if retrial == 4 && !found {
 			break
 		}
+		secretList, err := k8sClient.CoreV1().SecretsWithMultiTenancy(dashboardNS, "").List(api.ListEverything)
+		if err != nil {
+			log.Printf("Get secret for admin user failed, err:%s \n", err.Error())
+			return errors.New("secret not found for admin user")
+		}
+
+		for _, secret := range secretList.Items {
+			checkName := strings.Contains(secret.Name, saName)
+			if secret.Namespace == dashboardNS && checkName {
+				token = secret.Data["token"]
+				found = true
+				break
+			}
+		}
+		if found {
+			break
+		}
+		time.Sleep(1)
+	}
+	if !found && retrial == 4 {
+		log.Printf("Get token for admin user failed after 3 retrial, err:%s \n", "Get token failed")
+		return nil
 	}
 
 	// Create User and enter data into DB
