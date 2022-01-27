@@ -116,11 +116,11 @@ func ResourceAllocator(tenant string, clients []clientapi.ClientManager) clienta
 		pref := []rune(strings.ToUpper(tenant))
 		log.Printf("prefix:%v", pref[0])
 		if pref[0] <= rune(77) {
+			log.Printf("client[0]")
+			return clients[0]
+		} else {
 			log.Printf("client[1]")
 			return clients[1]
-		} else {
-			log.Printf("client[2]")
-			return clients[2]
 		}
 	}
 	return clients[0]
