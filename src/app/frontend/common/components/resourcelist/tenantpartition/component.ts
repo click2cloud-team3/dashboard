@@ -56,7 +56,7 @@ export class TenantPartitionListComponent extends ResourceListWithStatuses<Tenan
 
   setClusterName($event:any) {
     const clusterName = $event.target.innerHTML.replace(/^\s+|\s+$/gm,'');
-    this.router_.navigateByUrl('/node', {state: {clusterName}});
+    this.router_.navigateByUrl('/tptenant', {state: {clusterName}});
   }
 
   getResourceObservable(params?: HttpParams): Observable<TenantPartitionList> {

@@ -24,14 +24,16 @@ import {NotificationsService} from '../../../services/global/notifications';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 import {MenuComponent} from '../../list/column/menu/component';
 import {VerberService} from '../../../services/global/verber';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {isNil} from "lodash";
+import {CookieService} from "ngx-cookie-service";
 
 @Component({
-  selector: 'kd-tenant-list',
+  selector: 'kd-tptenant-list',
   templateUrl: './template.html',
 })
-export class TenantListComponent extends ResourceListWithStatuses<TenantList, Tenant> {
+//@ts-ignore
+export class TpTenantListComponent extends ResourceListWithStatuses<TenantList, Tenant> {
   @Input() endpoint = EndpointManager.resource(Resource.tenant).list();
   displayName:any;
   typeMeta:any;
@@ -45,13 +47,19 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
     readonly verber_: VerberService,
     private readonly tenant_: ResourceService<TenantList>,
     private readonly route_: ActivatedRoute,
+    private readonly router_: Router,
+    private readonly cookieService_: CookieService,
     notifications: NotificationsService,
   ) {
-    super('tenant', notifications);
+    super('tptenant', notifications);
     this.id = ListIdentifier.tenant;
     this.groupId = ListGroupIdentifier.cluster;
 
     this.nodeName = this.route_.snapshot.params.resourceName
+
+    const routeInfo = this.router_.getCurrentNavigation();
+    this.clusterName = (routeInfo.extras.state['clusterName']).toString();
+
 
     // Register status icon handlers
     this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
@@ -68,8 +76,16 @@ export class TenantListComponent extends ResourceListWithStatuses<TenantList, Te
   map(tenantList: TenantList): Tenant[] {
     this.tenantList = []
     this.tenantCount = 0
-    if (isNil(this.nodeName) && tenantList.tenants != null){
-      this.tenantList = tenantList.tenants
+    if (tenantList.tenants !== null) {
+      const tenantsList: any = [];
+      tenantList.tenants.map((tenant)=>{
+        // @ts-ignore
+        if(tenant['clusterName'].includes(this.clusterName))
+        {
+          tenantsList.push(tenant);
+        }
+      })
+      this.tenantList = tenantsList
       this.tenantCount = this.tenantList.length
     }
     return this.tenantList;

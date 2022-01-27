@@ -44,6 +44,7 @@ export enum ListIdentifier {
   serviceaccount= 'serviceaccount',
   resourcePartition = 'resourcepartition',
   tenantPartition = 'tenantpartition',
+  tpTenant = 'tptenant',
 }
 
 export enum ListGroupIdentifier {

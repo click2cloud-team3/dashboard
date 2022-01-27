@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
-  selector: 'kd-tenant-partition-list-view',
-  template: '<kd-tenant-partition-list></kd-tenant-partition-list>',
+  selector: 'kd-tptenant-list-view',
+  template: '<kd-tptenant-list></kd-tptenant-list>',
 })
-export class TenantPartitionListComponent implements OnInit {
-  constructor() {}
-  ngOnInit() {}
-}
+export class TpTenantListComponent {}

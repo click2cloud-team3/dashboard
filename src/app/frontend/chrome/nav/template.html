@@ -5,7 +5,7 @@
       <kd-tenant-selector></kd-tenant-selector>
       <mat-divider></mat-divider>
     </div>
-    <div *ngIf=showTenant>
+    <div *ngIf=showMenu>
       <kd-namespace-selector></kd-namespace-selector>
       <mat-divider></mat-divider>
     </div>
@@ -119,7 +119,7 @@
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Jobs
             </kd-nav-item>
-            <kd-nav-item class="kd-nav-item" state="/namespace" *ngIf=showTenant i18n>
+            <kd-nav-item class="kd-nav-item" state="/namespace" i18n>
               <img class="submenu_icon" src="assets/images/right_double_arrow.svg" alt="">
               Namespaces
             </kd-nav-item>

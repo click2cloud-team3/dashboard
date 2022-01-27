@@ -84,6 +84,7 @@ import {ResourcePartitionListComponent} from "./resourcelist/resourcepartition/c
 import {TenantPartitionListComponent} from "./resourcelist/tenantpartition/component";
 import {RoleListComponent} from "./resourcelist/role/component";
 import {ResourceQuotaListComponent} from "./quotas/component";
+import {TpTenantListComponent} from "./resourcelist/tptenants/component";
 
 const components = [
   ActionbarDetailActionsComponent,
@@ -99,6 +100,7 @@ const components = [
   BreadcrumbsComponent,
   ResourcePartitionListComponent,
   TenantPartitionListComponent,
+  TpTenantListComponent,
 
   CardComponent,
   CardListFilterComponent,

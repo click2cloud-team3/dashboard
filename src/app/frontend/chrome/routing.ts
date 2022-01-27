@@ -62,9 +62,8 @@ const routes: Routes = [
 
       },
       {
-        path: 'tenantpartition',
-        loadChildren: 'resource/cluster/tenantpartition/module#TenantPartitionModule',
-
+        path: 'tptenant',
+        loadChildren: 'resource/cluster/tptenant/module#TpTenantModule',
       },
       // Overview
       {
@@ -182,7 +181,7 @@ const routes: Routes = [
       // Custom resource definitions
       {
         path: 'customresourcedefinition',
-        loadChildren: 'crd/module#CrdModule'
+        loadChildren: 'crd/module#CrdModule',
       },
 
       // Others

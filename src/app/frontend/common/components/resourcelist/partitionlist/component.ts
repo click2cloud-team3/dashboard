@@ -60,7 +60,7 @@ export class ResourcePartitionListComponent extends ResourceListWithStatuses<Res
     private readonly resourcePartition_: ResourceService<ResourcePartitionList>,
     notifications: NotificationsService,
   ) {
-    super('node', notifications);
+    super('resourcePartition', notifications);
     this.id = ListIdentifier.resourcePartition;
     this.groupId = ListGroupIdentifier.cluster;
 
@@ -108,7 +108,7 @@ export class TenantPartitionListComponent extends ResourceListWithStatuses<Tenan
     private readonly tenantPartition_: ResourceService<TenantPartitionList>,
     notifications: NotificationsService,
   ) {
-    super('node', notifications);
+    super('tenantPartition', notifications);
     this.id = ListIdentifier.tenantPartition;
     this.groupId = ListGroupIdentifier.cluster;
 

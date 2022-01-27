@@ -12,21 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute,Router} from '@angular/router';
-import {NodeAddress, NodeDetail, NodeTaint, Tenant, TenantList} from '@api/backendapi';
+import {NodeAddress, NodeDetail, NodeTaint} from '@api/backendapi';
 import {Subscription} from 'rxjs/Subscription';
 
 import {ActionbarService, ResourceMeta} from '../../../../common/services/global/actionbar';
 import {NotificationsService} from '../../../../common/services/global/notifications';
 import {EndpointManager, Resource} from '../../../../common/services/resource/endpoint';
 import {ResourceService} from '../../../../common/services/resource/resource';
-import {ResourceListWithStatuses} from "../../../../common/resources/list";
-import {VerberService} from "../../../../common/services/global/verber";
-import {ListGroupIdentifier,ListIdentifier} from "../../../../common/components/resourcelist/groupids";
-import {MenuComponent} from "../../../../common/components/list/column/menu/component";
-import {HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'kd-node-detail',
@@ -88,50 +82,4 @@ export class NodeDetailComponent implements OnInit, OnDestroy {
         : `${taint.key}=${taint.effect}`;
     });
   }
-}
-
-export class TenantListComponent extends ResourceListWithStatuses<TenantList, Tenant> {
-  @Input() endpoint = EndpointManager.resource(Resource.tenant).list();
-
-  constructor(
-    readonly verber_: VerberService,
-    private readonly tenant_: ResourceService<TenantList>,
-    notifications: NotificationsService,
-  ) {
-    super('tenant', notifications);
-    this.id = ListIdentifier.tenant;
-    this.groupId = ListGroupIdentifier.cluster;
-
-    // Register status icon handlers
-    this.registerBinding(this.icon.checkCircle, 'kd-success', this.isInSuccessState);
-    this.registerBinding(this.icon.error, 'kd-error', this.isInErrorState);
-
-    // Register action columns.
-    this.registerActionColumn<MenuComponent>('menu', MenuComponent);
-  }
-
-  getResourceObservable(params?: HttpParams): Observable<TenantList> {
-    return this.tenant_.get(this.endpoint, undefined, params);
-  }
-
-  map(tenantList: TenantList): Tenant[] {
-    return tenantList.tenants;
-  }
-
-  isInErrorState(resource: Tenant): boolean {
-    return resource.phase === 'Terminating';
-  }
-
-  isInSuccessState(resource: Tenant): boolean {
-    return resource.phase === 'Active';
-  }
-
-  getDisplayColumns(): string[] {
-    return ['statusicon', 'clusterName', 'name', 'phase', 'age'];
-  }
-
-  getDisplayColumns2(): string[] {
-    return ['statusicon', 'clusterName', 'name', 'phase', 'age'];
-  }
-
 }

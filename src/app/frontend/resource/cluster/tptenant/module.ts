@@ -16,14 +16,14 @@ import {NgModule} from '@angular/core';
 
 import {ComponentsModule} from '../../../common/components/module';
 import {SharedModule} from '../../../shared.module';
-import {TenantPartitionRoutingModule} from './routing';
+import {TpTenantRoutingModule} from './routing';
 
-import {TenantPartitionListComponent} from './list/component';
-import {TenantPartitionDetailComponent} from './detail/component';
+import {TpTenantListComponent} from './list/component';
+import {TpTenantDetailComponent} from './detail/component';
 
 
 @NgModule({
-  imports: [SharedModule, ComponentsModule, TenantPartitionRoutingModule],
-  declarations: [TenantPartitionListComponent, TenantPartitionDetailComponent],
+  imports: [SharedModule, ComponentsModule, TpTenantRoutingModule],
+  declarations: [TpTenantListComponent, TpTenantDetailComponent],
 })
-export class TenantPartitionModule {}
+export class TpTenantModule {}

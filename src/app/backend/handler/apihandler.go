@@ -177,6 +177,14 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 		apiV1Ws.GET("/tenant/{name}").
 			To(apiHandler1.handleGetTenantDetail).
 			Writes(tenant.TenantDetail{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("/tptenant").
+			To(apiHandler1.handleGetTenantList).
+			Writes(tenant.TenantList{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("/tptenant/{name}").
+			To(apiHandler1.handleGetTenantDetail).
+			Writes(tenant.TenantDetail{}))
 	//apiV1Ws.Route(
 	//	apiV1Ws.POST("/tenant").
 	//		To(apiHandler.handleCreateTenant).
