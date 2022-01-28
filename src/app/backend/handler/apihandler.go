@@ -1005,11 +1005,11 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetRoles).
 			Writes(role.RoleList{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("/tenant/{tenant}/namespace/{namespace}/roles").
+		apiV1Ws.GET("/tenants/{tenant}/role/{namespace}/").
 			To(apiHandler.handleGetRolesWithMultiTenancy).
 			Writes(role.RoleList{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("tenants/{tenant}/namespaces/{namespace}/role/{name}").
+		apiV1Ws.GET("/tenants/{tenant}/role/{namespace}/{name}").
 			To(apiHandler.handleGetRoleDetailWithMultiTenancy).
 			Writes(role.RoleDetail{}))
 	apiV1Ws.Route(
@@ -1018,7 +1018,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Reads(role.Role{}).
 			Writes(role.Role{}))
 	apiV1Ws.Route(
-		apiV1Ws.DELETE("tenants/{tenant}/namespaces/{namespace}/role/{role}").
+		apiV1Ws.DELETE("/tenants/{tenant}/namespaces/{namespace}/role/{role}").
 			To(apiHandler.handleDeleteRolesWithMultiTenancy))
 
 	apiV1Ws.Route(
@@ -1040,11 +1040,11 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 
 	// Service Account with Multi Tenancy
 	apiV1Ws.Route(
-		apiV1Ws.GET("tenants/{tenant}/namespaces/{namespace}/serviceaccount").
+		apiV1Ws.GET("/tenants/{tenant}/namespaces/{namespace}/serviceaccount").
 			To(apiHandler.handleGetServiceAccountListWithMultiTenancy).
 			Writes(serviceaccount.ServiceAccountList{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("tenants/{tenant}/namespaces/{namespace}/serviceaccounts/{name}").
+		apiV1Ws.GET("/tenants/{tenant}/namespaces/{namespace}/serviceaccounts/{name}").
 			To(apiHandler.handleGetServiceAccountDetailWithMultiTenancy).
 			Writes(serviceaccount.ServiceAccountDetail{}))
 	apiV1Ws.Route(
@@ -1053,7 +1053,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Reads(serviceaccount.ServiceAccount{}).
 			Writes(serviceaccount.ServiceAccount{}))
 	apiV1Ws.Route(
-		apiV1Ws.DELETE("tenants/{tenant}/namespaces/{namespace}/serviceaccounts/{serviceaccount}").
+		apiV1Ws.DELETE("/tenants/{tenant}/namespaces/{namespace}/serviceaccounts/{serviceaccount}").
 			To(apiHandler.handleDeleteServiceAccountsWithMultiTenancy))
 
 	apiV1Ws.Route(

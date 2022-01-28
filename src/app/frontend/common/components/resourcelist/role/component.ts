@@ -20,7 +20,7 @@ import {Observable} from 'rxjs';
 import {ResourceListBase} from '../../../resources/list';
 import {NotificationsService} from '../../../services/global/notifications';
 import {EndpointManager, Resource} from '../../../services/resource/endpoint';
-import {NamespacedResourceService, ResourceService} from '../../../services/resource/resource';
+import {NamespacedResourceService} from '../../../services/resource/resource';
 import {MenuComponent} from '../../list/column/menu/component';
 import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 import {VerberService} from '../../../services/global/verber';
@@ -31,7 +31,7 @@ import {VerberService} from '../../../services/global/verber';
   templateUrl: './template.html',
 })
 export class RoleListComponent extends ResourceListBase<RoleList, Role> {
-  @Input() endpoint = EndpointManager.resource(Resource.role, true).list();
+  @Input() endpoint = EndpointManager.resource(Resource.role, true,true).list();
   typeMeta:any;
   objectMeta:any;
 

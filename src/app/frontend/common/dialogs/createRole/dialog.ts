@@ -17,11 +17,12 @@ import {MatDialog} from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
-import { FormGroup, FormControl } from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 import {CONFIG} from "../../../index.config";
 import {CsrfTokenService} from "../../services/global/csrftoken";
 import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
-import {validateProtocol} from "../../../create/from/form/validator/validprotocol.validator";
+import {NamespacedResourceService} from "../../services/resource/resource";
+import {TenantDetail} from "@api/backendapi";
 
 export interface CreateRoleDialogMeta {
   name: string;
@@ -40,26 +41,30 @@ export class CreateRoleDialog implements OnInit {
   private readonly config_ = CONFIG;
 
   //Validation
-  RoleMaxLength = 10;
-  RolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+  roleMaxLength = 10;
+  rolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  NamespaceMaxLength = 10;
-  NamespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
+  namespaceMaxLength = 10;
+  namespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  ApigroupsMaxLength = 20;
-  ApigroupsPattern: RegExp = new RegExp('^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
+  apiGroupsMaxLength = 20;
+  apiGroupsPattern: RegExp = new RegExp('^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
-  ResourceMaxLength = 10;
-  ResourcePattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
+  resourceMaxLength = 10;
+  resourcePattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
-  VerbsMaxLength = 10;
-  VerbsPattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
+  verbsMaxLength = 10;
+  verbsPattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
-  apigroups1: string[]
+  apiGroups1: string[]
   resources1: string[]
-  verbs1 : string[]
+  verbs1: string[]
+
+  currentTenant: string
+
   constructor(
     public dialogRef: MatDialogRef<CreateRoleDialog>,
+    private readonly tenant_: NamespacedResourceService<TenantDetail>,
     @Inject(MAT_DIALOG_DATA) public data: CreateRoleDialogMeta,
     private readonly http_: HttpClient,
     private readonly csrfToken_: CsrfTokenService,
@@ -68,40 +73,41 @@ export class CreateRoleDialog implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.currentTenant = this.tenant_['tenant_']['currentTenant_']
     this.form1 = this.fb_.group({
       role: [
         '',
         Validators.compose([
-          Validators.maxLength(this.RoleMaxLength),
-          Validators.pattern(this.RolePattern),
+          Validators.maxLength(this.roleMaxLength),
+          Validators.pattern(this.rolePattern),
         ]),
       ],
       apigroups: [
         '',
         Validators.compose([
-          Validators.maxLength(this.ApigroupsMaxLength),
-          Validators.pattern(this.ApigroupsPattern),
+          Validators.maxLength(this.apiGroupsMaxLength),
+          Validators.pattern(this.apiGroupsPattern),
         ]),
       ],
       namespace: [
         '',
         Validators.compose([
-          Validators.maxLength(this.NamespaceMaxLength),
-          Validators.pattern(this.NamespacePattern),
+          Validators.maxLength(this.namespaceMaxLength),
+          Validators.pattern(this.namespacePattern),
         ]),
       ],
       resources: [
         '',
         Validators.compose([
-          Validators.maxLength(this.ResourceMaxLength),
-          Validators.pattern(this.ResourcePattern),
+          Validators.maxLength(this.resourceMaxLength),
+          Validators.pattern(this.resourcePattern),
         ]),
       ],
       verbs: [
         '',
         Validators.compose([
-          Validators.maxLength(this.VerbsMaxLength),
-          Validators.pattern(this.VerbsPattern),
+          Validators.maxLength(this.verbsMaxLength),
+          Validators.pattern(this.verbsPattern),
         ]),
       ],
     });
@@ -125,16 +131,16 @@ export class CreateRoleDialog implements OnInit {
 
   createrole(): void {
     if (!this.form1.valid) return;
-    this.apigroups1 = this.apigroups.value.split(',')
+    this.apiGroups1 = this.apigroups.value.split(',')
     this.resources1 = this.resources.value.split(',')
     this.verbs1 = this.verbs.value.split(',')
 
-    const roleSpec= {name: this.role.value, namespace: this.namespace.value, apiGroups: this.apigroups1,verbs: this.verbs1,resources: this.resources1};
-    const tokenPromise = this.csrfToken_.getTokenForAction('role');
+    const roleSpec= {name: this.role.value, tenant: this.currentTenant, namespace: this.namespace.value, apiGroups: this.apiGroups1,verbs: this.verbs1,resources: this.resources1};
+    const tokenPromise = this.csrfToken_.getTokenForAction('roles');
     tokenPromise.subscribe(csrfToken => {
       return this.http_
         .post<{valid: boolean}>(
-          'api/v1/role',
+          'api/v1/roles',
           {...roleSpec},
           {
             headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),

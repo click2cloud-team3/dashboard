@@ -26,7 +26,7 @@ export class RawResource {
       resourceUrl = 'api/v1/tenants' + `/${objectMeta.name}`
     }
     if (resourceUrl.includes('role/')) {
-      resourceUrl = `api/v1/namespaces/${objectMeta.namespace}/${typeMeta.kind}/${objectMeta.name}`;
+      resourceUrl = `api/v1/tenants/${tenant}/namespaces/${objectMeta.namespace}/${typeMeta.kind}/${objectMeta.name}`;
     }
     return resourceUrl;
   }
