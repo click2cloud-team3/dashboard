@@ -18,7 +18,7 @@ import {DEFAULT_ACTIONBAR} from '../../../common/components/actionbars/routing';
 
 import {ClusterRoleDetailComponent} from './detail/component';
 import {ClusterRoleListComponent} from './list/component';
-import {TENANTMANAGEMENT_ROUTE} from "../../../tenantmanagement/routing";
+import {TENANTMANAGEMENT_ROUTE} from "../../tenantmanagement/routing";
 
 const CLUSTERROLE_LIST_ROUTE: Route = {
   path: '',
