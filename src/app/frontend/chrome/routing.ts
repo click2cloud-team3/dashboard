@@ -41,11 +41,11 @@ const routes: Routes = [
       },
       {
         path: 'role',
-        loadChildren: 'tenantmanagement/role/module#RoleModule',
+        loadChildren: 'resource/tenantmanagement/role/module#RoleModule',
       },
       {
         path: 'resourcequota',
-        loadChildren: 'tenantmanagement/resourcequota/module#ResourceQuotaModule',
+        loadChildren: 'resource/tenantmanagement/resourcequota/module#ResourceQuotaModule',
       },
       {
         path: 'tenant',
@@ -72,11 +72,11 @@ const routes: Routes = [
       },
       {
         path: 'usermanagement',
-        loadChildren: 'usermanagement/module#UserManagementModule',
+        loadChildren: 'resource/usermanagement/module#UserManagementModule',
       },
       {
         path: 'user',
-        loadChildren: 'usermanagement/user/module#UsersModule',
+        loadChildren: 'resource/usermanagement/user/module#UsersModule',
 
       },
 
@@ -195,11 +195,11 @@ const routes: Routes = [
       },
       {
         path: 'tenantmanagement',
-        loadChildren: 'tenantmanagement/module#TenantManagementModule',
+        loadChildren: 'resource/tenantmanagement/module#TenantManagementModule',
       },
       {
         path: 'tenantmonitoring',
-        loadChildren: 'tenantmanagement/tenantmonitoring/module#TenantMonitoringModule',
+        loadChildren: 'resource/tenantmanagement/tenantmonitoring/module#TenantMonitoringModule',
 
       },
 
