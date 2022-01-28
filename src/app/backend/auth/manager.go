@@ -91,7 +91,7 @@ func (self authManager) getAuthenticator(spec *authApi.LoginSpec) (authApi.Authe
 		return NewKubeConfigAuthenticator(spec, self.authenticationModes), nil
 	}
 
-	return nil, errors.NewInvalid("Not enough data to create authenticator.")
+	return nil, errors.NewInvalid("Invalid Username or Password")
 }
 
 // Checks if user data extracted from provided AuthInfo structure is valid and user is correctly authenticated

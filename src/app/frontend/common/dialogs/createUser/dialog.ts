@@ -14,7 +14,7 @@
 
 
 
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit, Inject,NgZone} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
@@ -23,16 +23,15 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
 
 import {FormGroup} from '@angular/forms';
-import {FormControl} from '@angular/forms';
 import {CONFIG} from "../../../index.config";
 import {CsrfTokenService} from "../../services/global/csrftoken";
 import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
 
 import {NamespacedResourceService} from '../../services/resource/resource';
 import {TenantService} from "../../services/global/tenant";
-import {CreateSecretDialog} from "../../../create/from/form/createsecret/dialog";
-import {SecretDetail, Tenant, TenantList,Role,RoleList} from '../../../typings/backendapi';
+import {SecretDetail,Role,RoleList} from '../../../typings/backendapi';
 import {validateUniqueName} from "../../../create/from/form/validator/uniquename.validator";
+
 
 export interface UserToken {
   token: string;
@@ -52,21 +51,19 @@ export class CreateUserDialog implements OnInit {
   tenants: string[];
   secrets: string[];
   roles:string[];
-  namespaceUsed = "centaurus-dashboard"
+  namespaceUsed = "default"
   adminroleUsed = "admin-role";
-  apiGroups : string [] =["", "extensions", "apps"]
-  resources : string [] =["deployments", "pods", "services", "secrets", "namespaces"]
+  apiGroups : string [] =["", "extensions", "apps","rbac.authorization.k8s.io"]
+  resources : string [] =["*"]
   verbs :string []= ["*"]
   serviceAccountCreated:any[] = [];
   secretDetails:any[] = [];
   selected = '';
+  Usertype='';
 
-
-  private readonly config_ = CONFIG;
-
+  private readonly config_ = CONFIG
   tenantMaxLength = 24;
   storageidMaxLength =10;
-
   tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
   storageidPattern: RegExp = new RegExp('^[0-9]$');
 
@@ -84,12 +81,12 @@ export class CreateUserDialog implements OnInit {
     private readonly tenantService_ : TenantService,
     private readonly dialog_: MatDialog,
     private readonly route_: ActivatedRoute,
+    private readonly ngZone_: NgZone,
   ) {}
 
   ngOnInit(): void {
     this.form1 = this.fb_.group({
-      tenant: [this.route_.snapshot.params.tenant || '', Validators.required],
-      role: [this.route_.snapshot.params.role || '', Validators.required],
+        role: [this.route_.snapshot.params.role || '', Validators.required],
         usertype: [
           '',
           Validators.compose([
@@ -97,6 +94,14 @@ export class CreateUserDialog implements OnInit {
             Validators.pattern(this.tenantPattern),
           ]),
         ],
+        tenant: [
+          '',
+          Validators.compose([
+            Validators.maxLength(this.tenantMaxLength),
+            Validators.pattern(this.tenantPattern),
+          ]),
+        ],
+
         username: [
           '',
           Validators.compose([
@@ -121,19 +126,6 @@ export class CreateUserDialog implements OnInit {
 
       },
     );
-    this.tenant.valueChanges.subscribe((tenant: string) => {
-      this.name.clearAsyncValidators();
-      this.name.setAsyncValidators(validateUniqueName(this.http_, tenant));
-      this.name.updateValueAndValidity();
-    });
-    this.http_.get('api/v1/tenant').subscribe((result: TenantList) => {
-      this.tenants = result.tenants.map((tenant: Tenant) => tenant.objectMeta.name);
-      this.tenant.patchValue(
-        !this.tenantService_.isCurrentSystem()
-          ? this.route_.snapshot.params.tenant || this.tenants[0]
-          : this.tenants[0],
-      );
-    });
     this.role.valueChanges.subscribe((role: string) => {
       this.name.clearAsyncValidators();
       this.name.setAsyncValidators(validateUniqueName(this.http_, role));
@@ -148,8 +140,14 @@ export class CreateUserDialog implements OnInit {
       );
     });
 
+    this.ngZone_.run(() => {
+      const usertype = sessionStorage.getItem('userType');
+      this.Usertype=usertype
+    });
+
 
   }
+
   selectUserType(event:any)
   {
     this.selected=event;
@@ -163,8 +161,8 @@ export class CreateUserDialog implements OnInit {
   resetImagePullSecret(): void {
     this.imagePullSecret.patchValue('');
   }
-  get tenant(): AbstractControl {
-    return this.form1.get('tenant');
+  get tenant(): any {
+    return this.tenantService_.current()
   }
   get role(): AbstractControl {
     return this.form1.get('role');
@@ -190,7 +188,7 @@ export class CreateUserDialog implements OnInit {
   createUser() {
     let response = this.http_.get('api/v1/tenant/'+this.user.value)
     this.getToken(async (token_:any)=>{
-      const userSpec= {username: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant.value};
+      const userSpec= {username: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant};
       const userTokenPromise = await this.csrfToken_.getTokenForAction('users');
       userTokenPromise.subscribe(csrfToken => {
         return this.http_
@@ -214,9 +212,6 @@ export class CreateUserDialog implements OnInit {
 
   // create role
   createRole(): void {
-    if(this.usertype.value == "tenant-user") {
-      this.namespaceUsed = "default"
-    }
     const roleSpec= {name: this.user.value, namespace: this.namespaceUsed, apiGroups: this.apiGroups,verbs: this.verbs,resources: this.resources};
     const tokenPromise = this.csrfToken_.getTokenForAction('role');
     tokenPromise.subscribe(csrfToken => {
@@ -277,7 +272,7 @@ export class CreateUserDialog implements OnInit {
 
   // create service account
   createServiceAccount() {
-    if(this.usertype.value == "tenant-user") {
+    if(this.Usertype == "tenant-admin") {
       this.namespaceUsed = "default"
     }
     const serviceAccountSpec= {name: this.user.value,namespace: this.namespaceUsed};
@@ -295,7 +290,7 @@ export class CreateUserDialog implements OnInit {
           (data) => {
             this.dialogRef.close(this.user.value);
             this.serviceAccountCreated.push(Object.entries(data))
-            },
+          },
         );
     })
   }
@@ -323,7 +318,35 @@ export class CreateUserDialog implements OnInit {
     })
 
   }
-
+  //  Creates new tenant based on the state of the controller.
+  createTenant(): void {
+    const tenantSpec= {name: this.user.value,storageclusterid: this.storageclusterid.value};
+    const tokenPromise = this.csrfToken_.getTokenForAction('tenant');
+    tokenPromise.subscribe(csrfToken => {
+      return this.http_
+        .post<{valid: boolean}>(
+          'api/v1/tenant',
+          {...tenantSpec},
+          {
+            headers: new HttpHeaders().set(this.config_.csrfHeaderName, csrfToken.token),
+          },
+        )
+        .subscribe(
+          () => {
+            this.dialogRef.close(this.tenant.value);
+          },
+          error => {
+            this.dialogRef.close();
+            const configData: AlertDialogConfig = {
+              title: 'Tenant Already Exists',
+              message: error.data,
+              confirmLabel: 'OK',
+            };
+            this.matDialog_.open(AlertDialog, {data: configData});
+          },
+        );
+    });
+  }
   createClusterRoleBinding(): void{
     if( this.usertype.value == "tenant-admin")
     {
@@ -365,20 +388,22 @@ export class CreateUserDialog implements OnInit {
           }
         });
       });
-      }, 3000);
+    }, 3000);
 
 
   }
   createTenantUser() {
     this.createServiceAccount()
     if(this.usertype.value == "tenant-user"){
-       this.createRoleBinding()
+      this.createTenant()
+      this.createRoleBinding()
 
     } else {
       if(this.usertype.value == "cluster-admin") {
         this.adminroleUsed = "admin-role"
       }
       else{
+        this.createTenant()
         this.createClusterRole()
       }
       this.createClusterRoleBinding()
