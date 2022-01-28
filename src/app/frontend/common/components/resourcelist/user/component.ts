@@ -12,6 +12,8 @@ import {ListGroupIdentifier, ListIdentifier} from '../groupids';
 import {MenuComponent} from '../../list/column/menu/component';
 import {UserApi} from "../../../../../frontend/common/services/global/userapi"
 import {VerberService} from "../../../../../frontend/common/services/global/verber"
+import {NamespacedResourceService} from "../../../services/resource/resource";
+import {TenantDetail} from "@api/backendapi";
 
 @Component({
   selector: 'kd-user-list',
@@ -27,11 +29,15 @@ export class UserListComponent extends ResourceListWithStatuses<UserList, User> 
   typeMeta:any;
   objectMeta:any;
 
+  private currentTenant: string;
+
   constructor(
     public readonly verber_: VerberService,
     private readonly user_: ResourceService<UserList>,
     private userAPI_:UserApi,
+    private readonly tenant_: NamespacedResourceService<TenantDetail>,
     notifications: NotificationsService,
+
   ) {
     super('user', notifications);
     this.id = ListIdentifier.user;
@@ -43,6 +49,8 @@ export class UserListComponent extends ResourceListWithStatuses<UserList, User> 
 
     // Register action columns.
     this.registerActionColumn<MenuComponent>('menu', MenuComponent);
+    this.currentTenant = this.tenant_['tenant_']['currentTenant_']
+
   }
 
   getResourceObservable(params?: HttpParams): Observable<UserList> {
@@ -53,17 +61,20 @@ export class UserListComponent extends ResourceListWithStatuses<UserList, User> 
     const userType=sessionStorage.getItem('userType');
     const data=userList.users
     const userdata:any=[];
-    data.map((elem)=>{
-      if(userType.split("-")[0]==='tenant')
+    data.map((user)=>{
+      if(userType.includes('tenant'))
       {
-        if (elem.objectMeta.type.includes('tenant')) {
-          return userdata.push(elem)
+        const parentTenant = sessionStorage.getItem('parentTenant');
+        //@ts-ignore
+        if(user.objectMeta.tenant === this.currentTenant || user.objectMeta.tenant === parentTenant || user.objectMeta.username === this.currentTenant) {
+          return userdata.push(user)
         }
       }
       else {
-        return userdata.push(elem)
+        return userdata.push(user)
       }
     })
+    this.totalItems=userdata.length
     return userdata
   }
 

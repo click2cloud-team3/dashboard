@@ -78,6 +78,7 @@ export class CreateRoleDialog implements OnInit {
       role: [
         '',
         Validators.compose([
+
           Validators.maxLength(this.roleMaxLength),
           Validators.pattern(this.rolePattern),
         ]),

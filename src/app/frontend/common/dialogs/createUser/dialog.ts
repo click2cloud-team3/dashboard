@@ -70,6 +70,8 @@ export class CreateUserDialog implements OnInit {
   secret: SecretDetail;
   secretName =""
 
+  private tenant_: string;
+
   constructor(
     private readonly secret_: NamespacedResourceService<SecretDetail>,
     public dialogRef: MatDialogRef<CreateUserDialog>,
@@ -186,9 +188,23 @@ export class CreateUserDialog implements OnInit {
   }
 
   createUser() {
-    let response = this.http_.get('api/v1/tenant/'+this.user.value)
+
+    const currentType = sessionStorage.getItem('userType')
+
+    if (this.usertype.value === 'tenant-admin' && currentType === 'cluster-admin') {
+      this.tenant_ = this.user.value
+    } else if (this.usertype.value === 'tenant-admin' && currentType === 'tenant-admin') {
+      this.tenant_ = this.tenant
+    } else if (this.usertype.value === 'tenant-user') {
+      this.tenant_ = this.tenant
+    } else {
+      this.tenant_ = 'system'
+    }
+
     this.getToken(async (token_:any)=>{
-      const userSpec= {username: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant};
+
+      const userSpec= {username: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant_};
+
       const userTokenPromise = await this.csrfToken_.getTokenForAction('users');
       userTokenPromise.subscribe(csrfToken => {
         return this.http_

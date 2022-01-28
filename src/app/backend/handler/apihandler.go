@@ -1010,6 +1010,11 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Writes(role.RoleList{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/tenants/{tenant}/role/{namespace}/{name}").
+		apiV1Ws.GET("/tenant/{tenant}/namespace/{namespace}/roles").
+			To(apiHandler.handleGetRolesWithMultiTenancy).
+			Writes(role.RoleList{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("tenants/{tenant}/namespaces/{namespace}/role/{name}").
 			To(apiHandler.handleGetRoleDetailWithMultiTenancy).
 			Writes(role.RoleDetail{}))
 	apiV1Ws.Route(
@@ -5594,6 +5599,7 @@ func (apiHandler *APIHandler) handleGetUserDetail(w *restful.Request, r *restful
 	}
 	user.ObjectMeta.Password = "***********"
 	user.ObjectMeta.Token = "***********"
+
 	r.WriteHeaderAndEntity(http.StatusOK, user)
 }
 

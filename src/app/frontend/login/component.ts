@@ -163,6 +163,7 @@ export class LoginComponent implements OnInit {
         this.responseData = await this.GetCurrentUserInformation(data)
         if (this.responseData.objectMeta.password == this.password_){
           this.setUserType(this.responseData.objectMeta.type);
+          this.setParentTenant(this.responseData.objectMeta.tenant);
           return this.responseData.objectMeta as LoginSpec;
         }
         else{
@@ -181,4 +182,7 @@ export class LoginComponent implements OnInit {
     sessionStorage.setItem('userType', userType);
   }
 
+  private setParentTenant (parentTenant:string) {
+    sessionStorage.setItem('parentTenant', parentTenant);
+  }
 }
