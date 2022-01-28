@@ -15,6 +15,7 @@
 package role
 
 import (
+	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"log"
 
 	"github.com/kubernetes/dashboard/src/app/backend/api"
@@ -49,6 +50,19 @@ func GetRoleList(client kubernetes.Interface, nsQuery *common.NamespaceQuery, ds
 	}
 
 	return GetRoleListFromChannels(channels, dsQuery)
+}
+
+// GetRolesWithMultiTenancy returns a list of all Roles under specific tenant.
+func GetRolesWithMultiTenancy(client kubernetes.Interface, tenant string, namespace string) (*RoleList, error) {
+	rawObject, err := client.RbacV1().RolesWithMultiTenancy(namespace, tenant).List(metaV1.ListOptions{})
+
+	nonCriticalErrors, criticalError := errors.HandleError(err)
+	if criticalError != nil {
+		return nil, criticalError
+	}
+	dsQuery := dataselect.NoDataSelect
+	roleList := toRoleList(rawObject.Items, nonCriticalErrors, dsQuery)
+	return roleList, nil
 }
 
 // GetRoleListFromChannels returns a list of all Roles in the cluster

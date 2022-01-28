@@ -938,6 +938,10 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetRoles).
 			Writes(role.RoleList{}))
 	apiV1Ws.Route(
+		apiV1Ws.GET("/tenant/{tenant}/namespace/{namespace}/roles").
+			To(apiHandler.handleGetRolesWithMultiTenancy).
+			Writes(role.RoleList{}))
+	apiV1Ws.Route(
 		apiV1Ws.GET("tenants/{tenant}/namespaces/{namespace}/role/{name}").
 			To(apiHandler.handleGetRoleDetailWithMultiTenancy).
 			Writes(role.RoleDetail{}))
@@ -3125,6 +3129,23 @@ func (apiHandler *APIHandler) handleDeleteRole(request *restful.Request, respons
 		return
 	}
 	response.WriteHeader(http.StatusOK)
+}
+
+func (apiHandler *APIHandler) handleGetRolesWithMultiTenancy(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	tenant := request.PathParameter("tenant")
+	namespace := request.PathParameter("namespace")
+	result, err := role.GetRolesWithMultiTenancy(k8sClient, tenant, namespace)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
 }
 
 func (apiHandler *APIHandler) handleGetRoleDetailWithMultiTenancy(request *restful.Request, response *restful.Response) {
