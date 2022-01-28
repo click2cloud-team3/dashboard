@@ -25,7 +25,7 @@ type IntegrationsGetter interface {
 }
 
 // List implements integration getter interface. See IntegrationsGetter for
-// more clustermanagement.
+// more information.
 func (self *integrationManager) List() []api.Integration {
 	result := make([]api.Integration, 0)
 

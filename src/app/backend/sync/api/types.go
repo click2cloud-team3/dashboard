@@ -53,7 +53,7 @@ type Synchronizer interface {
 
 // SynchronizerManager interface is responsible for creating specific synchronizers.
 type SynchronizerManager interface {
-	// Secret created single secret synchronizer based on name and namespace clustermanagement.
+	// Secret created single secret synchronizer based on name and namespace information.
 	Secret(namespace, name string) Synchronizer
 }
 

@@ -38,12 +38,12 @@ type integrationManager struct {
 	metric metric.MetricManager
 }
 
-// Metric implements integration manager interface. See IntegrationManager for more clustermanagement.
+// Metric implements integration manager interface. See IntegrationManager for more information.
 func (self *integrationManager) Metric() metric.MetricManager {
 	return self.metric
 }
 
-// GetState implements integration manager interface. See IntegrationManager for more clustermanagement.
+// GetState implements integration manager interface. See IntegrationManager for more information.
 func (self *integrationManager) GetState(id api.IntegrationID) (*api.IntegrationState, error) {
 	for _, i := range self.List() {
 		if i.ID() == id {

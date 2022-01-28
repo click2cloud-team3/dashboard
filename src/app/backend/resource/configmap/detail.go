@@ -33,7 +33,7 @@ type ConfigMapDetail struct {
 	Data map[string]string `json:"data,omitempty"`
 }
 
-// GetConfigMapDetail returns detailed clustermanagement about a config map
+// GetConfigMapDetail returns detailed information about a config map
 func GetConfigMapDetail(client kubernetes.Interface, namespace, name string) (*ConfigMapDetail, error) {
 	log.Printf("Getting details of %s config map in %s namespace", name, namespace)
 

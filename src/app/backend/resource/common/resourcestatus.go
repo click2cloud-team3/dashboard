@@ -14,7 +14,7 @@
 
 package common
 
-// ResourceStatus provides basic clustermanagement about resources status on the list.
+// ResourceStatus provides basic information about resources status on the list.
 type ResourceStatus struct {
 	// Number of resources that are currently in running state.
 	Running int `json:"running"`

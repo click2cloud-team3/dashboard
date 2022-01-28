@@ -26,7 +26,7 @@ import (
 	syncapi "github.com/kubernetes/dashboard/src/app/backend/sync/api"
 )
 
-// SecretPoller implements Poller interface. See Poller for more clustermanagement.
+// SecretPoller implements Poller interface. See Poller for more information.
 type SecretPoller struct {
 	name      string
 	namespace string
@@ -34,7 +34,7 @@ type SecretPoller struct {
 	watcher   *PollWatcher
 }
 
-// Poll new secret every 'interval' time and send it to watcher channel. See Poller for more clustermanagement.
+// Poll new secret every 'interval' time and send it to watcher channel. See Poller for more information.
 func (self *SecretPoller) Poll(interval time.Duration) watch.Interface {
 	stopCh := make(chan struct{})
 

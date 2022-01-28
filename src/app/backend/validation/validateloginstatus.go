@@ -37,7 +37,7 @@ type LoginStatus struct {
 	ImpersonatedUser string `json:"impersonatedUser"`
 }
 
-// ValidateLoginStatus returns clustermanagement about user login status and if request was made over HTTPS.
+// ValidateLoginStatus returns information about user login status and if request was made over HTTPS.
 func ValidateLoginStatus(request *restful.Request) *LoginStatus {
 	authHeader := request.HeaderParameter("Authorization")
 	tokenHeader := request.HeaderParameter(client.JWETokenHeader)

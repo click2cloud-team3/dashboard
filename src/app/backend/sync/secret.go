@@ -35,7 +35,7 @@ import (
 // Time interval between which secret should be resynchronized.
 const secretSyncPeriod = 5 * time.Minute
 
-// Implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// Implements Synchronizer interface. See Synchronizer for more information.
 type secretSynchronizer struct {
 	namespace string
 	name      string
@@ -49,12 +49,12 @@ type secretSynchronizer struct {
 	mux sync.Mutex
 }
 
-// Name implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// Name implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) Name() string {
 	return fmt.Sprintf("%s-%s", self.name, self.namespace)
 }
 
-// Start implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// Start implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) Start() {
 	self.errChan = make(chan error)
 	watcher, err := self.watch(self.namespace, self.name)
@@ -84,12 +84,12 @@ func (self *secretSynchronizer) Start() {
 	}()
 }
 
-// Error implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// Error implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) Error() chan error {
 	return self.errChan
 }
 
-// Create implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// Create implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) Create(obj runtime.Object) error {
 	secret := self.getSecret(obj)
 	_, err := self.client.CoreV1().Secrets(secret.Namespace).Create(secret)
@@ -100,7 +100,7 @@ func (self *secretSynchronizer) Create(obj runtime.Object) error {
 	return nil
 }
 
-// Get implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// Get implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) Get() runtime.Object {
 	self.mux.Lock()
 	defer self.mux.Unlock()
@@ -120,7 +120,7 @@ func (self *secretSynchronizer) Get() runtime.Object {
 	return self.secret
 }
 
-// Update implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// Update implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) Update(obj runtime.Object) error {
 	secret := self.getSecret(obj)
 	_, err := self.client.CoreV1().Secrets(secret.Namespace).Update(secret)
@@ -131,13 +131,13 @@ func (self *secretSynchronizer) Update(obj runtime.Object) error {
 	return nil
 }
 
-// Delete implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// Delete implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) Delete() error {
 	return self.client.CoreV1().Secrets(self.namespace).Delete(self.name,
 		&metaV1.DeleteOptions{GracePeriodSeconds: new(int64)})
 }
 
-// RegisterActionHandler implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// RegisterActionHandler implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) RegisterActionHandler(handler syncApi.ActionHandlerFunction, events ...watch.EventType) {
 	for _, ev := range events {
 		if _, exists := self.actionHandlers[ev]; !exists {
@@ -148,7 +148,7 @@ func (self *secretSynchronizer) RegisterActionHandler(handler syncApi.ActionHand
 	}
 }
 
-// Refresh implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// Refresh implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) Refresh() {
 	self.mux.Lock()
 	defer self.mux.Unlock()
@@ -162,7 +162,7 @@ func (self *secretSynchronizer) Refresh() {
 	self.secret = secret
 }
 
-// SetPoller implements Synchronizer interface. See Synchronizer for more clustermanagement.
+// SetPoller implements Synchronizer interface. See Synchronizer for more information.
 func (self *secretSynchronizer) SetPoller(poller syncApi.Poller) {
 	self.poller = poller
 }

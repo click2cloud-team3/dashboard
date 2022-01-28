@@ -36,7 +36,7 @@ type SecretDetail struct {
 	Data map[string][]byte `json:"data"`
 }
 
-// GetSecretDetail returns detailed clustermanagement about a secret
+// GetSecretDetail returns detailed information about a secret
 func GetSecretDetail(client kubernetes.Interface, namespace, name string) (*SecretDetail, error) {
 	log.Printf("Getting details of %s secret in %s namespace\n", name, namespace)
 
@@ -48,7 +48,7 @@ func GetSecretDetail(client kubernetes.Interface, namespace, name string) (*Secr
 	return getSecretDetail(rawSecret), nil
 }
 
-// GetSecretDetailWithMultiTenancy returns detailed clustermanagement about a secret
+// GetSecretDetailWithMultiTenancy returns detailed information about a secret
 func GetSecretDetailWithMultiTenancy(client kubernetes.Interface, tenant, namespace, name string) (*SecretDetail, error) {
 	log.Printf("Getting details of %s secret in %s namespace for %s\n", name, namespace, tenant)
 

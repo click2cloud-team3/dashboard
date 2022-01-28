@@ -20,7 +20,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// GetPluginSource has the logic to get the actual plugin source code from clustermanagement in Plugin.Spec
+// GetPluginSource has the logic to get the actual plugin source code from information in Plugin.Spec
 func GetPluginSource(client pluginclientset.Interface, k8sClient kubernetes.Interface, ns string, name string) ([]byte, error) {
 	plugin, err := client.DashboardV1alpha1().Plugins(ns).Get(name, v1.GetOptions{})
 	if err != nil {

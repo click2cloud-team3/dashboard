@@ -33,7 +33,7 @@ type ReplicationControllerList struct {
 	ListMeta          api.ListMeta       `json:"listMeta"`
 	CumulativeMetrics []metricapi.Metric `json:"cumulativeMetrics"`
 
-	// Basic clustermanagement about resources status on the list.
+	// Basic information about resources status on the list.
 	Status common.ResourceStatus `json:"status"`
 
 	// Unordered list of Replication Controllers.
@@ -49,7 +49,7 @@ type ReplicationController struct {
 	ObjectMeta api.ObjectMeta `json:"objectMeta"`
 	TypeMeta   api.TypeMeta   `json:"typeMeta"`
 
-	// Aggregate clustermanagement about pods belonging to this Replication Controller.
+	// Aggregate information about pods belonging to this Replication Controller.
 	Pods common.PodInfo `json:"podInfo"`
 
 	// Container images of the Replication Controller.

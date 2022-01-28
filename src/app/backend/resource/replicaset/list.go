@@ -34,7 +34,7 @@ type ReplicaSetList struct {
 	ListMeta          api.ListMeta       `json:"listMeta"`
 	CumulativeMetrics []metricapi.Metric `json:"cumulativeMetrics"`
 
-	// Basic clustermanagement about resources status on the list.
+	// Basic information about resources status on the list.
 	Status common.ResourceStatus `json:"status"`
 
 	// Unordered list of Replica Sets.
@@ -49,7 +49,7 @@ type ReplicaSet struct {
 	ObjectMeta api.ObjectMeta `json:"objectMeta"`
 	TypeMeta   api.TypeMeta   `json:"typeMeta"`
 
-	// Aggregate clustermanagement about pods belonging to this Replica Set.
+	// Aggregate information about pods belonging to this Replica Set.
 	Pods common.PodInfo `json:"podInfo"`
 
 	// Container images of the Replica Set.

@@ -33,7 +33,7 @@ func NewSystemBannerManager(message, severity string) SystemBannerManager {
 	}
 }
 
-// Get implements SystemBannerManager interface. Check it for more clustermanagement.
+// Get implements SystemBannerManager interface. Check it for more information.
 func (sbm *SystemBannerManager) Get() api.SystemBanner {
 	return sbm.systemBanner
 }

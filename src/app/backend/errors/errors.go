@@ -89,7 +89,7 @@ func NewUnexpectedObject(obj runtime.Object) *errors.StatusError {
 
 func NewGenericResponse(code int, serverMessage string) *errors.StatusError {
 	reason := metav1.StatusReasonUnknown
-	message := fmt.Sprintf("the server responded with the status code %d but did not return more clustermanagement", code)
+	message := fmt.Sprintf("the server responded with the status code %d but did not return more information", code)
 	switch code {
 	case http.StatusNotFound:
 		reason = metav1.StatusReasonNotFound

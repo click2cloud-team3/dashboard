@@ -52,7 +52,7 @@ const (
 	DefaultContentType = "application/vnd.kubernetes.protobuf"
 	// Default cluster/context/auth name to be set in clientcmd config
 	DefaultCmdConfigName = "kubernetes"
-	// Header name that contains token used for authorization. See TokenManager for more clustermanagement.
+	// Header name that contains token used for authorization. See TokenManager for more information.
 	JWETokenHeader = "jweToken"
 	// Default http header for user-agent
 	DefaultUserAgent = "dashboard"
@@ -207,7 +207,7 @@ func (self *clientManager) CanI(req *restful.Request, ssar *v1.SelfSubjectAccess
 	return response.Status.Allowed
 }
 
-// ClientCmdConfig creates ClientCmd Config based on authentication clustermanagement extracted from request.
+// ClientCmdConfig creates ClientCmd Config based on authentication information extracted from request.
 // Currently request header is only checked for existence of 'Authentication: BearerToken'
 func (self *clientManager) ClientCmdConfig(req *restful.Request) (clientcmd.ClientConfig, error) {
 	authInfo, err := self.extractAuthInfo(req)
@@ -275,7 +275,7 @@ func (self *clientManager) HasAccess(authInfo api.AuthInfo) error {
 	return err
 }
 
-// VerberClient returns new verber client based on authentication clustermanagement extracted from request
+// VerberClient returns new verber client based on authentication information extracted from request
 func (self *clientManager) VerberClient(req *restful.Request, config *rest.Config) (clientapi.ResourceVerber, error) {
 	k8sClient, err := self.Client(req)
 	if err != nil {
@@ -345,7 +345,7 @@ func (self *clientManager) buildCmdConfig(authInfo *api.AuthInfo, cfg *rest.Conf
 	)
 }
 
-// Extracts authorization clustermanagement from the request header
+// Extracts authorization information from the request header
 func (self *clientManager) extractAuthInfo(req *restful.Request) (*api.AuthInfo, error) {
 	authHeader := req.HeaderParameter("Authorization")
 	impersonationHeader := req.HeaderParameter("Impersonate-User")
@@ -388,7 +388,7 @@ func (self *clientManager) extractAuthInfo(req *restful.Request) (*api.AuthInfo,
 	return nil, errors.NewUnauthorized(errors.MsgLoginUnauthorizedError)
 }
 
-// Checks if request headers contain any auth clustermanagement without parsing.
+// Checks if request headers contain any auth information without parsing.
 func (self *clientManager) containsAuthInfo(req *restful.Request) bool {
 	authHeader := req.HeaderParameter("Authorization")
 	jweToken := req.HeaderParameter(JWETokenHeader)

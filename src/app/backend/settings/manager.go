@@ -95,7 +95,7 @@ func (sm *SettingsManager) restoreConfigMap(client kubernetes.Interface) {
 	}
 }
 
-// GetGlobalSettings implements SettingsManager interface. Check it for more clustermanagement.
+// GetGlobalSettings implements SettingsManager interface. Check it for more information.
 func (sm *SettingsManager) GetGlobalSettings(client kubernetes.Interface) api.Settings {
 	cm, _ := sm.load(client)
 	if cm == nil {
@@ -110,7 +110,7 @@ func (sm *SettingsManager) GetGlobalSettings(client kubernetes.Interface) api.Se
 	return s
 }
 
-// GetGlobalSettings implements SettingsManager interface. Check it for more clustermanagement.
+// GetGlobalSettings implements SettingsManager interface. Check it for more information.
 func (sm *SettingsManager) SaveGlobalSettings(client kubernetes.Interface, s *api.Settings) error {
 	cm, isDiff := sm.load(client)
 	if isDiff {

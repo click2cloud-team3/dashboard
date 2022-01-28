@@ -19,7 +19,7 @@ import (
 	metricapi "github.com/kubernetes/dashboard/src/app/backend/integration/metric/api"
 )
 
-// SidecarAllInOneDownloadConfig holds config clustermanagement specifying whether given native Sidecar
+// SidecarAllInOneDownloadConfig holds config information specifying whether given native Sidecar
 // resource type supports list download.
 var SidecarAllInOneDownloadConfig = map[api.ResourceKind]bool{
 	api.ResourceKindPod:  true,

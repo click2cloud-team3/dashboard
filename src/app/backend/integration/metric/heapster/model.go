@@ -20,7 +20,7 @@ import (
 	heapster "k8s.io/heapster/metrics/api/v1/types"
 )
 
-// HeapsterAllInOneDownloadConfig holds config clustermanagement specifying whether given native Heapster
+// HeapsterAllInOneDownloadConfig holds config information specifying whether given native Heapster
 // resource type supports list download.
 var HeapsterAllInOneDownloadConfig = map[api.ResourceKind]bool{
 	api.ResourceKindPod:  true,

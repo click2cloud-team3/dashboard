@@ -37,11 +37,11 @@ type Token struct {
 	Token            string
 }
 
-// AdditionalAuthData contains clustermanagement required to validate token. It is integrity protected.
-// For more clustermanagement check: https://tools.ietf.org/html/rfc7516 (Chapter 2: Terminology)
+// AdditionalAuthData contains information required to validate token. It is integrity protected.
+// For more information check: https://tools.ietf.org/html/rfc7516 (Chapter 2: Terminology)
 type AdditionalAuthData map[Claim]string
 
-// Claim represent token claims used in AAD header. For more clustermanagement check:
+// Claim represent token claims used in AAD header. For more information check:
 // https://self-issued.info/docs/draft-ietf-oauth-json-web-token.html#rfc.section.4
 type Claim string
 
@@ -93,7 +93,7 @@ func (self *jweTokenManager) Decrypt(jweToken string) (*api.AuthInfo, error) {
 	return authInfo, err
 }
 
-// Refresh implements token manager interface. See TokenManager for more clustermanagement.
+// Refresh implements token manager interface. See TokenManager for more information.
 func (self *jweTokenManager) Refresh(jweToken string) (string, error) {
 	if len(jweToken) == 0 {
 		return "", errors.NewInvalid("Can not refresh token. No token provided.")
@@ -118,7 +118,7 @@ func (self *jweTokenManager) Refresh(jweToken string) (string, error) {
 	return self.Generate(*authInfo)
 }
 
-// SetTokenTTL implements token manager interface. See TokenManager for more clustermanagement.
+// SetTokenTTL implements token manager interface. See TokenManager for more information.
 func (self *jweTokenManager) SetTokenTTL(ttl time.Duration) {
 	if ttl < 0 {
 		ttl = 0

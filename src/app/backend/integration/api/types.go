@@ -38,10 +38,10 @@ type Integration interface {
 	ID() IntegrationID
 }
 
-// IntegrationState represents integration application state. Provides clustermanagement about
+// IntegrationState represents integration application state. Provides information about
 // health (if dashboard can connect to it) of the integrated application.
 // ----------------IMPORTANT----------------
-// Until external storage sync is implemented clustermanagement about state of integration is refreshed
+// Until external storage sync is implemented information about state of integration is refreshed
 // on every request to ensure that every dashboard replica always returns up-to-date data.
 // It does not make dashboard stateful in any way.
 // ----------------IMPORTANT----------------

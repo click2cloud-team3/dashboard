@@ -18,7 +18,7 @@ import (
 	api "k8s.io/api/core/v1"
 )
 
-// PodInfo represents aggregate clustermanagement about controller's pods.
+// PodInfo represents aggregate information about controller's pods.
 type PodInfo struct {
 	// Number of pods that are created.
 	Current int32 `json:"current"`
@@ -42,7 +42,7 @@ type PodInfo struct {
 	Warnings []Event `json:"warnings"`
 }
 
-// GetPodInfo returns aggregate clustermanagement about a group of pods.
+// GetPodInfo returns aggregate information about a group of pods.
 func GetPodInfo(current int32, desired *int32, pods []api.Pod) PodInfo {
 	result := PodInfo{
 		Current:  current,

@@ -26,7 +26,7 @@ type IntegrationHandler struct {
 	manager IntegrationManager
 }
 
-// Install creates new endpoints for integrations. All clustermanagement that any integration would want
+// Install creates new endpoints for integrations. All information that any integration would want
 // to expose by creating new endpoints should be kept here, i.e. helm integration might want to
 // create endpoint to list available releases/charts.
 //

@@ -32,7 +32,7 @@ type HorizontalPodAutoscalerDetail struct {
 	LastScaleTime   *v1.Time `json:"lastScaleTime"`
 }
 
-// GetHorizontalPodAutoscalerDetail returns detailed clustermanagement about a horizontal pod autoscaler
+// GetHorizontalPodAutoscalerDetail returns detailed information about a horizontal pod autoscaler
 func GetHorizontalPodAutoscalerDetail(client client.Interface, namespace string, name string) (*HorizontalPodAutoscalerDetail, error) {
 	log.Printf("Getting details of %s horizontal pod autoscaler", name)
 
