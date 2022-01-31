@@ -14,7 +14,7 @@ import {NamespacedResourceService} from '../../../../common/services/resource/re
   templateUrl: './template.html',
 })
 export class RoleDetailComponent implements OnInit, OnDestroy {
-  private readonly endpoint_ = EndpointManager.resource(Resource.role, true);
+  private readonly endpoint_ = EndpointManager.resource(Resource.role, true,true);
   private readonly unsubscribe_ = new Subject<void>();
 
   role: RoleDetail;
@@ -24,7 +24,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     private readonly role_: NamespacedResourceService<RoleDetail>,
     private readonly actionbar_: ActionbarService,
     private readonly route_: ActivatedRoute,
-    private readonly notifications_: NotificationsService
+    private readonly notifications_: NotificationsService,
   ) {}
 
   ngOnInit(): void {
