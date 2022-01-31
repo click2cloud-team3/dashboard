@@ -14,7 +14,7 @@
       <div class="error_sec" *ngIf="tenant.errors && (tenant.dirty || tenant.touched)">
         <span class="red" *ngIf="tenant.errors.required">Name is required.</span>
         <span class="red" *ngIf="tenant.hasError('pattern')">Name must be in small alphanumeric characters or '-'.</span>
-        <span class="red" *ngIf="tenant.hasError('maxlength')">Name should not be greater than 10 characters.</span>
+        <span class="red" *ngIf="tenant.hasError('maxlength')">Name should not be greater than 24 characters.</span>
       </div>
     </div>
 
@@ -27,7 +27,7 @@
       <div class="error_sec" *ngIf="namespace.errors && (namespace.dirty || namespace.touched)">
         <span class="red" *ngIf="namespace.errors.required">Name is required.</span>
         <span class="red" *ngIf="namespace.hasError('pattern')">Name must be in small alphanumeric characters or '-'.</span>
-        <span class="red" *ngIf="namespace.hasError('maxlength')">Name should not be greater than 10 characters.</span>
+        <span class="red" *ngIf="namespace.hasError('maxlength')">Name should not be greater than 24 characters.</span>
       </div>
     </div>
   </div>
