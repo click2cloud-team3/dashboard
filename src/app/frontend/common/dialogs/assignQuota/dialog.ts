@@ -32,13 +32,13 @@ export class assignQuotaDialog implements OnInit {
   form1: FormGroup;
 
   //Validation
-  QuotaMaxLength = 10;
+  QuotaMaxLength = 24;
   QuotaPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  TenatMaxLength = 10;
+  TenatMaxLength = 24;
   TenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  NamespaceMaxLength = 10;
+  NamespaceMaxLength = 24;
   NamespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
   private readonly config_ = CONFIG;

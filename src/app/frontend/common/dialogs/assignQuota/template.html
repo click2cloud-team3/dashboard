@@ -14,7 +14,7 @@
         <div class="error_sec" *ngIf="quotaname.errors && (quotaname.dirty || quotaname.touched)">
           <span class="red" *ngIf="quotaname.errors.required">Name is required.</span>
           <span class="red" *ngIf="quotaname.hasError('pattern')">Name must be in small alphanumeric characters or '-'.</span>
-          <span class="red" *ngIf="quotaname.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+          <span class="red" *ngIf="quotaname.hasError('maxlength')">Name should not be greater than 10 characters.</span>
         </div>
       </div>
 
@@ -26,7 +26,7 @@
         <div class="error_sec" *ngIf="tenants.errors && (tenants.dirty || tenants.touched)">
           <span class="red" *ngIf="tenants.errors.required">Name is required.</span>
           <span class="red" *ngIf="tenants.hasError('pattern')">Name must be in small alphanumeric characters or '-'.</span>
-          <span class="red" *ngIf="tenants.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+          <span class="red" *ngIf="tenants.hasError('maxlength')">Name should not be greater than 10 characters.</span>
         </div>
       </div>
 
@@ -38,7 +38,7 @@
         <div class="error_sec" *ngIf="namespaces.errors && (namespaces.dirty || namespaces.touched)">
           <span class="red" *ngIf="namespaces.errors.required">Name is required.</span>
           <span class="red" *ngIf="namespaces.hasError('pattern')">Name must be in small alphanumeric characters or '-'.</span>
-          <span class="red" *ngIf="namespaces.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+          <span class="red" *ngIf="namespaces.hasError('maxlength')">Name should not be greater than 10 characters.</span>
         </div>
       </div>
 

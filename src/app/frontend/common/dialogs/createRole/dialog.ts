@@ -41,19 +41,19 @@ export class CreateRoleDialog implements OnInit {
   private readonly config_ = CONFIG;
 
   //Validation
-  roleMaxLength = 10;
+  roleMaxLength = 24;
   rolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  namespaceMaxLength = 10;
+  namespaceMaxLength = 24;
   namespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  apiGroupsMaxLength = 20;
+  apiGroupsMaxLength = 24;
   apiGroupsPattern: RegExp = new RegExp('^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
-  resourceMaxLength = 10;
+  resourceMaxLength = 24;
   resourcePattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
-  verbsMaxLength = 10;
+  verbsMaxLength = 24;
   verbsPattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
   apiGroups1: string[]

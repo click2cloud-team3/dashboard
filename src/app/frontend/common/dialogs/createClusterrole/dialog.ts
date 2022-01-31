@@ -43,13 +43,13 @@ export class CreateClusterroleDialog implements OnInit {
   ClusterroleMaxLength = 63;
   ClusterrolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  ApigroupsMaxLength = 10;
+  ApigroupsMaxLength = 50;
   ApigroupsPattern:  RegExp = new RegExp('^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
-  ResourceMaxLength = 10;
+  ResourceMaxLength = 50;
   ResourcePattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
-  VerbsMaxLength = 10;
+  VerbsMaxLength = 50;
   VerbsPattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
   name: string
@@ -111,7 +111,7 @@ export class CreateClusterroleDialog implements OnInit {
   get resources(): AbstractControl {
     return this.form1.get('resources');
   }
-  
+
   // function for creating new Clusterrole
   createclusterrole(): void {
     if (!this.form1.valid) return;

@@ -49,7 +49,7 @@ export class CreateNodeDialog implements OnInit {
    * Max-length validation rule for namespace
    */
   tenantMaxLength = 63;
-  storageidMaxLength =10;
+  storageidMaxLength =24;
   /**
    * Pattern validation rule for namespace
    */

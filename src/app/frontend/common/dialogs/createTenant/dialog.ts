@@ -39,10 +39,10 @@ export class CreateTenantDialog implements OnInit {
   private readonly config_ = CONFIG;
 
   //validations
-  tenantMaxLength = 10;
+  tenantMaxLength = 24;
   tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  storageidMaxLength =2;
+  storageidMaxLength =24;
   storageidPattern: RegExp = new RegExp('^[0-9]*$');
 
   constructor(

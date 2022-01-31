@@ -12,7 +12,7 @@
       <div class="error_sec" *ngIf="clusterrole.errors && (clusterrole.dirty || clusterrole.touched)">
         <span class="red" *ngIf="clusterrole.errors.required">Name is required.</span>
         <span class="red" *ngIf="clusterrole.hasError('pattern')">Name must be in small alphanumeric characters or '-'.</span>
-        <span class="red" *ngIf="clusterrole.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+        <span class="red" *ngIf="clusterrole.hasError('maxlength')">Name should not be greater than 10 characters.</span>
       </div>
       </div>
 
@@ -24,7 +24,7 @@
       <div class="error_sec" *ngIf="apigroups.errors && (apigroups.dirty || apigroups.touched)">
         <span class="red" *ngIf="apigroups.errors.required">Name is required.</span>
         <span class="red" *ngIf="apigroups.hasError('pattern')">Name must be in small alphanumeric characters or '-' or ' * '.</span>
-        <span class="red" *ngIf="apigroups.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+        <span class="red" *ngIf="apigroups.hasError('maxlength')">Name should not be greater than 10 characters.</span>
       </div>
       </div>
 
@@ -36,7 +36,7 @@
       <div class="error_sec" *ngIf="resources.errors && (resources.dirty || resources.touched)">
         <span class="red" *ngIf="resources.errors.required">Name is required.</span>
         <span class="red" *ngIf="resources.hasError('pattern')">Name must be in small alphanumeric characters or '-' or ' * '.</span>
-        <span class="red" *ngIf="resources.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+        <span class="red" *ngIf="resources.hasError('maxlength')">Name should not be greater than 10 characters.</span>
       </div>
       </div>
 
@@ -48,7 +48,7 @@
       <div class="error_sec" *ngIf="verbs.errors && (verbs.dirty || verbs.touched)">
         <span class="red" *ngIf="verbs.errors.required">Name is required.</span>
         <span class="red" *ngIf="verbs.hasError('pattern')">Name must be in small alphanumeric characters or '-' or ' * '.</span>
-        <span class="red" *ngIf="verbs.hasError('maxlength')">Name should not be greater than 10 digits.</span>
+        <span class="red" *ngIf="verbs.hasError('maxlength')">Name should not be greater than 10 characters.</span>
       </div>
       </div>
 
