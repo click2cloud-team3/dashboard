@@ -105,7 +105,7 @@ export class AuthService {
         switchMap((authResponse: AuthResponse) => {
           if (authResponse.jweToken.length !== 0 && authResponse.errors.length === 0) {
             this.setTokenCookie_(authResponse.jweToken);
-            this.setTenantCookie_(authResponse.tenant);
+            this.setTenantCookie_(this.getTenant_());
             this.setAuthTenant_(authResponse.tenant);
           }
 
@@ -180,5 +180,16 @@ export class AuthService {
    */
   isLoginPageEnabled(): boolean {
     return !(this.cookies_.get(this.config_.skipLoginPageCookieName) === 'true');
+  }
+
+  getTenant_(): string {
+    const username = sessionStorage.getItem('username');
+    const userType = sessionStorage.getItem('userType');
+    if (userType === 'cluster-admin'){
+      return 'system'
+    }
+    else{
+      return username
+    }
   }
 }
