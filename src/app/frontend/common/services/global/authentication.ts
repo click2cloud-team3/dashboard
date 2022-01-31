@@ -86,6 +86,7 @@ export class AuthService {
     this.cookies_.delete(this.config_.authTokenCookieName);
     this.cookies_.delete(this.config_.skipLoginPageCookieName);
     this.cookies_.delete(this.config_.authTenantCookieName);
+    sessionStorage.clear()
   }
 
   /**
