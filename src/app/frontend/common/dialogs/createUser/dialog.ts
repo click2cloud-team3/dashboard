@@ -32,7 +32,6 @@ import {TenantService} from "../../services/global/tenant";
 import {SecretDetail,Role,RoleList} from '../../../typings/backendapi';
 import {validateUniqueName} from "../../../create/from/form/validator/uniquename.validator";
 import {TenantDetail} from "@api/backendapi";
-import {NamespaceDetail} from "../../../typings/backendapi";
 
 
 export interface UserToken {
@@ -71,7 +70,7 @@ export class CreateUserDialog implements OnInit {
 
   secret: SecretDetail;
   secretName =""
-  private currentNamespace: string;
+
   private currentTenant: string;
   private tenant_: string;
 
@@ -89,13 +88,11 @@ export class CreateUserDialog implements OnInit {
     private readonly route_: ActivatedRoute,
     private readonly ngZone_: NgZone,
     private readonly tenants_: NamespacedResourceService<TenantDetail>,
-    private readonly namespace_: NamespacedResourceService<NamespaceDetail>,
   ) {}
 
   ngOnInit(): void {
 
     this.currentTenant = this.tenants_['tenant_']['currentTenant_']
-    this.currentNamespace = this.namespace_['namespace_']['currentNamespace_']
     this.form1 = this.fb_.group({
         role: [this.route_.snapshot.params.role || '', Validators.required],
         usertype: [
@@ -143,7 +140,7 @@ export class CreateUserDialog implements OnInit {
       this.name.updateValueAndValidity();
     });
 
-    this.http_.get(`api/v1/tenants/${this.currentTenant}/role/${this.currentNamespace}`).subscribe((result: RoleList) => {
+    this.http_.get(`api/v1/tenants/${this.currentTenant}/role/default`).subscribe((result: RoleList) => {
       this.roles = result.items.map((role: Role) => role.objectMeta.name);
       this.role.patchValue(
         !this.tenantService_.isCurrentSystem()
