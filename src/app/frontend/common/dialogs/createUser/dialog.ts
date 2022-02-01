@@ -31,6 +31,7 @@ import {NamespacedResourceService} from '../../services/resource/resource';
 import {TenantService} from "../../services/global/tenant";
 import {SecretDetail,Role,RoleList} from '../../../typings/backendapi';
 import {validateUniqueName} from "../../../create/from/form/validator/uniquename.validator";
+import {TenantDetail} from "@api/backendapi";
 
 
 export interface UserToken {
@@ -63,16 +64,18 @@ export class CreateUserDialog implements OnInit {
 
   private readonly config_ = CONFIG
   tenantMaxLength = 24;
-  storageidMaxLength =24;
+  storageidMaxLength =10;
   tenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
   storageidPattern: RegExp = new RegExp('^[0-9]$');
 
   secret: SecretDetail;
   secretName =""
+  private currentTenant: string;
 
   private tenant_: string;
 
   constructor(
+
     private readonly secret_: NamespacedResourceService<SecretDetail>,
     public dialogRef: MatDialogRef<CreateUserDialog>,
     @Inject(MAT_DIALOG_DATA) public data: CreateUserDialogMeta,
@@ -84,9 +87,12 @@ export class CreateUserDialog implements OnInit {
     private readonly dialog_: MatDialog,
     private readonly route_: ActivatedRoute,
     private readonly ngZone_: NgZone,
+    private readonly tenants_: NamespacedResourceService<TenantDetail>,
   ) {}
 
   ngOnInit(): void {
+
+    this.currentTenant = this.tenants_['tenant_']['currentTenant_']
     this.form1 = this.fb_.group({
         role: [this.route_.snapshot.params.role || '', Validators.required],
         usertype: [
@@ -133,12 +139,13 @@ export class CreateUserDialog implements OnInit {
       this.name.setAsyncValidators(validateUniqueName(this.http_, role));
       this.name.updateValueAndValidity();
     });
-    this.http_.get('api/v1/role').subscribe((result: RoleList) => {
+
+    this.http_.get(`api/v1/tenants/${this.currentTenant}/role/default`).subscribe((result: RoleList) => {
       this.roles = result.items.map((role: Role) => role.objectMeta.name);
       this.role.patchValue(
         !this.tenantService_.isCurrentSystem()
-          ? this.route_.snapshot.params.role || this.roles[0]
-          : this.roles[0],
+          ? this.route_.snapshot.params.role || this.roles
+          : this.roles
       );
     });
 
@@ -147,9 +154,7 @@ export class CreateUserDialog implements OnInit {
       this.Usertype=usertype
     });
 
-
   }
-
   selectUserType(event:any)
   {
     this.selected=event;
@@ -166,7 +171,7 @@ export class CreateUserDialog implements OnInit {
   get tenant(): any {
     return this.tenantService_.current()
   }
-  get role(): AbstractControl {
+ get role(): any {
     return this.form1.get('role');
   }
   get user(): AbstractControl {
@@ -202,9 +207,15 @@ export class CreateUserDialog implements OnInit {
     }
 
     this.getToken(async (token_:any)=>{
+      if(this.selected == "tenant-admin") {
+        var commaSeperatedString = this.role.value.toString();
+        this.role.value=commaSeperatedString
+      }
 
-      const userSpec= {username: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant_};
-
+      else if (this.selected == "tenant-user"){
+        this.role.value = this.role.value
+      }
+      const userSpec= {name: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant,role:this.role.value};
       const userTokenPromise = await this.csrfToken_.getTokenForAction('users');
       userTokenPromise.subscribe(csrfToken => {
         return this.http_
