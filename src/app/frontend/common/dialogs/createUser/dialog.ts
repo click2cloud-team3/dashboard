@@ -109,7 +109,6 @@ export class CreateUserDialog implements OnInit {
             Validators.pattern(this.tenantPattern),
           ]),
         ],
-
         username: [
           '',
           Validators.compose([
@@ -131,7 +130,6 @@ export class CreateUserDialog implements OnInit {
             Validators.pattern(this.storageidPattern),
           ]),
         ],
-
       },
     );
     this.role.valueChanges.subscribe((role: string) => {
@@ -195,9 +193,7 @@ export class CreateUserDialog implements OnInit {
   }
 
   createUser() {
-
     const currentType = sessionStorage.getItem('userType')
-
     if (this.usertype.value === 'tenant-admin' && currentType === 'cluster-admin') {
       this.tenant_ = this.user.value
     } else if (this.usertype.value === 'tenant-admin' && currentType === 'tenant-admin') {
@@ -209,16 +205,13 @@ export class CreateUserDialog implements OnInit {
     }
 
     this.getToken(async (token_:any)=>{
-
       const userSpec= {name: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant,role:this.role.value};
-      console.log("value",this.selected)
       if (this.selected === "tenant-user") {
-        userSpec.role = this.role.value; }
-        else
-      {
+        userSpec.role = this.role.value;
+      }
+      else {
         userSpec.role = '';
       }
-      console.log("userspce",userSpec)
       const userTokenPromise = await this.csrfToken_.getTokenForAction('users');
       userTokenPromise.subscribe(csrfToken => {
         return this.http_
