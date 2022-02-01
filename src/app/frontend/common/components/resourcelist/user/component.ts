@@ -87,11 +87,11 @@ export class UserListComponent extends ResourceListWithStatuses<UserList, User> 
   }
 
   getDisplayColumns(): string[] {
-    return ['statusicon', 'username', 'phase', 'type'];
+    return ['statusicon', 'username', 'phase', 'type','age','role'];
   }
 
   getDisplayColumns2(): string[] {
-    return ['statusicon', 'username', 'phase', 'type'];
+    return ['statusicon', 'username', 'phase', 'type','age','role'];
   }
 
   onClick(): void {

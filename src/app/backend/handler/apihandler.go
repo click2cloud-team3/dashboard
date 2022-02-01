@@ -1249,7 +1249,7 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			To(apiHandler.handleGetUser).
 			Writes(model.User{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("/users/{username}/detail").
+		apiV1Ws.GET("/user/{username}").
 			To(apiHandler.handleGetUserDetail).
 			Writes(model.User{}))
 	apiV1Ws.Route(
@@ -5556,7 +5556,7 @@ func (apiHandler *APIHandler) handleCreateUser(w *restful.Request, r *restful.Re
 	if err != nil {
 		log.Fatalf("Unable to decode the request body.  %v", err)
 	}
-	user.CreationTime = time.Now().Truncate(time.Second)
+	user.CreationTimestamp = time.Now().Truncate(time.Second)
 	insertID := db.InsertUser(user)
 	res := response{
 		ID:      insertID,

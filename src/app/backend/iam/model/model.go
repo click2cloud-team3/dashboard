@@ -22,14 +22,14 @@ import (
 
 // User schema of the user table
 type User struct {
-	ID           int64     `json:"id"`
-	Username     string    `json:"username"`
-	Password     string    `json:"password"`
-	Token        string    `json:"token"`
-	Type         string    `json:"type"`
-	Tenant       string    `json:"tenant"`
-	Role         string    `json:"role"`
-	CreationTime time.Time `json:"creationTime"`
+	ID                int64     `json:"id"`
+	Username          string    `json:"name"`
+	Password          string    `json:"password"`
+	Token             string    `json:"token"`
+	Type              string    `json:"type"`
+	Tenant            string    `json:"tenant"`
+	Role              string    `json:"role"`
+	CreationTimestamp time.Time `json:"creationTimestamp"`
 }
 
 type UserDetails struct {

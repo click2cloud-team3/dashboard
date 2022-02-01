@@ -14,7 +14,7 @@ import {takeUntil} from "rxjs/operators";
 })
 
 export class UsersDetailComponent implements OnInit, OnDestroy {
-  private readonly endpoint_ = EndpointManager.resource(Resource.user);
+  private readonly endpoint_ = EndpointManager.resource(Resource.users);
   private readonly unsubscribe_ = new Subject<void>();
 
   user: UserDetail;

@@ -41,7 +41,34 @@
                                matSortDirection="asc"
                                i18n>Name</mat-header-cell>
               <mat-cell *matCellDef="let user">
-                {{user.objectMeta.username}}
+                <a [routerLink]="getDetailsHref(user.objectMeta.name)"
+                   queryParamsHandling="preserve">
+                  {{user.objectMeta.name}}
+                </a>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container [matColumnDef]="getColumns()[4]">
+              <mat-header-cell *matHeaderCellDef
+                               mat-sort-header
+                               disableClear="true"
+                               i18n>Age</mat-header-cell>
+              <mat-cell *matCellDef="let user">
+                <kd-date [date]="user.objectMeta.creationTimestamp"
+                         relative></kd-date>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container [matColumnDef]="getColumns()[5]">
+              <mat-header-cell *matHeaderCellDef
+                               mat-sort-header
+                               disableClear="true"
+                               matSortDirection="asc"
+                               i18n>Role</mat-header-cell>
+              <mat-cell *matCellDef="let user">
+                <a routerLink="/role/default/{{user.objectMeta.role}}" queryParamsHandling="preserve" routerLinkActive="active">
+                  {{user.objectMeta.role}}
+                </a>
               </mat-cell>
             </ng-container>
 
