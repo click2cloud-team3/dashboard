@@ -205,7 +205,7 @@ export class CreateUserDialog implements OnInit {
     }
 
     this.getToken(async (token_:any)=>{
-      const userSpec= {name: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant,role:this.role.value};
+      const userSpec= {name: this.user.value, password:this.pass.value, token:token_, type:this.usertype.value,tenant:this.tenant_,role:this.role.value};
       if (this.selected === "tenant-user") {
         userSpec.role = this.role.value;
       }

@@ -148,7 +148,7 @@ func CreateClusterAdmin() error {
 		Token:             string(token),
 		Type:              "cluster-admin",
 		Tenant:            "system",
-		Role:              "admin",
+		Role:              "",
 		CreationTimestamp: time.Now(),
 	}
 
