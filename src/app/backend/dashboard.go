@@ -357,7 +357,7 @@ func CreateTable() {
 	// close the db connection
 	defer db.Close()
 
-	sqlStatement := `CREATE TABLE IF NOT EXISTS userdetails (userid SERIAL PRIMARY KEY,username TEXT,password TEXT,token TEXT,type TEXT,tenant TEXT,role TEXT,creationtime TIMESTAMP, UNIQUE (username));`
+	sqlStatement := `CREATE TABLE IF NOT EXISTS userdetails (userid SERIAL PRIMARY KEY,username TEXT,password TEXT,token TEXT,type TEXT,tenant TEXT,role TEXT,creationtime TIMESTAMP,namespace TEXT, UNIQUE (username));`
 
 	// execute the sql statement
 	res, err := db.Exec(sqlStatement)
