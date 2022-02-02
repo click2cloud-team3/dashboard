@@ -45,6 +45,10 @@ type fakeClientManager struct {
 	HasAccessError error
 }
 
+func (self *fakeClientManager) GetClusterName() string {
+	return ""
+}
+
 func (self *fakeClientManager) Client(req *restful.Request) (kubernetes.Interface, error) {
 	return nil, nil
 }

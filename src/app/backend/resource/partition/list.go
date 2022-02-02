@@ -56,20 +56,32 @@ func GetResourcePartitionDetail(client client.Interface, clusterName string) (*R
 		return nil, err
 	}
 	var cpuLimit int64 = 0
+	var cpuFree int64 = 0
 	var memoryLimit int64 = 0
+	var memoryFree int64 = 0
 	var healthyNodeCount int64 = 0
 	for _, node := range nodes.Items {
-		cpuLimit += node.Status.Allocatable.Cpu().MilliValue()
-		memoryLimit += node.Status.Allocatable.Memory().Value()
+		cpuLimit += node.Status.Capacity.Cpu().MilliValue()
+		cpuFree += node.Status.Allocatable.Cpu().MilliValue()
+		memoryLimit += node.Status.Capacity.Memory().Value()
+		memoryFree += node.Status.Allocatable.Memory().Value()
 
-		if node.Status.Conditions[0].Status == v1.ConditionTrue {
-			healthyNodeCount++
+		//if node.Status.Conditions[0].Status == v1.ConditionTrue {
+		//	healthyNodeCount++
+		//}
+		for _, condition := range node.Status.Conditions {
+			if condition.Type == v1.NodeConditionType("Ready") && condition.Status == v1.ConditionTrue {
+				healthyNodeCount++
+				break
+			}
 		}
 	}
+	var cpuUsed int64 = int64((cpuLimit - cpuFree) * 100 / cpuLimit)
+	var memoryUsed int64 = int64((memoryLimit - memoryFree) * 100 / memoryLimit)
 	partitionDetail := new(ResourcePartitionDetail)
 	partitionDetail.ObjectMeta.NodeCount = len(nodes.Items)
-	partitionDetail.ObjectMeta.CPULimit = cpuLimit
-	partitionDetail.ObjectMeta.MemoryLimit = memoryLimit
+	partitionDetail.ObjectMeta.CPULimit = cpuUsed
+	partitionDetail.ObjectMeta.MemoryLimit = memoryUsed
 	partitionDetail.ObjectMeta.HealthyNodeCount = healthyNodeCount
 	partitionDetail.ObjectMeta.Name = clusterName
 	partitionDetail.TypeMeta.Kind = "ResourcePartition"
@@ -82,24 +94,36 @@ func GetTenantPartitionDetail(client client.Interface, clusterName string) (*Ten
 		return nil, err
 	}
 	var cpuLimit int64 = 0
+	var cpuFree int64 = 0
 	var memoryLimit int64 = 0
+	var memoryFree int64 = 0
 	var healthyNodeCount int64 = 0
 	for _, node := range nodes.Items {
-		cpuLimit += node.Status.Allocatable.Cpu().MilliValue()
-		memoryLimit += node.Status.Allocatable.Memory().Value()
+		cpuLimit += node.Status.Capacity.Cpu().MilliValue()
+		cpuFree += node.Status.Allocatable.Cpu().MilliValue()
+		memoryLimit += node.Status.Capacity.Memory().Value()
+		memoryFree += node.Status.Allocatable.Memory().Value()
 
-		if node.Status.Conditions[0].Status == v1.ConditionTrue {
-			healthyNodeCount++
+		//if node.Status.Conditions[0].Status == v1.ConditionTrue {
+		//	healthyNodeCount++
+		//}
+		for _, condition := range node.Status.Conditions {
+			if condition.Type == v1.NodeConditionType("Ready") && condition.Status == v1.ConditionTrue {
+				healthyNodeCount++
+				break
+			}
 		}
 	}
 	tenants, err := client.CoreV1().Tenants().List(api.ListEverything)
 	if err != nil {
 		return nil, err
 	}
+	var cpuUsed int64 = int64((cpuLimit - cpuFree) * 100 / cpuLimit)
+	var memoryUsed int64 = int64((memoryLimit - memoryFree) * 100 / memoryLimit)
 	partitionDetail := new(TenantPartitionDetail)
 	partitionDetail.ObjectMeta.TenantCount = len(tenants.Items)
-	partitionDetail.ObjectMeta.CPULimit = cpuLimit
-	partitionDetail.ObjectMeta.MemoryLimit = memoryLimit
+	partitionDetail.ObjectMeta.CPULimit = cpuUsed
+	partitionDetail.ObjectMeta.MemoryLimit = memoryUsed
 	partitionDetail.ObjectMeta.HealthyNodeCount = healthyNodeCount
 	partitionDetail.ObjectMeta.Name = clusterName
 	partitionDetail.TypeMeta.Kind = "TenantPartition"
