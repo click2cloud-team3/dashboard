@@ -5556,6 +5556,9 @@ func (apiHandler *APIHandler) handleCreateUser(w *restful.Request, r *restful.Re
 	if err != nil {
 		log.Fatalf("Unable to decode the request body.  %v", err)
 	}
+	if user.NameSpace == "" {
+		user.NameSpace = "default"
+	}
 	user.CreationTimestamp = time.Now().Truncate(time.Second)
 	insertID := db.InsertUser(user)
 	res := response{

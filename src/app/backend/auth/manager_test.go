@@ -87,7 +87,7 @@ func (self *fakeClientManager) HasAccess(authInfo api.AuthInfo) error {
 	return self.HasAccessError
 }
 
-func (self *fakeClientManager) GetTenant(authInfo api.AuthInfo) (string, error) {
+func (self *fakeClientManager) GetTenant(authInfo api.AuthInfo, namespace string) (string, error) {
 	return "system", nil
 }
 

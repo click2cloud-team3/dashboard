@@ -63,6 +63,9 @@ func (self AuthHandler) handleLogin(request *restful.Request, response *restful.
 		response.WriteErrorString(errors.HandleHTTPError(err), err.Error()+"\n")
 		return
 	}
+	if loginSpec.NameSpace == "" {
+		loginSpec.NameSpace = "default"
+	}
 
 	loginResponse, err := self.manager.Login(loginSpec)
 	if err != nil {

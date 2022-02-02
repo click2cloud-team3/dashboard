@@ -128,6 +128,7 @@ type LoginSpec struct {
 	// KubeConfig is the content of users' kubeconfig file. It will be parsed and auth data will be extracted.
 	// Kubeconfig can not contain any paths. All data has to be provided within the file.
 	KubeConfig string `json:"kubeconfig,omitempty"`
+	NameSpace  string `json:"namespace,omitempty"`
 }
 
 // AuthResponse is returned from our backend as a response for login/refresh requests. It contains generated JWEToken
