@@ -51,11 +51,13 @@ export class VerberService {
   onCreateQuota = new EventEmitter<boolean>();
 
   //variable for success msg
+  public success_node: boolean = false;
   public success_tenant: boolean = false;
+  public success_namespace: boolean = false;
   public success_role: boolean = false;
   public success_clusterrole: boolean = false;
   public success_quota: boolean = false;
-  public success_namespace: boolean = false;
+  public success_user: boolean = false;
   public success_result: any;
 
   constructor(
@@ -78,10 +80,6 @@ export class VerberService {
           setTimeout(()=>{
             this.success_tenant = false;
           }, 6000);
-          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
-          this.http_
-            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
-            .subscribe(() => this.onCreateTenant.emit(true), this.handleErrorResponse_.bind(this));
         }
         else{
           this.success_result = result
@@ -98,10 +96,11 @@ export class VerberService {
       .afterClosed()
       .subscribe(result => {
         if (result) {
-          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
-          this.http_
-            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
-            .subscribe(() => this.onCreateTenant.emit(true), this.handleErrorResponse_.bind(this));
+          this.success_user = true;
+          this.success_result = result
+          setTimeout(()=>{
+            this.success_user = false;
+          }, 6000);
         }
       });
   }
@@ -119,10 +118,6 @@ export class VerberService {
           setTimeout(()=>{
             this.success_namespace = false;
           }, 6000);
-          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
-          this.http_
-            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
-            .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
         }
       });
 
@@ -141,10 +136,6 @@ export class VerberService {
           setTimeout(()=>{
             this.success_quota = false;
           }, 6000);
-          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
-          this.http_
-            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
-            .subscribe(() => this.onCreateQuota.emit(true), this.handleErrorResponse_.bind(this));
         }
       });
   }
@@ -162,10 +153,6 @@ export class VerberService {
           setTimeout(()=>{
             this.success_role = false;
           }, 6000);
-          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
-          this.http_
-            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
-            .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
         }
       });
   }
@@ -182,10 +169,6 @@ export class VerberService {
           setTimeout(()=>{
             this.success_clusterrole = false;
           }, 6000);
-          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
-          this.http_
-            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
-            .subscribe(() => this.onCreate.emit(true), this.handleErrorResponse_.bind(this));
         }
       });
   }
@@ -198,10 +181,11 @@ export class VerberService {
       .afterClosed()
       .subscribe(result => {
         if (result) {
-          const url = RawResource.getUrl(this.tenant_.current(), typeMeta, objectMeta);
-          this.http_
-            .post(url, JSON.parse(result), {headers: this.getHttpHeaders_()})
-            .subscribe(() => this.onCreateNode.emit(true), this.handleErrorResponse_.bind(this));
+          this.success_node = true;
+          this.success_result = result
+          setTimeout(()=>{
+            this.success_node = false;
+          }, 6000);
         }
       });
   }

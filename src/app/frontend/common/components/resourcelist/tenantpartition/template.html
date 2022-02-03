@@ -73,7 +73,7 @@ limitations under the License.
                              disableClear="true"
                              i18n>CPU limits (cores)</mat-header-cell>
             <mat-cell *matCellDef="let tenantPartition">
-              {{tenantPartition.objectMeta.cpuLimit  | kdCores}}
+              {{tenantPartition.objectMeta.cpuLimit | number:"1.2-2"}}%
             </mat-cell>
           </ng-container>
 
@@ -83,7 +83,7 @@ limitations under the License.
                              disableClear="true"
                              i18n>Memory limits (bytes)</mat-header-cell>
             <mat-cell *matCellDef="let tenantPartition">
-              {{tenantPartition.objectMeta.memoryLimit  | kdMemory}}
+              {{tenantPartition.objectMeta.memoryLimit | number:"1.2-2"}}%
             </mat-cell>
           </ng-container>
 
