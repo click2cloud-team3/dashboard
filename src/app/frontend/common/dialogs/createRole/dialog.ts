@@ -1,16 +1,3 @@
-// Copyright 2020 Authors of Arktos - file modified.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
@@ -44,16 +31,16 @@ export class CreateRoleDialog implements OnInit {
   roleMaxLength = 24;
   rolePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  namespaceMaxLength = 24;
+  namespaceMaxLength = 63;
   namespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  apiGroupsMaxLength = 24;
+  apiGroupsMaxLength = 63;
   apiGroupsPattern: RegExp = new RegExp('^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
-  resourceMaxLength = 24;
+  resourceMaxLength = 63;
   resourcePattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
-  verbsMaxLength = 24;
+  verbsMaxLength = 63;
   verbsPattern: RegExp = new RegExp('^^[a-z\\a-z\\d_@.#$=!%^)(\\]:\\*;\\?\\/\\,}{\'\\|<>\\[&\\+-]*$');
 
   apiGroups1: string[]

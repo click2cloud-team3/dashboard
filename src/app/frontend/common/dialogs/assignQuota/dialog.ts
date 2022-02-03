@@ -4,7 +4,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {AbstractControl, Validators,FormBuilder} from '@angular/forms';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import {CONFIG} from "../../../index.config";
 import {CsrfTokenService} from "../../services/global/csrftoken";
 import {AlertDialog, AlertDialogConfig} from "../alert/dialog";
@@ -31,14 +31,13 @@ export interface assignQuotaDialogMeta {
 export class assignQuotaDialog implements OnInit {
   form1: FormGroup;
 
-  //Validation
   QuotaMaxLength = 24;
   QuotaPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
   TenatMaxLength = 24;
   TenantPattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
-  NamespaceMaxLength = 24;
+  NamespaceMaxLength = 63;
   NamespacePattern: RegExp = new RegExp('^[a-z0-9]([-a-z0-9]*[a-z0-9])?$');
 
   private readonly config_ = CONFIG;
@@ -110,7 +109,7 @@ export class assignQuotaDialog implements OnInit {
   get pvc(): AbstractControl {
     return this.form1.get('pvc');
   }
-get config_maps(): AbstractControl {
+  get config_maps(): AbstractControl {
     return this.form1.get('config_maps');
   }
   get secrets(): AbstractControl {
@@ -120,9 +119,7 @@ get config_maps(): AbstractControl {
     return this.form1.get('ephemeral_storage');
   }
 
-  // function for creating new quota
   createQuota(): void {
-   // alert(this.storage.value)
     if (!this.form1.valid) return;
     const quotaSpec= {
       name: this.quotaname.value ,

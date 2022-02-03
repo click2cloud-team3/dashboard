@@ -1566,8 +1566,12 @@ box-shadow: none !important;
   color:#D8000C;
   font-size: 11px;
 }
-// media query
+.hintmessage{
+  color:#326de6 !important;
+  font-size: 11px;
+}
 
+// media query
 @media screen and (min-width:1023px) and (max-width:1024px){
   .login_container .mat-card{
     margin-left: 40px !important;
