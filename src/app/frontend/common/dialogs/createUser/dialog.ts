@@ -162,12 +162,6 @@ export class CreateUserDialog implements OnInit {
   get name(): AbstractControl {
     return this.form1.get('name');
   }
-  get imagePullSecret(): AbstractControl {
-    return this.form1.get('imagePullSecret');
-  }
-  resetImagePullSecret(): void {
-    this.imagePullSecret.patchValue('');
-  }
   get tenant(): any {
     return this.tenantService_.current()
   }
