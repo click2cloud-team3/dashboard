@@ -63,7 +63,7 @@ export class CreateUserDialog implements OnInit {
   userType = '';
   message = false;
   success: string;
-
+  
   private readonly config_ = CONFIG
 
   usernameMaxLength = 24;
