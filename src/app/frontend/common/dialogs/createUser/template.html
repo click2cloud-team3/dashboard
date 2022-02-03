@@ -12,9 +12,9 @@
             <mat-select  formControlName="usertype"
                          (selectionChange)="selectUserType($event.value)">
 
-              <mat-option value="cluster-admin" *ngIf="Usertype=='cluster-admin'">Cluster Admin</mat-option>
-              <mat-option value="tenant-admin" *ngIf="Usertype=='cluster-admin' || Usertype=='tenant-admin'">Tenant Admin</mat-option>
-              <mat-option value="tenant-user" *ngIf="Usertype=='tenant-admin'">Tenant User</mat-option>
+              <mat-option value="cluster-admin" *ngIf="userType=='cluster-admin'">Cluster Admin</mat-option>
+              <mat-option value="tenant-admin" *ngIf="userType=='cluster-admin' || userType=='tenant-admin'">Tenant Admin</mat-option>
+              <mat-option value="tenant-user" *ngIf="userType=='tenant-admin'">Tenant User</mat-option>
             </mat-select>
             <input matInput >
           </mat-form-field>
