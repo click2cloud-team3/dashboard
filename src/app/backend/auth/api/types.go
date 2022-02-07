@@ -128,6 +128,7 @@ type LoginSpec struct {
 	// KubeConfig is the content of users' kubeconfig file. It will be parsed and auth data will be extracted.
 	// Kubeconfig can not contain any paths. All data has to be provided within the file.
 	KubeConfig string `json:"kubeconfig,omitempty"`
+	NameSpace  string `json:"namespace,omitempty"`
 }
 
 // AuthResponse is returned from our backend as a response for login/refresh requests. It contains generated JWEToken
@@ -139,7 +140,8 @@ type AuthResponse struct {
 	Errors []error `json:"errors"`
 	// Tenant is the tenant that user belongs to. Used by frontend to determine if the current user is system tenant
 	// or regular tenant.
-	Tenant string `json:"tenant"`
+	Tenant    string `json:"tenant"`
+	NameSpace string `json:"namespace"`
 }
 
 // TokenRefreshSpec contains token that is required by token refresh operation.

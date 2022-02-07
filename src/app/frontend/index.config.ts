@@ -16,14 +16,22 @@
 import {InjectionToken} from '@angular/core';
 import {MatTooltipDefaultOptions} from '@angular/material';
 
-const username = sessionStorage.getItem('username');
+const username = sessionStorage.getItem('parentTenant');
 const userType = sessionStorage.getItem('userType');
-
+const defaultnamespace = sessionStorage.getItem('namespace');
 let tenant = '';
 if (userType === 'cluster-admin'){
   tenant = 'system'
 } else {
   tenant = username
+}
+
+let namespace = '';
+
+if (defaultnamespace !== '') {
+  namespace = defaultnamespace
+} else {
+  namespace = 'default'
 }
 
 export let CONFIG_DI_TOKEN = new InjectionToken<Config>('kd.config');
@@ -44,7 +52,7 @@ export const CONFIG: Config = {
   authTenantCookieName: 'tenant',
   csrfHeaderName: 'X-CSRF-TOKEN',
   skipLoginPageCookieName: 'skipLoginPage',
-  defaultNamespace: 'default',  //default
+  defaultNamespace: namespace,//'default',  //default
   systemTenantName: tenant,  //system
 };
 

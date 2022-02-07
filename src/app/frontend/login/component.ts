@@ -164,6 +164,7 @@ export class LoginComponent implements OnInit {
         if (this.responseData.objectMeta.password == this.password_){
           this.setUserType(this.responseData.objectMeta.type);
           this.setParentTenant(this.responseData.objectMeta.tenant);
+          this.setDefaultNamespace(this.responseData.objectMeta.namespace);
           return this.responseData.objectMeta as LoginSpec;
         }
         else{
@@ -184,5 +185,8 @@ export class LoginComponent implements OnInit {
 
   private setParentTenant (parentTenant:string) {
     sessionStorage.setItem('parentTenant', parentTenant);
+  }
+  private setDefaultNamespace (namespace:string) {
+    sessionStorage.setItem('namespace', namespace);
   }
 }

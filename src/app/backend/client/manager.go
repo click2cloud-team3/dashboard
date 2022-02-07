@@ -229,7 +229,7 @@ func (self *clientManager) CSRFKey() string {
 }
 
 // GetTenant gets the tenant name using the provided AuthInfo
-func (self *clientManager) GetTenant(authInfo api.AuthInfo) (string, error) {
+func (self *clientManager) GetTenant(authInfo api.AuthInfo, nameSpace string) (string, error) {
 	cfg, err := self.buildConfigFromFlags(self.apiserverHost, self.kubeConfigPath)
 	if err != nil {
 		return "", err
@@ -247,7 +247,7 @@ func (self *clientManager) GetTenant(authInfo api.AuthInfo) (string, error) {
 	}
 
 	// Get the tenant name from default namespace.
-	result, err := client.CoreV1().NamespacesWithMultiTenancy("").Get("default", metaV1.GetOptions{})
+	result, err := client.CoreV1().NamespacesWithMultiTenancy("").Get(nameSpace, metaV1.GetOptions{})
 	tenant := result.ObjectMeta.Tenant
 	return tenant, err
 }

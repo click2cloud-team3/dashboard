@@ -29,6 +29,7 @@ type User struct {
 	Type              string    `json:"type"`
 	Tenant            string    `json:"tenant"`
 	Role              string    `json:"role"`
+	NameSpace         string    `json:"namespace"`
 	CreationTimestamp time.Time `json:"creationTimestamp"`
 }
 

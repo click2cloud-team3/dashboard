@@ -149,6 +149,7 @@ func CreateClusterAdmin() error {
 		Type:              "cluster-admin",
 		Tenant:            "system",
 		Role:              "",
+		NameSpace:         "default",
 		CreationTimestamp: time.Now(),
 	}
 

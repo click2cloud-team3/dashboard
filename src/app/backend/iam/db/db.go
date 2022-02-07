@@ -67,13 +67,13 @@ func InsertUser(user model.User) int64 {
 
 	// create the insert sql query
 	// returning userid will return the id of the inserted user
-	sqlStatement := `INSERT INTO userdetails (username, password, token, type, tenant, role, creationtime) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT ON CONSTRAINT userdetails_username_key DO UPDATE SET username=EXCLUDED.username RETURNING userid;`
+	sqlStatement := `INSERT INTO userdetails (username, password, token, type, tenant, role, creationtime, namespace) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT ON CONSTRAINT userdetails_username_key DO UPDATE SET username=EXCLUDED.username RETURNING userid;`
 	// the inserted id will store in this id
 	var id int64
 
 	// execute the sql statement
 	// Scan function will save the insert id in the id
-	err := db.QueryRow(sqlStatement, user.Username, user.Password, user.Token, user.Type, user.Tenant, user.Role, user.CreationTimestamp).Scan(&id)
+	err := db.QueryRow(sqlStatement, user.Username, user.Password, user.Token, user.Type, user.Tenant, user.Role, user.CreationTimestamp, user.NameSpace).Scan(&id)
 
 	if err != nil {
 		log.Fatalf("Unable to execute the query. %v", err)
@@ -105,7 +105,7 @@ func GetUser(param string) (model.UserDetails, error) {
 	row := db.QueryRow(sqlStatement, param)
 
 	// unmarshal the row object to user
-	err := row.Scan(&user.ObjectMeta.ID, &user.ObjectMeta.Username, &user.ObjectMeta.Password, &user.ObjectMeta.Token, &user.ObjectMeta.Type, &user.ObjectMeta.Tenant, &user.ObjectMeta.Role, &user.ObjectMeta.CreationTimestamp)
+	err := row.Scan(&user.ObjectMeta.ID, &user.ObjectMeta.Username, &user.ObjectMeta.Password, &user.ObjectMeta.Token, &user.ObjectMeta.Type, &user.ObjectMeta.Tenant, &user.ObjectMeta.Role, &user.ObjectMeta.CreationTimestamp, &user.ObjectMeta.NameSpace)
 
 	switch err {
 	case sql.ErrNoRows:
@@ -141,7 +141,7 @@ func GetUserDetail(param string) (model.UserDetails, error) {
 	row := db.QueryRow(sqlStatement, param)
 
 	// unmarshal the row object to user
-	err := row.Scan(&user.ObjectMeta.ID, &user.ObjectMeta.Username, &user.ObjectMeta.Password, &user.ObjectMeta.Token, &user.ObjectMeta.Type, &user.ObjectMeta.Tenant, &user.ObjectMeta.Role, &user.ObjectMeta.CreationTimestamp)
+	err := row.Scan(&user.ObjectMeta.ID, &user.ObjectMeta.Username, &user.ObjectMeta.Password, &user.ObjectMeta.Token, &user.ObjectMeta.Type, &user.ObjectMeta.Tenant, &user.ObjectMeta.Role, &user.ObjectMeta.CreationTimestamp, &user.ObjectMeta.NameSpace)
 
 	switch err {
 	case sql.ErrNoRows:
@@ -186,7 +186,7 @@ func GetAllUsers() (*model.UserList, error) {
 		var user model.UserDetails
 
 		// unmarshal the row object to user
-		err = rows.Scan(&user.ObjectMeta.ID, &user.ObjectMeta.Username, &user.ObjectMeta.Password, &user.ObjectMeta.Token, &user.ObjectMeta.Type, &user.ObjectMeta.Tenant, &user.ObjectMeta.Role, &user.ObjectMeta.CreationTimestamp)
+		err = rows.Scan(&user.ObjectMeta.ID, &user.ObjectMeta.Username, &user.ObjectMeta.Password, &user.ObjectMeta.Token, &user.ObjectMeta.Type, &user.ObjectMeta.Tenant, &user.ObjectMeta.Role, &user.ObjectMeta.CreationTimestamp, &user.ObjectMeta.NameSpace)
 
 		if err != nil {
 			log.Fatalf("Unable to scan the row. %v", err)

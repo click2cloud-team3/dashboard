@@ -38,7 +38,7 @@ export class TenantService {
 
 
   current(): string {
-    const username = sessionStorage.getItem('username');
+    const username = sessionStorage.getItem('parentTenant');
     const userType = sessionStorage.getItem('userType');
     if (userType === 'cluster-admin'){
       this.currentTenant_ = 'system'
