@@ -140,7 +140,8 @@ type AuthResponse struct {
 	Errors []error `json:"errors"`
 	// Tenant is the tenant that user belongs to. Used by frontend to determine if the current user is system tenant
 	// or regular tenant.
-	Tenant string `json:"tenant"`
+	Tenant    string `json:"tenant"`
+	NameSpace string `json:"namespace"`
 }
 
 // TokenRefreshSpec contains token that is required by token refresh operation.

@@ -73,6 +73,7 @@ func (self AuthHandler) handleLogin(request *restful.Request, response *restful.
 		response.WriteErrorString(errors.HandleHTTPError(err), err.Error()+"\n")
 		return
 	}
+	loginResponse.NameSpace = loginSpec.NameSpace
 
 	response.WriteHeaderAndEntity(http.StatusOK, loginResponse)
 }
