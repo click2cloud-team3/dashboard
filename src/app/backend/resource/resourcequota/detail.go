@@ -1,13 +1,15 @@
 package resourcequota
 
 import (
-	"errors"
 	"github.com/kubernetes/dashboard/src/app/backend/api"
+	"github.com/kubernetes/dashboard/src/app/backend/errors"
+	"github.com/kubernetes/dashboard/src/app/backend/resource/common"
 	"github.com/kubernetes/dashboard/src/app/backend/resource/dataselect"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8sClient "k8s.io/client-go/kubernetes"
+	"log"
 )
 
 type ResourceQuotaSpec struct {
@@ -109,7 +111,7 @@ func AddResourceQuotas(client k8sClient.Interface, namespace string, tenant stri
 		spec.NameSpace = namespace
 	}
 	if spec.Name == "" {
-		err := errors.New("empty resource-quota name error")
+		err := errors.NewInternal("empty resource-quota name error")
 		return nil, err
 	}
 	resQuota, err := client.CoreV1().ResourceQuotasWithMultiTenancy(namespace, ns.Tenant).Create(&v1.ResourceQuota{
@@ -153,7 +155,27 @@ func DeleteResourceQuota(client k8sClient.Interface, namespace string, tenant st
 	return nil
 }
 
-func GetResourceQuotaLists(client k8sClient.Interface, namespace string, tenant string) (*ResourceQuotaDetailList, error) {
+func GetResourceQuotaList(client k8sClient.Interface, namespace *common.NamespaceQuery, dsQuery *dataselect.DataSelectQuery) (*ResourceQuotaDetailList, error) {
+	log.Println("Getting list of Resource quotas")
+	rqlist, err := client.CoreV1().ResourceQuotas(namespace.ToRequestParam()).List(metaV1.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	result := &ResourceQuotaDetailList{
+		Items:    make([]ResourceQuotaDetail, 0),
+		ListMeta: api.ListMeta{TotalItems: len(rqlist.Items)},
+	}
+	for _, item := range rqlist.Items {
+		detail := ToResourceQuotaDetail(&item)
+		result.Items = append(result.Items, *detail)
+	}
+
+	return result, nil
+
+}
+
+func GetResourceQuotaListsWithMultiTenancy(client k8sClient.Interface, namespace string, tenant string) (*ResourceQuotaDetailList, error) {
 	if tenant == "" {
 		tenant = "default"
 	}

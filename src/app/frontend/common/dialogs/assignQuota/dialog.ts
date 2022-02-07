@@ -124,7 +124,7 @@ export class assignQuotaDialog implements OnInit {
     const quotaSpec= {
       name: this.quotaname.value ,
       tenant: this.tenants.value,
-      name_space: this.namespaces.value,
+      namespace: this.namespaces.value,
       cpu: this.cpus.value,
       memory: this.memory.value,
       pods: this.pods.value,

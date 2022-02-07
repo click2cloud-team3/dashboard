@@ -655,14 +655,17 @@ func CreateHTTPAPIHandler(iManager integration.IntegrationManager, cManager clie
 			Reads(resourcequota.ResourceQuotaSpec{}).
 			Writes(v1.ResourceQuota{}))
 	apiV1Ws.Route(
-		apiV1Ws.GET("/tenants/{tenant}/resourcequota/{namespace}").
+		apiV1Ws.GET("/resourcequota").
 			To(apiHandler.handleGetResourceQuotaList).
+			Writes(v1.ResourceQuotaList{}))
+	apiV1Ws.Route(
+		apiV1Ws.GET("/tenants/{tenant}/resourcequota/{namespace}").
+			To(apiHandler.handleGetResourceQuotaListWithMultiTenancy).
 			Writes(v1.ResourceQuotaList{}))
 	apiV1Ws.Route(
 		apiV1Ws.GET("/tenants/{tenant}/resourcequota/{namespace}/{name}"). // TODO
 											To(apiHandler.handleGetResourceQuotaDetails).
-											Reads(v1.ResourceQuotaSpec{}).
-											Writes(v1.ResourceQuotaSpec{}))
+											Writes(v1.ResourceQuotaList{}))
 	apiV1Ws.Route(
 		apiV1Ws.DELETE("/tenants/{tenant}/namespace/{namespace}/resourcequota/{name}").
 			To(apiHandler.handleDeleteResourceQuota))
@@ -3598,6 +3601,26 @@ func (apiHandler *APIHandler) handleAddResourceQuota(request *restful.Request, r
 }
 
 func (apiHandler *APIHandler) handleGetResourceQuotaList(request *restful.Request, response *restful.Response) {
+	k8sClient, err := apiHandler.cManager.Client(request)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+
+	Namespace := request.PathParameter("namespace")
+	var namespaces []string
+	namespaces = append(namespaces, Namespace)
+	namespace := common.NewNamespaceQuery(namespaces)
+	dataSelect := parseDataSelectPathParameter(request)
+	result, err := resourcequota.GetResourceQuotaList(k8sClient, namespace, dataSelect)
+	if err != nil {
+		errors.HandleInternalError(response, err)
+		return
+	}
+	response.WriteHeaderAndEntity(http.StatusOK, result)
+}
+
+func (apiHandler *APIHandler) handleGetResourceQuotaListWithMultiTenancy(request *restful.Request, response *restful.Response) {
 
 	log.Printf("Get Quota List")
 	k8sClient, err := apiHandler.cManager.Client(request)
@@ -3608,7 +3631,7 @@ func (apiHandler *APIHandler) handleGetResourceQuotaList(request *restful.Reques
 
 	tenant := request.PathParameter("tenant")
 	namespace := request.PathParameter("namespace")
-	result, err := resourcequota.GetResourceQuotaLists(k8sClient, namespace, tenant)
+	result, err := resourcequota.GetResourceQuotaListsWithMultiTenancy(k8sClient, namespace, tenant)
 	if err != nil {
 		errors.HandleInternalError(response, err)
 		return
